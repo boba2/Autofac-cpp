@@ -6,41 +6,46 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using ServiceInstanceMap = std::unordered_map<std::type_index, void *>;
+using ServiceInstances = std::unordered_map<std::type_index, void *>;
 
-class ServiceNotRegistered : public std::logic_error
-{
-public:
-	template<class T>
-	auto static from_type()
+namespace Error {
+	class ServiceNotRegistered : public std::logic_error
 	{
-		return ServiceNotRegistered(typeid(T).name());
-	}
+	public:
+		template<class T>
+		auto static fromType()
+		{
+			return ServiceNotRegistered(typeid(T).name());
+		}
 
-private:
-	explicit ServiceNotRegistered(std::string type_name)
-		: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
-	{}
-};
+	private:
+		explicit ServiceNotRegistered(std::string type_name)
+			: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
+		{}
+	};
+}
+
+template<class T>
+using UnderlyingType = std::remove_pointer_t<T>;
 
 class Container
 {
 public:
-	explicit Container(const ServiceInstanceMap service_instances)
+	explicit Container(const ServiceInstances service_instances)
 		: _service_instances(service_instances)
 	{}
 
 	template<class T>
-	T *resolve()
+	T resolve()
 	{
-		if (_service_instances.find(std::type_index(typeid(T))) == _service_instances.end())
-			throw ServiceNotRegistered::from_type<T>();
+		if (_service_instances.find(std::type_index(typeid(UnderlyingType<T>))) == _service_instances.end())
+			throw Error::ServiceNotRegistered::fromType<UnderlyingType<T>>();
 
-		return static_cast<T *>(_service_instances[std::type_index(typeid(T))]);
+		return static_cast<T>(_service_instances[std::type_index(typeid(UnderlyingType<T>))]);
 	}
 
 private:
-	ServiceInstanceMap _service_instances;
+	ServiceInstances _service_instances;
 };
 
 class ContainerBuilder
@@ -58,7 +63,7 @@ public:
 	}
 
 private:
-	ServiceInstanceMap _service_instances;
+	ServiceInstances _service_instances;
 };
 
 class Class1 {};
@@ -73,7 +78,7 @@ public:
 
 		builder()->registerInstance(&service);
 
-		Assert::IsTrue(container()->resolve<Class1>() == &service);
+		Assert::IsTrue(container()->resolve<Class1 *>() == &service);
 	}
 
 	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenInstancesOfDifferentTypesRegistered)
@@ -84,8 +89,8 @@ public:
 		builder()->registerInstance(&service1);
 		builder()->registerInstance(&service2);
 
-		Assert::IsTrue(container()->resolve<Class1>() == &service1);
-		Assert::IsTrue(container()->resolve<Class2>() == &service2);
+		Assert::IsTrue(container()->resolve<Class1 *>() == &service1);
+		Assert::IsTrue(container()->resolve<Class2 *>() == &service2);
 	}
 
 	TEST_METHOD(ShouldThrowException_WhenResolvingServiceOfUnregisteredType)
@@ -94,9 +99,9 @@ public:
 
 		builder()->registerInstance(&service1);
 
-		Assert::ExpectException<ServiceNotRegistered>([this]
+		Assert::ExpectException<Error::ServiceNotRegistered>([this]
 		{
-			container()->resolve<Class2>();
+			container()->resolve<Class2 *>();
 		});
 	}
 
