@@ -8,6 +8,21 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using ServiceInstanceMap = std::unordered_map<std::type_index, void *>;
 
+class ServiceNotRegistered : public std::logic_error
+{
+public:
+	template<class T>
+	auto static from_type()
+	{
+		return ServiceNotRegistered(typeid(T).name());
+	}
+
+private:
+	explicit ServiceNotRegistered(std::string type_name)
+		: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
+	{}
+};
+
 class Container
 {
 public:
@@ -18,6 +33,9 @@ public:
 	template<class T>
 	T *resolve()
 	{
+		if (_service_instances.find(std::type_index(typeid(T))) == _service_instances.end())
+			throw ServiceNotRegistered::from_type<T>();
+
 		return static_cast<T *>(_service_instances[std::type_index(typeid(T))]);
 	}
 
@@ -68,6 +86,18 @@ public:
 
 		Assert::IsTrue(container()->resolve<Class1>() == service1.get());
 		Assert::IsTrue(container()->resolve<Class2>() == service2.get());
+	}
+
+	TEST_METHOD(ShouldThrowException_WhenResolvingServiceOfUnknownType)
+	{
+		auto service1 = std::make_unique<Class1>();
+
+		builder()->registerInstance(service1.get());
+
+		Assert::ExpectException<ServiceNotRegistered>([this]
+		{
+			container()->resolve<Class2>();
+		});
 	}
 
 private:
