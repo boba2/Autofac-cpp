@@ -11,9 +11,10 @@ public:
 		: _service_instance(service_instance)
 	{}
 
-	void *resolve()
+	template<class T>
+	T *resolve()
 	{
-		return _service_instance;
+		return static_cast<T *>(_service_instance);
 	}
 
 private:
@@ -42,7 +43,7 @@ class Class1 {};
 TEST_CLASS(BaseContainerTest)
 {
 public:
-	TEST_METHOD(ShouldResolveInstance_WhenInstanceRegistered)
+	TEST_METHOD(ShouldResolveInstanceByType_WhenInstanceRegistered)
 	{
 		ContainerBuilder container_builder;
 
@@ -52,8 +53,8 @@ public:
 
 		auto container = container_builder.build();
 
-		auto resolved_service_instance = container.resolve();
+		auto resolved_service_instance = container.resolve<Class1>();
 
-		Assert::AreEqual(resolved_service_instance, static_cast<void *>(given_service_instance.get()));
+		Assert::IsTrue(resolved_service_instance == given_service_instance.get());
 	}
 };
