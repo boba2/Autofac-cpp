@@ -67,32 +67,32 @@ class Class2 {};
 TEST_CLASS(BaseContainerTest)
 {
 public:
-	TEST_METHOD(ShouldResolveServiceByType_WhenServiceRegistered)
+	TEST_METHOD(ShouldResolveServiceByType_WhenInstanceRegistered)
 	{
-		auto service = std::make_unique<Class1>();
+		Class1 service;
 
-		builder()->registerInstance(service.get());
+		builder()->registerInstance(&service);
 
-		Assert::IsTrue(container()->resolve<Class1>() == service.get());
+		Assert::IsTrue(container()->resolve<Class1>() == &service);
 	}
 
-	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenServicesOfDifferentTypesRegistered)
+	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenInstancesOfDifferentTypesRegistered)
 	{
-		auto service1 = std::make_unique<Class1>();
-		auto service2 = std::make_unique<Class2>();
+		Class1 service1;
+		Class2 service2;
 
-		builder()->registerInstance(service1.get());
-		builder()->registerInstance(service2.get());
+		builder()->registerInstance(&service1);
+		builder()->registerInstance(&service2);
 
-		Assert::IsTrue(container()->resolve<Class1>() == service1.get());
-		Assert::IsTrue(container()->resolve<Class2>() == service2.get());
+		Assert::IsTrue(container()->resolve<Class1>() == &service1);
+		Assert::IsTrue(container()->resolve<Class2>() == &service2);
 	}
 
-	TEST_METHOD(ShouldThrowException_WhenResolvingServiceOfUnknownType)
+	TEST_METHOD(ShouldThrowException_WhenResolvingServiceOfUnregisteredType)
 	{
-		auto service1 = std::make_unique<Class1>();
+		Class1 service1;
 
-		builder()->registerInstance(service1.get());
+		builder()->registerInstance(&service1);
 
 		Assert::ExpectException<ServiceNotRegistered>([this]
 		{
