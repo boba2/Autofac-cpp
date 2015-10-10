@@ -6,27 +6,59 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using ServiceInstances = std::unordered_map<std::type_index, void *>;
-
 namespace Error {
-	class ServiceNotRegistered : public std::logic_error
-	{
-	public:
-		template<class T>
-		auto static fromType()
-		{
-			return ServiceNotRegistered(typeid(T).name());
-		}
 
-	private:
-		explicit ServiceNotRegistered(std::string type_name)
-			: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
-		{}
-	};
+class ServiceNotRegistered : public std::logic_error
+{
+public:
+	template<class T>
+	auto static fromType()
+	{
+		return ServiceNotRegistered(typeid(T).name());
+	}
+
+private:
+	explicit ServiceNotRegistered(std::string type_name)
+		: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
+	{}
+};
+
 }
 
 template<class T>
 using UnderlyingType = std::remove_pointer_t<T>;
+
+class ServiceInstances
+{
+public:
+	template<class T>
+	void add(T service_instance)
+	{
+		_service_instances[getTypeIndex<T>()] = service_instance;
+	}
+
+	template<class T>
+	bool has()
+	{
+		return _service_instances.find(getTypeIndex<T>()) != _service_instances.end();
+	}
+
+	template<class T>
+	T get() 
+	{
+		return static_cast<T>(_service_instances.at(getTypeIndex<T>()));
+	}
+
+private:
+	template<class T>
+	static std::type_index getTypeIndex()
+	{
+		return std::type_index(typeid(UnderlyingType<T>));
+	}
+
+private:
+	std::unordered_map<std::type_index, void *> _service_instances;
+};
 
 class Container
 {
@@ -38,10 +70,11 @@ public:
 	template<class T>
 	T resolve()
 	{
-		if (_service_instances.find(std::type_index(typeid(UnderlyingType<T>))) == _service_instances.end())
+		if (!_service_instances.has<T>())
 			throw Error::ServiceNotRegistered::fromType<UnderlyingType<T>>();
 
-		return static_cast<T>(_service_instances[std::type_index(typeid(UnderlyingType<T>))]);
+
+		return _service_instances.get<T>();
 	}
 
 private:
@@ -52,9 +85,9 @@ class ContainerBuilder
 {
 public:
 	template<class T>
-	void registerInstance(T *service_instance)
+	void registerInstance(T service_instance)
 	{
-		_service_instances[std::type_index(typeid(T))] = service_instance;
+		_service_instances.add(service_instance);
 	}
 
 	std::unique_ptr<Container> build() const
