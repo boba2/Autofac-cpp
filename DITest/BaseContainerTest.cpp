@@ -99,42 +99,42 @@ private:
 	ServiceInstances _service_instances;
 };
 
-class Class1 {};
-class Class2 {};
+template<int>
+class DummyService {};
 
 TEST_CLASS(BaseContainerTest)
 {
 public:
 	TEST_METHOD(ShouldResolveServiceByType_WhenInstanceRegistered)
 	{
-		Class1 service;
+		DummyService<1> service;
 
 		builder()->registerInstance(&service);
 
-		Assert::IsTrue(container()->resolve<Class1 *>() == &service);
+		Assert::IsTrue(container()->resolve<DummyService<1> *>() == &service);
 	}
 
 	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenInstancesOfDifferentTypesRegistered)
 	{
-		Class1 service1;
-		Class2 service2;
+		DummyService<1> service1;
+		DummyService<2> service2;
 
 		builder()->registerInstance(&service1);
 		builder()->registerInstance(&service2);
 
-		Assert::IsTrue(container()->resolve<Class1 *>() == &service1);
-		Assert::IsTrue(container()->resolve<Class2 *>() == &service2);
+		Assert::IsTrue(container()->resolve<DummyService<1> *>() == &service1);
+		Assert::IsTrue(container()->resolve<DummyService<2> *>() == &service2);
 	}
 
 	TEST_METHOD(ShouldThrowException_WhenResolvingServiceOfUnregisteredType)
 	{
-		Class1 service1;
+		DummyService<1> service1;
 
 		builder()->registerInstance(&service1);
 
 		Assert::ExpectException<Error::ServiceNotRegistered>([this]
 		{
-			container()->resolve<Class2 *>();
+			container()->resolve<DummyService<2> *>();
 		});
 	}
 
