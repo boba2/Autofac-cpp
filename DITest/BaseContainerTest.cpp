@@ -26,38 +26,91 @@ private:
 }
 
 template<class T>
-using UnderlyingType = std::remove_pointer_t<T>;
+using UnderlyingType = std::remove_pointer_t<std::remove_reference_t<T>>;
+
+template<class T = void>
+class ServiceInstanceHolder;
+
+template<>
+class ServiceInstanceHolder<void>
+{
+public:
+	virtual ~ServiceInstanceHolder() {};
+};
+
+template<class T>
+class ServiceInstanceHolder : public ServiceInstanceHolder<>
+{
+public:
+	virtual T *serviceInstance() = 0;
+};
+
+template<class T>
+class ConcreteServiceInstanceHolder : public ServiceInstanceHolder<T>
+{
+public:
+	explicit ConcreteServiceInstanceHolder(const T &service_instance)
+		: _service_instance(service_instance)
+	{}
+
+	virtual T *serviceInstance() override
+	{
+		return &_service_instance;
+	}
+
+private:
+	T _service_instance;
+};
+
+template<class T>
+class ConcreteServiceInstanceHolder<T *> : public ServiceInstanceHolder<T>
+{
+public:
+	explicit ConcreteServiceInstanceHolder(T *const service_instance_ptr)
+		: _service_instance_ptr(service_instance_ptr)
+	{}
+
+	virtual T *serviceInstance() override
+	{
+		return _service_instance_ptr;
+	}
+
+private:
+	T *const _service_instance_ptr;
+};
+
+template<class T>
+struct TypeIndex
+{
+	static const std::type_index value;
+};
+
+template<class T>
+const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>) };
 
 class ServiceInstances
 {
 public:
 	template<class T>
-	void add(T service_instance)
+	void add(T &&service_instance)
 	{
-		_service_instances[getTypeIndex<T>()] = service_instance;
+		_service_instances[TypeIndex<T>::value] = std::make_shared<ConcreteServiceInstanceHolder<std::remove_reference_t<T>>>(service_instance);
 	}
 
 	template<class T>
 	bool has()
 	{
-		return _service_instances.find(getTypeIndex<T>()) != _service_instances.end();
+		return _service_instances.find(TypeIndex<T>::value) != _service_instances.end();
 	}
 
 	template<class T>
-	T get() 
+	T *get() 
 	{
-		return static_cast<T>(_service_instances.at(getTypeIndex<T>()));
+		return dynamic_cast<ServiceInstanceHolder<T> *>(_service_instances.at(TypeIndex<T>::value).get())->serviceInstance();
 	}
 
 private:
-	template<class T>
-	static std::type_index getTypeIndex()
-	{
-		return std::type_index(typeid(UnderlyingType<T>));
-	}
-
-private:
-	std::unordered_map<std::type_index, void *> _service_instances;
+	std::unordered_map<std::type_index, std::shared_ptr<ServiceInstanceHolder<>>> _service_instances;
 };
 
 class Container
@@ -70,11 +123,13 @@ public:
 	template<class T>
 	T resolve()
 	{
-		if (!_service_instances.has<T>())
-			throw Error::ServiceNotRegistered::fromType<UnderlyingType<T>>();
+		using UnderlyingType = UnderlyingType<T>;
+
+		if (!_service_instances.has<UnderlyingType>())
+			throw Error::ServiceNotRegistered::fromType<UnderlyingType>();
 
 
-		return _service_instances.get<T>();
+		return _service_instances.get<UnderlyingType>();
 	}
 
 private:
@@ -85,9 +140,9 @@ class ContainerBuilder
 {
 public:
 	template<class T>
-	void registerInstance(T service_instance)
+	void registerInstance(T &&service_instance)
 	{
-		_service_instances.add(service_instance);
+		_service_instances.add(std::forward<T>(service_instance));
 	}
 
 	std::unique_ptr<Container> build() const
@@ -99,13 +154,22 @@ private:
 	ServiceInstances _service_instances;
 };
 
-template<int>
-class DummyService {};
+template<int = 0>
+class DummyService
+{
+public:
+	explicit DummyService(const int value = 0)
+		: _value(value)
+	{}
+	virtual ~DummyService() {}
+
+	const int _value;
+};
 
 TEST_CLASS(BaseContainerTest)
 {
 public:
-	TEST_METHOD(ShouldResolveServiceByType_WhenInstanceRegistered)
+	TEST_METHOD(ShouldResolveServiceByType_WhenServiceRegisteredThroughPointer)
 	{
 		DummyService<1> service;
 
@@ -114,7 +178,7 @@ public:
 		Assert::IsTrue(container()->resolve<DummyService<1> *>() == &service);
 	}
 
-	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenInstancesOfDifferentTypesRegistered)
+	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenServicesOfDifferentTypesRegisteredThroughPointers)
 	{
 		DummyService<1> service1;
 		DummyService<2> service2;
@@ -136,6 +200,15 @@ public:
 		{
 			container()->resolve<DummyService<2> *>();
 		});
+	}
+
+	TEST_METHOD(ShouldResolveServiceCopy_WhenInstanceRegistered)
+	{
+		DummyService<> service(13);
+
+		builder()->registerInstance(service);
+
+		Assert::AreEqual(13, container()->resolve<DummyService<> *>()->_value);
 	}
 
 private:
