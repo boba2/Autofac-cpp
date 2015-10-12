@@ -263,6 +263,25 @@ public:
 		Assert::IsTrue(container()->resolve<DummyService<1> *>() == service.get());
 	}
 
+	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenServiceInstancesOfDifferentTypesRegisteredThroughSharedPtr)
+	{
+		auto service1 = std::make_shared<DummyService<1>>();
+		auto service2 = std::make_shared<DummyService<2>>();
+
+		builder()->registerInstance(service1);
+		builder()->registerInstance(service2);
+
+		Assert::IsTrue(container()->resolve<DummyService<1> *>() == service1.get());
+		Assert::IsTrue(container()->resolve<DummyService<2> *>() == service2.get());
+	}
+
+	TEST_METHOD(ShouldHoldServiceInstance_WhenRegisteredReferenceDestroyed)
+	{
+		builder()->registerInstance(std::make_shared<DummyService<1>>(15));
+
+		Assert::AreEqual(15, container()->resolve<DummyService<1> *>()->_value);
+	}
+
 private:
 	ContainerBuilder *builder() const
 	{
