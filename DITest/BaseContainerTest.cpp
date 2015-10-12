@@ -6,25 +6,6 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace Error {
-
-class ServiceNotRegistered : public std::logic_error
-{
-public:
-	template<class T>
-	auto static fromType()
-	{
-		return ServiceNotRegistered(typeid(T).name());
-	}
-
-private:
-	explicit ServiceNotRegistered(std::string type_name)
-		: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
-	{}
-};
-
-}
-
 template<class T>
 struct UnderlyingType
 {
@@ -54,6 +35,25 @@ struct UnderlyingType<std::shared_ptr<T>>
 {
 	using Type = typename UnderlyingType<T>::Type;
 };
+
+namespace Error {
+
+	class ServiceNotRegistered : public std::logic_error
+	{
+	public:
+		template<class T>
+		auto static fromType()
+		{
+			return ServiceNotRegistered(typeid(typename UnderlyingType<T>::Type).name());
+		}
+
+	private:
+		explicit ServiceNotRegistered(std::string type_name)
+			: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
+		{}
+	};
+
+}
 
 template<class T = void>
 class ServiceInstanceHolder;
@@ -119,9 +119,9 @@ public:
 	}
 
 	template<class T>
-	T *get() 
+	T get() 
 	{
-		return dynamic_cast<ServiceInstanceHolder<T> *>(_service_instances.at(TypeIndex<T>::value).get())->serviceInstance();
+		return std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->serviceInstance();
 	}
 
 private:
@@ -138,11 +138,11 @@ public:
 	template<class T>
 	T resolve()
 	{
-		if (!_service_instances.has<typename UnderlyingType<T>::Type>())
-			throw Error::ServiceNotRegistered::fromType<typename UnderlyingType<T>::Type>();
+		if (!_service_instances.has<T>())
+			throw Error::ServiceNotRegistered::fromType<T>();
 
 
-		return _service_instances.get<typename UnderlyingType<T>::Type>();
+		return _service_instances.get<T>();
 	}
 
 private:
