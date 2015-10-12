@@ -26,7 +26,28 @@ private:
 }
 
 template<class T>
-using UnderlyingType = std::remove_pointer_t<std::remove_reference_t<T>>;
+struct UnderlyingType
+{
+	using Type = T;
+};
+
+template<class T>
+struct UnderlyingType<T *>
+{
+	using Type = typename UnderlyingType<T>::Type;
+};
+
+template<class T>
+struct UnderlyingType<T &>
+{
+	using Type = typename UnderlyingType<T>::Type;
+};
+
+template<class T>
+struct UnderlyingType<std::shared_ptr<T>>
+{
+	using Type = typename UnderlyingType<T>::Type;
+};
 
 template<class T = void>
 class ServiceInstanceHolder;
@@ -80,13 +101,30 @@ private:
 };
 
 template<class T>
+class ConcreteServiceInstanceHolder<std::shared_ptr<T>> : public ServiceInstanceHolder<T>
+{
+public:
+	explicit ConcreteServiceInstanceHolder(std::shared_ptr<T> service_instance_sptr)
+		: _service_instance_sptr(service_instance_sptr)
+	{}
+
+	virtual T *serviceInstance() override
+	{
+		return _service_instance_sptr.get();
+	}
+
+private:
+	std::shared_ptr<T> const _service_instance_sptr;
+};
+
+template<class T>
 struct TypeIndex
 {
 	static const std::type_index value;
 };
 
 template<class T>
-const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>) };
+const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>::Type) };
 
 class ServiceInstances
 {
@@ -123,13 +161,11 @@ public:
 	template<class T>
 	T resolve()
 	{
-		using UnderlyingType = UnderlyingType<T>;
-
-		if (!_service_instances.has<UnderlyingType>())
-			throw Error::ServiceNotRegistered::fromType<UnderlyingType>();
+		if (!_service_instances.has<typename UnderlyingType<T>::Type>())
+			throw Error::ServiceNotRegistered::fromType<typename UnderlyingType<T>::Type>();
 
 
-		return _service_instances.get<UnderlyingType>();
+		return _service_instances.get<typename UnderlyingType<T>::Type>();
 	}
 
 private:
@@ -216,6 +252,15 @@ public:
 
 		Assert::AreEqual(13, container()->resolve<DummyService<1> *>()->_value);
 		Assert::AreEqual(14, container()->resolve<DummyService<2> *>()->_value);
+	}
+
+	TEST_METHOD(ShouldResolveServiceByType_WhenServiceRegisteredThroughSharedPtr)
+	{
+		auto service = std::make_shared<DummyService<1>>();
+
+		builder()->registerInstance(service);
+
+		Assert::IsTrue(container()->resolve<DummyService<1> *>() == service.get());
 	}
 
 private:
