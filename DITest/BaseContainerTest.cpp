@@ -44,6 +44,12 @@ struct UnderlyingType<T &>
 };
 
 template<class T>
+struct UnderlyingType<T &&>
+{
+	using Type = typename UnderlyingType<T>::Type;
+};
+
+template<class T>
 struct UnderlyingType<std::shared_ptr<T>>
 {
 	using Type = typename UnderlyingType<T>::Type;
@@ -62,64 +68,30 @@ public:
 template<class T>
 class ServiceInstanceHolder : public ServiceInstanceHolder<>
 {
-public:
-	virtual T *serviceInstance() = 0;
-};
-
-template<class T>
-class ConcreteServiceInstanceHolder : public ServiceInstanceHolder<T>
-{
-public:
-	explicit ConcreteServiceInstanceHolder(const T &service_instance)
-		: _service_instance(std::make_shared<T>(service_instance))
-	{}
-
-	virtual T *serviceInstance() override
-	{
-		return _service_instance.get();
-	}
-
-private:
-	const std::shared_ptr<T> _service_instance;
-};
-
-template<class T>
-class ConcreteServiceInstanceHolder<T *> : public ServiceInstanceHolder<T>
-{
 	struct NullDeleter
 	{
 		void operator()(T *) const {}
 	};
 
 public:
-	explicit ConcreteServiceInstanceHolder(T *const service_instance_ptr)
-		: _service_instance(service_instance_ptr, NullDeleter())
+	template<class U>
+	explicit ServiceInstanceHolder(U &&instance)
+		: _instance(std::make_shared<std::remove_reference_t<U>>(std::forward<U>(instance)))
+	{}
+	explicit ServiceInstanceHolder(T *const instance)
+		: _instance(std::shared_ptr<T>(instance, NullDeleter()))
+	{}
+	explicit ServiceInstanceHolder(std::shared_ptr<T> instance)
+		: _instance(instance)
 	{}
 
-	virtual T *serviceInstance() override
+	T *serviceInstance()
 	{
-		return _service_instance.get();
+		return _instance.get();
 	}
 
 private:
-	std::shared_ptr<T> _service_instance;
-};
-
-template<class T>
-class ConcreteServiceInstanceHolder<std::shared_ptr<T>> : public ServiceInstanceHolder<T>
-{
-public:
-	explicit ConcreteServiceInstanceHolder(std::shared_ptr<T> service_instance_sptr)
-		: _service_instance(service_instance_sptr)
-	{}
-
-	virtual T *serviceInstance() override
-	{
-		return _service_instance.get();
-	}
-
-private:
-	std::shared_ptr<T> const _service_instance;
+	std::shared_ptr<T> _instance;
 };
 
 template<class T>
@@ -137,7 +109,7 @@ public:
 	template<class T>
 	void add(T &&service_instance)
 	{
-		_service_instances[TypeIndex<T>::value] = std::make_shared<ConcreteServiceInstanceHolder<std::remove_reference_t<T>>>(service_instance);
+		_service_instances[TypeIndex<T>::value] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(std::forward<T>(service_instance));
 	}
 
 	template<class T>
@@ -201,10 +173,47 @@ class DummyService
 public:
 	explicit DummyService(const int value = 0)
 		: _value(value)
-	{}
-	virtual ~DummyService() {}
+	{
+		Logger::WriteMessage("Constructing");
+	}
 
-	const int _value;
+	DummyService(const DummyService &other)
+		: _value(other._value)
+	{
+		Logger::WriteMessage("Copy constructing");
+	}
+
+	DummyService(DummyService &&other)
+	{
+		Logger::WriteMessage("Move constructing");
+
+		std::swap(_value, other._value);
+	}
+
+	DummyService &operator=(const DummyService &other)
+	{
+		Logger::WriteMessage("Copy assigning");
+
+		_value = other._value;
+
+		return *this;
+	}
+
+	DummyService &operator=(DummyService &&other)
+	{
+		Logger::WriteMessage("Move assigning");
+
+		std::swap(_value, other._value);
+
+		return *this;
+	}
+
+	virtual ~DummyService()
+	{
+		Logger::WriteMessage("Destroying");
+	}
+
+	int _value;
 };
 
 TEST_CLASS(BaseContainerTest)
