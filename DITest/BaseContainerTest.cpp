@@ -202,13 +202,20 @@ public:
 		});
 	}
 
-	TEST_METHOD(ShouldResolveServiceCopy_WhenInstanceRegistered)
+	TEST_METHOD(ShouldResolveCopyOfService_WhenServiceInstanceRegistered)
 	{
-		DummyService<> service(13);
-
-		builder()->registerInstance(service);
+		builder()->registerInstance(DummyService<>(13));
 
 		Assert::AreEqual(13, container()->resolve<DummyService<> *>()->_value);
+	}
+
+	TEST_METHOD(ShouldResolveCopyOfServiceOfCorrectType_WhenServiceInstancesOfDifferentTypesRegistered)
+	{
+		builder()->registerInstance(DummyService<1>(13));
+		builder()->registerInstance(DummyService<2>(14));
+
+		Assert::AreEqual(13, container()->resolve<DummyService<1> *>()->_value);
+		Assert::AreEqual(14, container()->resolve<DummyService<2> *>()->_value);
 	}
 
 private:
