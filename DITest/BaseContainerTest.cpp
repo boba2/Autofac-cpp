@@ -71,33 +71,38 @@ class ConcreteServiceInstanceHolder : public ServiceInstanceHolder<T>
 {
 public:
 	explicit ConcreteServiceInstanceHolder(const T &service_instance)
-		: _service_instance(service_instance)
+		: _service_instance(std::make_shared<T>(service_instance))
 	{}
 
 	virtual T *serviceInstance() override
 	{
-		return &_service_instance;
+		return _service_instance.get();
 	}
 
 private:
-	T _service_instance;
+	const std::shared_ptr<T> _service_instance;
 };
 
 template<class T>
 class ConcreteServiceInstanceHolder<T *> : public ServiceInstanceHolder<T>
 {
+	struct NullDeleter
+	{
+		void operator()(T *) const {}
+	};
+
 public:
 	explicit ConcreteServiceInstanceHolder(T *const service_instance_ptr)
-		: _service_instance_ptr(service_instance_ptr)
+		: _service_instance(service_instance_ptr, NullDeleter())
 	{}
 
 	virtual T *serviceInstance() override
 	{
-		return _service_instance_ptr;
+		return _service_instance.get();
 	}
 
 private:
-	T *const _service_instance_ptr;
+	std::shared_ptr<T> _service_instance;
 };
 
 template<class T>
@@ -105,16 +110,16 @@ class ConcreteServiceInstanceHolder<std::shared_ptr<T>> : public ServiceInstance
 {
 public:
 	explicit ConcreteServiceInstanceHolder(std::shared_ptr<T> service_instance_sptr)
-		: _service_instance_sptr(service_instance_sptr)
+		: _service_instance(service_instance_sptr)
 	{}
 
 	virtual T *serviceInstance() override
 	{
-		return _service_instance_sptr.get();
+		return _service_instance.get();
 	}
 
 private:
-	std::shared_ptr<T> const _service_instance_sptr;
+	std::shared_ptr<T> const _service_instance;
 };
 
 template<class T>
