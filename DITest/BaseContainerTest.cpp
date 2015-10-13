@@ -96,13 +96,12 @@ private:
 };
 
 template<class T>
-struct TypeIndex
+struct TypeIndex : std::type_index
 {
-	static const std::type_index value;
+	TypeIndex()
+		: type_index(typeid(UnderlyingType<T>::Type))
+	{}
 };
-
-template<class T>
-const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>::Type) };
 
 template<class T>
 struct ServiceInstanceReferenceTypeConverter
@@ -187,21 +186,21 @@ class ServiceInstances
 {
 public:
 	template<class T>
-	void add(T &&service_instance)
+	void add(T &&instance)
 	{
-		_service_instances[TypeIndex<T>::value] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(ServiceInstanceReferenceTypeConverter<T>::convert(std::forward<T>(service_instance)));
+		_service_instances[TypeIndex<T>()] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(ServiceInstanceReferenceTypeConverter<T>::convert(std::forward<T>(instance)));
 	}
 
 	template<class T>
 	bool has()
 	{
-		return _service_instances.find(TypeIndex<T>::value) != _service_instances.end();
+		return _service_instances.find(TypeIndex<T>()) != _service_instances.end();
 	}
 
 	template<class T>
 	T get() 
 	{
-		return ServiceInstanceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->get());
+		return ServiceInstanceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>()))->get());
 	}
 
 private:
@@ -233,9 +232,9 @@ class ContainerBuilder
 {
 public:
 	template<class T>
-	void registerInstance(T &&service_instance)
+	void registerInstance(T &&instance)
 	{
-		_service_instances.add(std::forward<T>(service_instance));
+		_service_instances.add(std::forward<T>(instance));
 	}
 
 	std::unique_ptr<Container> build() const
