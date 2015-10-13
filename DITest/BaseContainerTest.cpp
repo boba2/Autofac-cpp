@@ -36,6 +36,12 @@ struct UnderlyingType<std::shared_ptr<T>>
 	using Type = typename UnderlyingType<T>::Type;
 };
 
+template<class T>
+struct UnderlyingType<std::unique_ptr<T>>
+{
+	using Type = typename UnderlyingType<T>::Type;
+};
+
 namespace Error {
 
 	class ServiceNotRegistered : public std::logic_error
@@ -83,6 +89,9 @@ public:
 	{}
 	explicit ServiceInstanceHolder(std::shared_ptr<T> instance)
 		: _instance(instance)
+	{}
+	explicit ServiceInstanceHolder(std::unique_ptr<T> instance)
+		: _instance(std::move(instance))
 	{}
 
 	T *serviceInstance()
@@ -221,11 +230,11 @@ TEST_CLASS(BaseContainerTest)
 public:
 	TEST_METHOD(ShouldResolveServiceByType_WhenServiceRegisteredThroughPointer)
 	{
-		DummyService<1> service;
+		DummyService<> service;
 
 		builder()->registerInstance(&service);
 
-		Assert::IsTrue(container()->resolve<DummyService<1> *>() == &service);
+		Assert::IsTrue(container()->resolve<DummyService<> *>() == &service);
 	}
 
 	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenServicesOfDifferentTypesRegisteredThroughPointers)
@@ -270,11 +279,11 @@ public:
 
 	TEST_METHOD(ShouldResolveServiceByType_WhenServiceRegisteredThroughSharedPtr)
 	{
-		auto service = std::make_shared<DummyService<1>>();
+		auto service = std::make_shared<DummyService<>>();
 
 		builder()->registerInstance(service);
 
-		Assert::IsTrue(container()->resolve<DummyService<1> *>() == service.get());
+		Assert::IsTrue(container()->resolve<DummyService<> *>() == service.get());
 	}
 
 	TEST_METHOD(ShouldResolveServiceOfCorrectType_WhenServiceInstancesOfDifferentTypesRegisteredThroughSharedPtr)
@@ -291,9 +300,16 @@ public:
 
 	TEST_METHOD(ShouldHoldServiceInstance_WhenRegisteredReferenceDestroyed)
 	{
-		builder()->registerInstance(std::make_shared<DummyService<1>>(15));
+		builder()->registerInstance(std::make_shared<DummyService<>>(15));
 
-		Assert::AreEqual(15, container()->resolve<DummyService<1> *>()->_value);
+		Assert::AreEqual(15, container()->resolve<DummyService<> *>()->_value);
+	}
+
+	TEST_METHOD(ShouldAllowRegisteringThroughUniquePtr)
+	{
+		builder()->registerInstance(std::make_unique<DummyService<>>(13));
+
+		Assert::AreEqual(13, container()->resolve<DummyService<> *>()->_value);
 	}
 
 private:
