@@ -133,6 +133,15 @@ struct TypeConverter<T &>
 	}
 };
 
+template<class T>
+struct TypeConverter<std::shared_ptr<T>>
+{
+	static std::shared_ptr<T> convert(std::shared_ptr<T> ptr)
+	{
+		return ptr;
+	}
+};
+
 class ServiceInstances
 {
 public:
@@ -349,6 +358,15 @@ public:
 		builder()->registerInstance(service);
 
 		Assert::IsTrue(&container()->resolve<DummyService<> &>() == service.get());
+	}
+
+	TEST_METHOD(ShouldResolveServiceInstanceBySharedPtr)
+	{
+		auto service = std::make_shared<DummyService<>>();
+
+		builder()->registerInstance(service);
+
+		Assert::IsTrue(container()->resolve<std::shared_ptr<DummyService<>>>() == service);
 	}
 
 private:
