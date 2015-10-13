@@ -305,11 +305,20 @@ public:
 		Assert::AreEqual(15, container()->resolve<DummyService<> *>()->_value);
 	}
 
-	TEST_METHOD(ShouldAllowRegisteringThroughUniquePtr)
+	TEST_METHOD(ShouldAllowRegisteringServiceThroughUniquePtr)
 	{
 		builder()->registerInstance(std::make_unique<DummyService<>>(13));
 
 		Assert::AreEqual(13, container()->resolve<DummyService<> *>()->_value);
+	}
+
+	TEST_METHOD(ShouldTakeOwnershipOfServiceRegisteredThroughUniquePtr)
+	{
+		auto service = std::make_unique<DummyService<>>();
+
+		builder()->registerInstance(std::move(service));
+
+		Assert::IsNull(service.get());
 	}
 
 private:
