@@ -105,7 +105,7 @@ template<class T>
 const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>::Type) };
 
 template<class T>
-struct TypeConverter
+struct ServiceInstanceReferenceTypeConverter
 {
 	static std::shared_ptr<T> convert(T &&instance)
 	{
@@ -119,7 +119,21 @@ struct TypeConverter
 };
 
 template<class T>
-struct TypeConverter<T *>
+struct ServiceInstanceReferenceTypeConverter<T &>
+{
+	static std::shared_ptr<T> convert(const T &instance)
+	{
+		return std::make_shared<T>(instance);
+	}
+
+	static T &convert(std::shared_ptr<T> instance)
+	{
+		return *instance.get();
+	}
+};
+
+template<class T>
+struct ServiceInstanceReferenceTypeConverter<T *>
 {
 	struct NullDeleter
 	{
@@ -138,16 +152,7 @@ struct TypeConverter<T *>
 };
 
 template<class T>
-struct TypeConverter<T &>
-{
-	static T &convert(std::shared_ptr<T> instance)
-	{
-		return *instance.get();
-	}
-};
-
-template<class T>
-struct TypeConverter<std::shared_ptr<T> &>
+struct ServiceInstanceReferenceTypeConverter<std::shared_ptr<T>>
 {
 	static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
 	{
@@ -156,7 +161,7 @@ struct TypeConverter<std::shared_ptr<T> &>
 };
 
 template<class T>
-struct TypeConverter<std::shared_ptr<T>>
+struct ServiceInstanceReferenceTypeConverter<std::shared_ptr<T> &>
 {
 	static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
 	{
@@ -165,7 +170,7 @@ struct TypeConverter<std::shared_ptr<T>>
 };
 
 template<class T>
-struct TypeConverter<std::unique_ptr<T>>
+struct ServiceInstanceReferenceTypeConverter<std::unique_ptr<T>>
 {
 	static std::shared_ptr<T> convert(std::unique_ptr<T> instance)
 	{
@@ -184,7 +189,7 @@ public:
 	template<class T>
 	void add(T &&service_instance)
 	{
-		_service_instances[TypeIndex<T>::value] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(TypeConverter<T>::convert(std::forward<T>(service_instance)));
+		_service_instances[TypeIndex<T>::value] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(ServiceInstanceReferenceTypeConverter<T>::convert(std::forward<T>(service_instance)));
 	}
 
 	template<class T>
@@ -196,7 +201,7 @@ public:
 	template<class T>
 	T get() 
 	{
-		return TypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->get());
+		return ServiceInstanceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->get());
 	}
 
 private:
@@ -341,6 +346,24 @@ public:
 
 		Assert::AreEqual(13, container()->resolve<DummyService<1> *>()->_value);
 		Assert::AreEqual(14, container()->resolve<DummyService<2> *>()->_value);
+	}
+
+	TEST_METHOD(ShouldResolveCopyOfService_WhenServiceInstanceRegisteredByCopy)
+	{
+		DummyService<> service(13);
+
+		builder()->registerInstance(service);
+
+		Assert::AreEqual(13, container()->resolve<DummyService<> *>()->_value);
+	}
+
+	TEST_METHOD(ShouldNotMove_WhenRegisteringLValueServiceInstance)
+	{
+		DummyService<> service(13);
+
+		builder()->registerInstance(service);
+
+		Assert::AreEqual(13, service._value);
 	}
 
 	TEST_METHOD(ShouldResolveServiceByType_WhenServiceRegisteredThroughSharedPtr)
