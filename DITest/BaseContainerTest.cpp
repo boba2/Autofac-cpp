@@ -94,9 +94,9 @@ public:
 		: _instance(std::move(instance))
 	{}
 
-	T *serviceInstance()
+	std::shared_ptr<T> serviceInstance()
 	{
-		return _instance.get();
+		return _instance;
 	}
 
 private:
@@ -111,6 +111,27 @@ struct TypeIndex
 
 template<class T>
 const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>::Type) };
+
+template<class T>
+struct TypeConverter;
+
+template<class T>
+struct TypeConverter<T *>
+{
+	static T *convert(std::shared_ptr<T> ptr)
+	{
+		return ptr.get();
+	}
+};
+
+template<class T>
+struct TypeConverter<T &>
+{
+	static T &convert(std::shared_ptr<T> ptr)
+	{
+		return *ptr.get();
+	}
+};
 
 class ServiceInstances
 {
@@ -130,7 +151,7 @@ public:
 	template<class T>
 	T get() 
 	{
-		return std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->serviceInstance();
+		return TypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->serviceInstance());
 	}
 
 private:
@@ -319,6 +340,15 @@ public:
 		builder()->registerInstance(std::move(service));
 
 		Assert::IsNull(service.get());
+	}
+
+	TEST_METHOD(ShouldResolveServiceInstanceByReference)
+	{
+		auto service = std::make_shared<DummyService<>>();
+
+		builder()->registerInstance(service);
+
+		Assert::IsTrue(&container()->resolve<DummyService<> &>() == service.get());
 	}
 
 private:
