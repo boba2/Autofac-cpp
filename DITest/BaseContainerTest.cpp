@@ -59,6 +59,13 @@ namespace Error {
 		{}
 	};
 
+	class ServiceInstanceNotResolvableAsUniquePtr : public std::logic_error
+	{
+	public:
+		ServiceInstanceNotResolvableAsUniquePtr()
+			: logic_error("Cannot resolve service instance as std::unique_ptr")
+		{}
+	};
 }
 
 template<class T = void>
@@ -139,6 +146,15 @@ struct TypeConverter<std::shared_ptr<T>>
 	static std::shared_ptr<T> convert(std::shared_ptr<T> ptr)
 	{
 		return ptr;
+	}
+};
+
+template<class T>
+struct TypeConverter<std::unique_ptr<T>>
+{
+	static std::unique_ptr<T> convert(std::shared_ptr<T>)
+	{
+		throw Error::ServiceInstanceNotResolvableAsUniquePtr();
 	}
 };
 
@@ -367,6 +383,18 @@ public:
 		builder()->registerInstance(service);
 
 		Assert::IsTrue(container()->resolve<std::shared_ptr<DummyService<>>>() == service);
+	}
+
+	TEST_METHOD(ShouldThrowException_WhenResolvingServiceInstanceByUniquePtr)
+	{
+		auto service = std::make_shared<DummyService<>>();
+
+		builder()->registerInstance(service);
+
+		Assert::ExpectException<Error::ServiceInstanceNotResolvableAsUniquePtr>([this]
+		{
+			container()->resolve<std::unique_ptr<DummyService<>>>();
+		});
 	}
 
 private:
