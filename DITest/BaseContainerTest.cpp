@@ -81,27 +81,12 @@ public:
 template<class T>
 class ServiceInstanceHolder : public ServiceInstanceHolder<>
 {
-	struct NullDeleter
-	{
-		void operator()(T *) const {}
-	};
-
 public:
-	template<class U>
-	explicit ServiceInstanceHolder(U &&instance)
-		: _instance(std::make_shared<std::remove_reference_t<U>>(std::forward<U>(instance)))
-	{}
-	explicit ServiceInstanceHolder(T *const instance)
-		: _instance(std::shared_ptr<T>(instance, NullDeleter()))
-	{}
 	explicit ServiceInstanceHolder(std::shared_ptr<T> instance)
 		: _instance(instance)
 	{}
-	explicit ServiceInstanceHolder(std::unique_ptr<T> instance)
-		: _instance(std::move(instance))
-	{}
 
-	std::shared_ptr<T> serviceInstance()
+	std::shared_ptr<T> get()
 	{
 		return _instance;
 	}
@@ -122,42 +107,71 @@ const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingTy
 template<class T>
 struct TypeConverter
 {
-	static const T &convert(std::shared_ptr<T> ptr)
+	static std::shared_ptr<T> convert(T &&instance)
 	{
-		return *ptr.get();
+		return std::make_shared<T>(std::forward<T>(instance));
+	}
+
+	static const T &convert(std::shared_ptr<T> instance)
+	{
+		return *instance.get();
 	}
 };
 
 template<class T>
 struct TypeConverter<T *>
 {
-	static T *convert(std::shared_ptr<T> ptr)
+	struct NullDeleter
 	{
-		return ptr.get();
+		void operator()(T *) const {}
+	};
+
+	static std::shared_ptr<T> convert(T *instance)
+	{
+		return std::shared_ptr<T>(instance, NullDeleter());
+	}
+
+	static T *convert(std::shared_ptr<T> instance)
+	{
+		return instance.get();
 	}
 };
 
 template<class T>
 struct TypeConverter<T &>
 {
-	static T &convert(std::shared_ptr<T> ptr)
+	static T &convert(std::shared_ptr<T> instance)
 	{
-		return *ptr.get();
+		return *instance.get();
+	}
+};
+
+template<class T>
+struct TypeConverter<std::shared_ptr<T> &>
+{
+	static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
+	{
+		return instance;
 	}
 };
 
 template<class T>
 struct TypeConverter<std::shared_ptr<T>>
 {
-	static std::shared_ptr<T> convert(std::shared_ptr<T> ptr)
+	static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
 	{
-		return ptr;
+		return instance;
 	}
 };
 
 template<class T>
 struct TypeConverter<std::unique_ptr<T>>
 {
+	static std::shared_ptr<T> convert(std::unique_ptr<T> instance)
+	{
+		return std::move(instance);
+	}
+
 	static std::unique_ptr<T> convert(std::shared_ptr<T>)
 	{
 		throw Error::ServiceInstanceNotResolvableAsUniquePtr();
@@ -170,7 +184,7 @@ public:
 	template<class T>
 	void add(T &&service_instance)
 	{
-		_service_instances[TypeIndex<T>::value] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(std::forward<T>(service_instance));
+		_service_instances[TypeIndex<T>::value] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(TypeConverter<T>::convert(std::forward<T>(service_instance)));
 	}
 
 	template<class T>
@@ -182,7 +196,7 @@ public:
 	template<class T>
 	T get() 
 	{
-		return TypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->serviceInstance());
+		return TypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(_service_instances.at(TypeIndex<T>::value))->get());
 	}
 
 private:
