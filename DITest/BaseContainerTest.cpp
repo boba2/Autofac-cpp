@@ -120,7 +120,13 @@ template<class T>
 const std::type_index TypeIndex<T>::value = std::type_index{ typeid(UnderlyingType<T>::Type) };
 
 template<class T>
-struct TypeConverter;
+struct TypeConverter
+{
+	static const T &convert(std::shared_ptr<T> ptr)
+	{
+		return *ptr.get();
+	}
+};
 
 template<class T>
 struct TypeConverter<T *>
@@ -395,6 +401,17 @@ public:
 		{
 			container()->resolve<std::unique_ptr<DummyService<>>>();
 		});
+	}
+
+	TEST_METHOD(ShouldResolveServiceInstanceAsCopy)
+	{
+		auto service = std::make_shared<DummyService<>>(13);
+
+		builder()->registerInstance(service);
+
+		auto service2 = container()->resolve<DummyService<>>();
+
+		Assert::AreEqual(13, service2._value);
 	}
 
 private:
