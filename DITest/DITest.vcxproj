@@ -158,8 +158,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Container.h" />
+    <ClInclude Include="ContainerBuilder.h" />
+    <ClInclude Include="DummyService.h" />
+    <ClInclude Include="Error.h" />
+    <ClInclude Include="ServiceInstanceHolder.h" />
+    <ClInclude Include="ServiceInstanceReferenceTypeConverter.h" />
+    <ClInclude Include="ServiceInstances.h" />
     <ClInclude Include="Support\stdafx.h" />
     <ClInclude Include="Support\targetver.h" />
+    <ClInclude Include="TypeIndex.h" />
+    <ClInclude Include="UnderlyingType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">
