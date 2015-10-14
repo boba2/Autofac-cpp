@@ -12,7 +12,7 @@ public:
 	template<class T>
 	void add(T &&instance)
 	{
-		_service_instances[TypeIndex<T>()] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(ServiceInstanceReferenceTypeConverter<T>::convert(std::forward<T>(instance)));
+		_service_instances[TypeIndex<T>()] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(std::forward<T>(instance));
 	}
 
 	template<class T>

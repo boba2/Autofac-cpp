@@ -309,6 +309,18 @@ public:
 		Assert::IsNull(service.get());
 	}
 
+//	TEST_METHOD(ShouldThrowException_WhenResolvingServiceByNonConstReference_AndServiceInstanceRegisteredThroughPointerToConst)
+//	{
+//		const DummyService<> service(13);
+//
+//		builder()->registerInstance(&service);
+//
+//		Assert::ExpectException<Error::ServiceNotRegistered>([this]
+//		{
+//			container()->resolve<DummyService<> &>();
+//		});
+//	}
+
 private:
 	ContainerBuilder *builder() const
 	{
