@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ContainerBaseTest.h" />
     <ClInclude Include="DummyService.h" />
     <ClInclude Include="Support\stdafx.h" />
     <ClInclude Include="Support\targetver.h" />

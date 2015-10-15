@@ -30,6 +30,9 @@
     <ClInclude Include="DummyService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContainerBaseTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DIGTest.cpp">
