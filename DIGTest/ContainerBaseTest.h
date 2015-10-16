@@ -5,14 +5,14 @@
 
 struct ContainerBaseTest : ::testing::Test
 {
-	ContainerBuilder *builder() const
+	ContainerBuilder &builder() const
 	{
-		return _container_builder.get();
+		return *_container_builder.get();
 	}
 
-	Container *container()
+	Container &container()
 	{
-		return (_container ? _container : _container = builder()->build()).get();
+		return *(_container ? _container : _container = builder().build()).get();
 	}
 
 	std::unique_ptr<ContainerBuilder> _container_builder = std::make_unique<ContainerBuilder>();
