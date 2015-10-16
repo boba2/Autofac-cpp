@@ -1,6 +1,5 @@
 #pragma once
 
-template<int = 0>
 class DummyService
 {
 public:
@@ -16,7 +15,7 @@ public:
 
 	DummyService(DummyService &&other)
 	{
-		std::swap(_value, other._value);
+		*this = other;
 	}
 
 	DummyService &operator=(const DummyService &other)

@@ -1,271 +1,283 @@
 #include "ContainerBaseTest.h"
 #include "DummyService.h"
 
+class DummyService1 : public DummyService
+{
+public:
+	using DummyService::DummyService;
+};
+
+class DummyService2 : public DummyService
+{
+public:
+	using DummyService::DummyService;
+};
+
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughPointer)
 {
-	auto service = DummyService<>();
+	auto service = DummyService();
 
 	builder().registerInstance(&service);
 
-	ASSERT_EQ(&service, container().resolve<DummyService<> *>());
+	ASSERT_EQ(&service, container().resolve<DummyService *>());
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByReference_WhenServiceInstanceRegisteredThroughPointer)
 {
-	auto service = DummyService<>();
+	auto service = DummyService();
 
 	builder().registerInstance(&service);
 
-	ASSERT_EQ(&service, &container().resolve<DummyService<> &>());
+	ASSERT_EQ(&service, &container().resolve<DummyService &>());
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceInstanceRegisteredThroughPointer)
 {
-	auto service = DummyService<>(13);
+	auto service = DummyService(13);
 
 	builder().registerInstance(&service);
 
-	ASSERT_EQ(13, container().resolve<DummyService<>>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceInstanceRegisteredThroughPointer)
 {
-	auto service = DummyService<>();
+	auto service = DummyService();
 
 	builder().registerInstance(&service);
 
-	ASSERT_EQ(&service, container().resolve<std::shared_ptr<DummyService<>>>().get());
+	ASSERT_EQ(&service, container().resolve<std::shared_ptr<DummyService>>().get());
 }
 
 TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_AndServiceInstanceRegisteredThroughPointer)
 {
-	auto service = DummyService<>();
+	auto service = DummyService();
 
 	builder().registerInstance(&service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService<>>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughCopy)
 {
-	auto service = DummyService<>(13);
+	auto service = DummyService(13);
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(13, container().resolve<DummyService<> *>()->_value);
+	ASSERT_EQ(13, container().resolve<DummyService *>()->_value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByReference_WhenServiceInstanceRegisteredThroughCopy)
 {
-	auto service = DummyService<>(13);
+	auto service = DummyService(13);
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(13, container().resolve<DummyService<> &>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService &>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceInstanceRegisteredThroughCopy)
 {
-	auto service = DummyService<>(13);
+	auto service = DummyService(13);
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(13, container().resolve<DummyService<>>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceInstanceRegisteredThroughCopy)
 {
-	auto service = DummyService<>(13);
+	auto service = DummyService(13);
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(13, container().resolve<std::shared_ptr<DummyService<>>>()->_value);
+	ASSERT_EQ(13, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_AndServiceInstanceRegisteredThroughCopy)
 {
-	auto service = DummyService<>();
+	auto service = DummyService();
 
 	builder().registerInstance(service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService<>>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughMove)
 {
-	builder().registerInstance(DummyService<>(13));
+	builder().registerInstance(DummyService(13));
 
-	ASSERT_EQ(13, container().resolve<DummyService<> *>()->_value);
+	ASSERT_EQ(13, container().resolve<DummyService *>()->_value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByReference_WhenServiceInstanceRegisteredThroughMove)
 {
-	builder().registerInstance(DummyService<>(13));
+	builder().registerInstance(DummyService(13));
 
-	ASSERT_EQ(13, container().resolve<DummyService<> &>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService &>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceInstanceRegisteredThroughMove)
 {
-	builder().registerInstance(DummyService<>(13));
+	builder().registerInstance(DummyService(13));
 
-	ASSERT_EQ(13, container().resolve<DummyService<>>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceInstanceRegisteredThroughMove)
 {
-	builder().registerInstance(DummyService<>(13));
+	builder().registerInstance(DummyService(13));
 
-	ASSERT_EQ(13, container().resolve<std::shared_ptr<DummyService<>>>()->_value);
+	ASSERT_EQ(13, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_AndServiceInstanceRegisteredThroughMove)
 {
-	builder().registerInstance(DummyService<>());
+	builder().registerInstance(DummyService());
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService<>>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughSharedPtr)
 {
-	auto service = std::make_shared<DummyService<>>();
+	auto service = std::make_shared<DummyService>();
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(service.get(), container().resolve<DummyService<> *>());
+	ASSERT_EQ(service.get(), container().resolve<DummyService *>());
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByReference_WhenServiceInstanceRegisteredThroughSharedPtr)
 {
-	auto service = std::make_shared<DummyService<>>();
+	auto service = std::make_shared<DummyService>();
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(service.get(), &container().resolve<DummyService<> &>());
+	ASSERT_EQ(service.get(), &container().resolve<DummyService &>());
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceInstanceRegisteredThroughSharedPtr)
 {
-	auto service = std::make_shared<DummyService<>>(13);
+	auto service = std::make_shared<DummyService>(13);
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(13, container().resolve<DummyService<>>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceInstanceRegisteredThroughSharedPtr)
 {
-	auto service = std::make_shared<DummyService<>>();
+	auto service = std::make_shared<DummyService>();
 
 	builder().registerInstance(service);
 
-	ASSERT_EQ(service.get(), container().resolve<std::shared_ptr<DummyService<>>>().get());
+	ASSERT_EQ(service.get(), container().resolve<std::shared_ptr<DummyService>>().get());
 }
 
 TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_AndServiceInstanceRegisteredThroughSharedPtr)
 {
-	auto service = std::make_shared<DummyService<>>();
+	auto service = std::make_shared<DummyService>();
 
 	builder().registerInstance(service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService<>>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughUniquePtr)
 {
-	builder().registerInstance(std::make_unique<DummyService<>>(13));
+	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_EQ(13, container().resolve<DummyService<> *>()->_value);
+	ASSERT_EQ(13, container().resolve<DummyService *>()->_value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByReference_WhenServiceInstanceRegisteredThroughUniquePtr)
 {
-	builder().registerInstance(std::make_unique<DummyService<>>(13));
+	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_EQ(13, container().resolve<DummyService<> &>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService &>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceInstanceRegisteredThroughUniquePtr)
 {
-	builder().registerInstance(std::make_unique<DummyService<>>(13));
+	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_EQ(13, container().resolve<DummyService<>>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceInstanceRegisteredThroughUniquePtr)
 {
-	builder().registerInstance(std::make_unique<DummyService<>>(13));
+	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_EQ(13, container().resolve<std::shared_ptr<DummyService<>>>()->_value);
+	ASSERT_EQ(13, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_AndServiceInstanceRegisteredThroughUniquePtr)
 {
-	builder().registerInstance(std::make_unique<DummyService<>>(13));
+	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService<>>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), Error::ServiceInstanceNotResolvableAsUniquePtr);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveCorrectServiceByPointer_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService<1> service1;
-	DummyService<2> service2;
+	DummyService1 service1;
+	DummyService2 service2;
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
 
-	ASSERT_EQ(&service1, container().resolve<DummyService<1> *>());
-	ASSERT_EQ(&service2, container().resolve<DummyService<2> *>());
+	ASSERT_EQ(&service1, container().resolve<DummyService1 *>());
+	ASSERT_EQ(&service2, container().resolve<DummyService2 *>());
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveCorrectServiceByReference_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService<1> service1;
-	DummyService<2> service2;
+	DummyService1 service1;
+	DummyService2 service2;
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
 
-	ASSERT_EQ(&service1, &container().resolve<DummyService<1> &>());
-	ASSERT_EQ(&service2, &container().resolve<DummyService<2> &>());
+	ASSERT_EQ(&service1, &container().resolve<DummyService1 &>());
+	ASSERT_EQ(&service2, &container().resolve<DummyService2 &>());
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveCorrectServiceByCopy_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService<1> service1(13);
-	DummyService<2> service2(14);
+	DummyService1 service1(13);
+	DummyService2 service2(14);
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
 
-	ASSERT_EQ(13, container().resolve<DummyService<1>>()._value);
-	ASSERT_EQ(14, container().resolve<DummyService<2>>()._value);
+	ASSERT_EQ(13, container().resolve<DummyService1>()._value);
+	ASSERT_EQ(14, container().resolve<DummyService2>()._value);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveCorrectServiceBySharedPtr_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService<1> service1;
-	DummyService<2> service2;
+	DummyService1 service1;
+	DummyService2 service2;
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
 
-	ASSERT_EQ(&service1, container().resolve<std::shared_ptr<DummyService<1>>>().get());
-	ASSERT_EQ(&service2, container().resolve<std::shared_ptr<DummyService<2>>>().get());
+	ASSERT_EQ(&service1, container().resolve<std::shared_ptr<DummyService1>>().get());
+	ASSERT_EQ(&service2, container().resolve<std::shared_ptr<DummyService2>>().get());
 }
 
 TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceOfOtherTypeThanRegistered)
 {
-	DummyService<1> service1;
+	DummyService1 service1;
 
 	builder().registerInstance(&service1);
 
-	ASSERT_THROW(container().resolve<DummyService<2> *>(), Error::ServiceNotRegistered);
+	ASSERT_THROW(container().resolve<DummyService2 *>(), Error::ServiceNotRegistered);
 }
 
 TEST_F(ContainerBaseTest, ShouldNotMove_WhenRegisteringServiceInstanceAsLValue)
 {
-	DummyService<> service(13);
+	DummyService service(13);
 
 	builder().registerInstance(service);
 
@@ -274,7 +286,7 @@ TEST_F(ContainerBaseTest, ShouldNotMove_WhenRegisteringServiceInstanceAsLValue)
 
 TEST_F(ContainerBaseTest, ShouldTakeOwnershipOfService_WhenServiceInstanceRegisteredThroughUniquePtr)
 {
-	auto service = std::make_unique<DummyService<>>();
+	auto service = std::make_unique<DummyService>();
 
 	builder().registerInstance(std::move(service));
 
