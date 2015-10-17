@@ -163,7 +163,8 @@
     <ClInclude Include="DummyService.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="ServiceInstanceHolder.h" />
-    <ClInclude Include="ServiceInstanceReferenceTypeConverter.h" />
+    <ClInclude Include="ServiceReferenceTypeConverter.h" />
+    <ClInclude Include="ServiceInstanceResolver.h" />
     <ClInclude Include="ServiceInstances.h" />
     <ClInclude Include="ServiceResolver.h" />
     <ClInclude Include="ServiceResolvers.h" />

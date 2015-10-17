@@ -1,21 +1,24 @@
 #pragma once
 
-#include "ServiceInstances.h"
-#include <algorithm>
+#include <set>
+#include <unordered_map>
+#include "TypeIndex.h"
+#include "ServiceResolver.h"
+#include "ServiceReferenceTypeConverter.h"
 
 class ServiceResolvers
 {
 public:
-	explicit ServiceResolvers(const ServiceInstances service_instances)
+	explicit ServiceResolvers(std::set<std::shared_ptr<ServiceResolver<>>> service_resolvers)
 	{
-		for (auto instance : service_instances.getAll())
-			_service_resolvers[instance.first] = std::dynamic_pointer_cast<ServiceResolver<>>(instance.second);
+		for (auto &resolver : service_resolvers)
+			_service_resolvers[resolver->getServiceType()] = resolver;
 	}
 
 	template<class T>
 	void add(T &&instance)
 	{
-		_service_resolvers[TypeIndex<T>()] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(std::forward<T>(instance));
+		_service_resolvers[TypeIndex<T>()] = ServiceInstanceHolder<typename UnderlyingType<T>::Type>(instance).getServiceResolver();
 	}
 
 	template<class T>
@@ -27,9 +30,9 @@ public:
 	template<class T>
 	T get()
 	{
-		return ServiceInstanceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceResolver<typename UnderlyingType<T>::Type>>(_service_resolvers.at(TypeIndex<T>()))->get());
+		return ServiceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceResolver<typename UnderlyingType<T>::Type>>(_service_resolvers.at(TypeIndex<T>()))->getService());
 	}
 
 private:
-	std::unordered_map<std::type_index, std::shared_ptr<ServiceResolver<>>> _service_resolvers;
+	std::unordered_map<TypeIndex<>, std::shared_ptr<ServiceResolver<>>> _service_resolvers;
 };

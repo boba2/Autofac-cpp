@@ -1,10 +1,7 @@
 #pragma once
 
-#include <typeindex>
-#include <unordered_map>
-#include "ServiceInstanceReferenceTypeConverter.h"
+#include <set>
 #include "ServiceInstanceHolder.h"
-#include "TypeIndex.h"
 
 class ServiceInstances
 {
@@ -12,14 +9,18 @@ public:
 	template<class T>
 	void add(T &&instance)
 	{
-		_service_instances[TypeIndex<T>()] = std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(std::forward<T>(instance));
+		_service_instances.insert(std::make_shared<ServiceInstanceHolder<typename UnderlyingType<T>::Type>>(std::forward<T>(instance)));
 	}
 
-	std::unordered_map<std::type_index, std::shared_ptr<ServiceInstanceHolder<>>> getAll() const
+	std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const
 	{
-		return _service_instances;
+		std::set<std::shared_ptr<ServiceResolver<>>> result;
+		for (auto &instance : _service_instances)
+			result.insert(instance->getServiceResolver());
+
+		return result;
 	}
 
 private:
-	std::unordered_map<std::type_index, std::shared_ptr<ServiceInstanceHolder<>>> _service_instances;
+	std::set<std::shared_ptr<ServiceInstanceHolder<>>> _service_instances;
 };

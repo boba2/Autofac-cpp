@@ -1,7 +1,8 @@
 #pragma once
+
+#include <gtest/gtest.h>
 #include "../DITest/Container.h"
 #include "../DITest/ContainerBuilder.h"
-#include <gtest/gtest.h>
 
 struct ContainerBaseTest : ::testing::Test
 {

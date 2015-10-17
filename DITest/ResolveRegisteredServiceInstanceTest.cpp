@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include <memory>
-#include "ServiceInstanceReferenceTypeConverter.h"
 #include "Container.h"
 #include "ContainerBuilder.h"
 #include "DummyService.h"

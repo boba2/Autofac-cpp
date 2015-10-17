@@ -4,7 +4,7 @@
 #include "Error.h"
 
 template<class T>
-struct ServiceInstanceReferenceTypeConverter
+struct ServiceReferenceTypeConverter
 {
 	static const T &convert(std::shared_ptr<T> instance)
 	{
@@ -13,7 +13,7 @@ struct ServiceInstanceReferenceTypeConverter
 };
 
 template<class T>
-struct ServiceInstanceReferenceTypeConverter<T &>
+struct ServiceReferenceTypeConverter<T &>
 {
 	static T &convert(std::shared_ptr<T> instance)
 	{
@@ -22,7 +22,7 @@ struct ServiceInstanceReferenceTypeConverter<T &>
 };
 
 template<class T>
-struct ServiceInstanceReferenceTypeConverter<T *>
+struct ServiceReferenceTypeConverter<T *>
 {
 	static T *convert(std::shared_ptr<T> instance)
 	{
@@ -31,7 +31,7 @@ struct ServiceInstanceReferenceTypeConverter<T *>
 };
 
 template<class T>
-struct ServiceInstanceReferenceTypeConverter<std::shared_ptr<T>>
+struct ServiceReferenceTypeConverter<std::shared_ptr<T>>
 {
 	static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
 	{
@@ -40,10 +40,16 @@ struct ServiceInstanceReferenceTypeConverter<std::shared_ptr<T>>
 };
 
 template<class T>
-struct ServiceInstanceReferenceTypeConverter<std::shared_ptr<T> &> : ServiceInstanceReferenceTypeConverter<std::shared_ptr<T>> {};
+struct ServiceReferenceTypeConverter<std::shared_ptr<T> &>
+{
+	static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
+	{
+		return instance;
+	}
+};
 
 template<class T>
-struct ServiceInstanceReferenceTypeConverter<std::unique_ptr<T>>
+struct ServiceReferenceTypeConverter<std::unique_ptr<T>>
 {
 	static std::unique_ptr<T> convert(std::shared_ptr<T>)
 	{

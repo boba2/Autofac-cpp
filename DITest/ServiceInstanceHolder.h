@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include "ServiceResolver.h"
+#include "ServiceInstanceResolver.h"
+
 
 template<class T = void>
 class ServiceInstanceHolder;
@@ -11,10 +12,12 @@ class ServiceInstanceHolder<void>
 {
 public:
 	virtual ~ServiceInstanceHolder() {};
+
+	virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const = 0;
 };
 
 template<class T>
-class ServiceInstanceHolder : public ServiceResolver<T>, public ServiceInstanceHolder<>
+class ServiceInstanceHolder : public ServiceInstanceHolder<>
 {
 public:
 	template<class U>
@@ -31,9 +34,9 @@ public:
 		: _instance(std::move(instance))
 	{}
 
-	std::shared_ptr<T> get() override
+	std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 	{
-		return _instance;
+		return std::make_shared<ServiceInstanceResolver<T>>(_instance);
 	}
 
 private:

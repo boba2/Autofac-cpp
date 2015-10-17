@@ -13,7 +13,6 @@
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="UnderlyingType.h" />
-    <ClInclude Include="ServiceInstanceReferenceTypeConverter.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="ServiceInstanceHolder.h" />
     <ClInclude Include="TypeIndex.h" />
@@ -23,6 +22,8 @@
     <ClInclude Include="DummyService.h" />
     <ClInclude Include="ServiceResolvers.h" />
     <ClInclude Include="ServiceResolver.h" />
+    <ClInclude Include="ServiceInstanceResolver.h" />
+    <ClInclude Include="ServiceReferenceTypeConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">

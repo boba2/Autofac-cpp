@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ServiceResolvers.h"
+#include "Error.h"
 
 class Container
 {
