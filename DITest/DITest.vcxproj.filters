@@ -21,6 +21,8 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="DummyService.h" />
+    <ClInclude Include="ServiceResolvers.h" />
+    <ClInclude Include="ServiceResolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">

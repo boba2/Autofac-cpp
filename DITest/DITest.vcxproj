@@ -165,6 +165,8 @@
     <ClInclude Include="ServiceInstanceHolder.h" />
     <ClInclude Include="ServiceInstanceReferenceTypeConverter.h" />
     <ClInclude Include="ServiceInstances.h" />
+    <ClInclude Include="ServiceResolver.h" />
+    <ClInclude Include="ServiceResolvers.h" />
     <ClInclude Include="Support\stdafx.h" />
     <ClInclude Include="Support\targetver.h" />
     <ClInclude Include="TypeIndex.h" />

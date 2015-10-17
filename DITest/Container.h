@@ -1,26 +1,26 @@
 #pragma once
 
-#include "ServiceInstances.h"
+#include "ServiceResolvers.h"
 
 class Container
 {
 public:
-	explicit Container(const ServiceInstances &service_instances)
-		: _service_instances(service_instances)
+	explicit Container(const ServiceResolvers &service_resolvers)
+		: _service_resolvers(service_resolvers)
 	{
-		_service_instances.add(static_cast<Container *>(this));
+		_service_resolvers.add(static_cast<Container *>(this));
 	}
 
 	template<class T>
 	T resolve()
 	{
-		if (!_service_instances.has<T>())
+		if (!_service_resolvers.has<T>())
 			throw Error::ServiceNotRegistered::fromType<T>();
 
 
-		return _service_instances.get<T>();
+		return _service_resolvers.get<T>();
 	}
 
 private:
-	ServiceInstances _service_instances;
+	ServiceResolvers _service_resolvers;
 };
