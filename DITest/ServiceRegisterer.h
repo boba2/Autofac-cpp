@@ -19,6 +19,11 @@ namespace DI
 			return *this;
 		}
 
+		ServiceRegisterer& asSelf()
+		{
+			return as<T>();
+		}
+
 	protected:
 		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
 	};

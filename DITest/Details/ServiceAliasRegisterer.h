@@ -29,5 +29,15 @@ namespace DI
 			}
 		};
 
+		template<class T>
+		class ServiceAliasRegisterer<T, T> : public ServiceAliasRegisterer<>
+		{
+		public:
+			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const override
+			{
+				return main_resolver;
+			}
+		};
+
 	}
 }
