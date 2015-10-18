@@ -18,7 +18,6 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="DummyService.h" />
-    <ClInclude Include="ServiceResolvers.h" />
     <ClInclude Include="ServiceResolver.h" />
     <ClInclude Include="ServiceInstanceResolver.h" />
     <ClInclude Include="ServiceReferenceTypeConverter.h" />

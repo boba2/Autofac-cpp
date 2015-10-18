@@ -167,7 +167,6 @@
     <ClInclude Include="ServiceInstanceResolver.h" />
     <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="ServiceResolver.h" />
-    <ClInclude Include="ServiceResolvers.h" />
     <ClInclude Include="Support\stdafx.h" />
     <ClInclude Include="Support\targetver.h" />
     <ClInclude Include="TypeIndex.h" />

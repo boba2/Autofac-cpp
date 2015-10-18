@@ -1,27 +1,45 @@
 #pragma once
 
-#include "ServiceResolvers.h"
+#include <set>
+#include <unordered_map>
 #include "Error.h"
+#include "ServiceInstanceRegisterer.h"
+#include "ServiceReferenceTypeConverter.h"
 
 class Container
 {
 public:
-	explicit Container(const ServiceResolvers &service_resolvers)
-		: _service_resolvers(service_resolvers)
+	explicit Container(std::set<std::shared_ptr<ServiceResolver<>>> service_resolvers)
 	{
-		_service_resolvers.add(static_cast<Container *>(this));
+		for (auto &resolver : service_resolvers)
+			_service_resolvers[resolver->getServiceType()] = resolver;
+
+		_service_resolvers[TypeIndex<Container>()] = ServiceInstanceRegisterer<Container>(this).getServiceResolver();
 	}
 
 	template<class T>
 	T resolve()
 	{
-		if (!_service_resolvers.has<T>())
+		if (!has<T>())
 			throw Error::ServiceNotRegistered::fromType<T>();
 
 
-		return _service_resolvers.get<T>();
+		return get<T>();
 	}
 
 private:
-	ServiceResolvers _service_resolvers;
+	template<class T>
+	bool has()
+	{
+		return _service_resolvers.find(TypeIndex<T>()) != _service_resolvers.end();
+	}
+
+	template<class T>
+	T get()
+	{
+		return ServiceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceResolver<typename UnderlyingType<T>::Type>>(_service_resolvers.at(TypeIndex<T>()))->getService());
+	}
+
+private:
+	std::unordered_map<TypeIndex<>, std::shared_ptr<ServiceResolver<>>> _service_resolvers;
 };

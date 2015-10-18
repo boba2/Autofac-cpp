@@ -4,7 +4,6 @@
 #include "ServiceRegisterer.h"
 #include "ServiceInstanceResolver.h"
 
-
 template<class T>
 class ServiceInstanceRegisterer : public ServiceRegisterer<>
 {

@@ -1,9 +1,7 @@
 #pragma once
 
 #include <memory>
-
-template<class T>
-class ServiceResolver;
+#include "ServiceResolver.h"
 
 template<class T = void>
 class ServiceRegisterer;

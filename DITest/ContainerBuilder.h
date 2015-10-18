@@ -16,7 +16,7 @@ public:
 
 	std::unique_ptr<Container> build() const
 	{
-		return std::make_unique<Container>(ServiceResolvers(getServiceResolvers()));
+		return std::make_unique<Container>(getServiceResolvers());
 	}
 
 private:
