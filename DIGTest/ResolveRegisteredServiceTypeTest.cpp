@@ -1,10 +1,18 @@
 #include "ContainerBaseTest.h"
 
-class DummyService {};
+struct DummyService {};
+struct SpecialDummyService : DummyService {};
 
-TEST_F(ContainerBaseTest, Should)
+TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceTypeRegistered)
 {
 	builder().registerType<DummyService>();
 
 	ASSERT_TRUE(dynamic_cast<DummyService *>(container().resolve<DummyService *>()) != nullptr);
+}
+
+TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceTypeRegistered)
+{
+	builder().registerType<DummyService>();
+
+	auto service = container().resolve<DummyService>();
 }
