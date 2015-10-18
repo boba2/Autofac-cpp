@@ -24,6 +24,11 @@ namespace DI
 		class ServiceResolver : public ServiceResolver<>
 		{
 		public:
+			virtual TypeIndex<> getServiceType() const override
+			{
+				return TypeIndex<T>();
+			}
+
 			virtual std::shared_ptr<T> getService() const = 0;
 		};
 

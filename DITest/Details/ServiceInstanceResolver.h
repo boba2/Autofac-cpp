@@ -20,11 +20,6 @@ namespace DI
 				return _instance;
 			}
 
-			virtual TypeIndex<> getServiceType() const override
-			{
-				return TypeIndex<T>();
-			}
-
 		private:
 			std::shared_ptr<T> const _instance;
 		};
