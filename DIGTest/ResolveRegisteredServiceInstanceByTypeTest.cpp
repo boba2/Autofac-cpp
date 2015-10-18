@@ -4,7 +4,7 @@ struct DummyService1 {};
 struct DummyService2 {};
 struct SpecialDummyService : DummyService1, DummyService2 {};
 
-TEST_F(ContainerBaseTest, ShouldResolveServiceByBaseType_WhenServiceInstanceRegisteredWithAliasForBaseType)
+TEST_F(ContainerBaseTest, ShouldResolveServiceByBaseType_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
 	SpecialDummyService service;
 
@@ -15,7 +15,7 @@ TEST_F(ContainerBaseTest, ShouldResolveServiceByBaseType_WhenServiceInstanceRegi
 	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
 }
 
-TEST_F(ContainerBaseTest, ShouldResolveServiceByAnyBaseType_WhenServiceInstanceRegisteredWithAliasesForManyBaseTypes)
+TEST_F(ContainerBaseTest, ShouldResolveServiceByAnyBaseType_WhenServiceInstanceRegisteredAliasedAsManyBaseTypes)
 {
 	SpecialDummyService service;
 
@@ -39,7 +39,18 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByItsType_And
 	ASSERT_THROW(container().resolve<SpecialDummyService *>(), DI::Error::ServiceNotRegistered);
 }
 
-TEST_F(ContainerBaseTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasForVirtualBaseType)
+TEST_F(ContainerBaseTest, ShouldResolveServiceByItsType_WhenServiceInstanceRegisteredOnlyAliasedAsItsOwnType)
+{
+	SpecialDummyService service;
+
+	builder()
+		.registerInstance(&service)
+		.as<SpecialDummyService>();
+
+	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
+}
+
+TEST_F(ContainerBaseTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
 //	SpecialDummyService service;
 //
