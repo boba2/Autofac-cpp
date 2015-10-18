@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "Details/ServiceInstanceRegisterer.h"
 #include "Details/ServiceReferenceTypeConverter.h"
-#include "Details/Error/Error.h"
+#include "Error/ServiceNotRegistered.h"
 
 namespace DI 
 {

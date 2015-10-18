@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "Error/Error.h"
+#include "../Error/ServiceInstanceNotResolvableAsUniquePtr.h"
 
 namespace DI
 {
