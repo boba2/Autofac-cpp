@@ -165,7 +165,6 @@
     <ClInclude Include="ServiceInstanceRegisterer.h" />
     <ClInclude Include="ServiceReferenceTypeConverter.h" />
     <ClInclude Include="ServiceInstanceResolver.h" />
-    <ClInclude Include="ServiceInstances.h" />
     <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="ServiceResolver.h" />
     <ClInclude Include="ServiceResolvers.h" />
