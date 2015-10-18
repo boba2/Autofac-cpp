@@ -27,9 +27,6 @@
     <ClInclude Include="Support\targetver.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="DummyService.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ContainerBaseTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>

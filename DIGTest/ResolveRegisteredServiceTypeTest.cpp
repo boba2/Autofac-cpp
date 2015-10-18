@@ -1,16 +1,10 @@
 #include "ContainerBaseTest.h"
 #include "../DITest/Error/ServiceInstanceNotResolvableAs.h"
 
-struct DummyService
+struct DummyService {};
+struct AbstractDummyService
 {
-	virtual ~DummyService() {}
-	virtual void doSomething() {} 
-};
-struct SpecialDummyService : DummyService {};
-
-struct AbstractDummyService : DummyService
-{
-	virtual void abstractMethod() = 0;
+	virtual ~AbstractDummyService() = 0;
 };
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceTypeRegistered)

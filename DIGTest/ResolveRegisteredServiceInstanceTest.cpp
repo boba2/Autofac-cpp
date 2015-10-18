@@ -1,18 +1,28 @@
 #include "ContainerBaseTest.h"
-#include "DummyService.h"
 #include "../DITest/Error/ServiceNotRegistered.h"
 #include "../DITest/Error/ServiceInstanceNotResolvableAs.h"
 
-class DummyService1 : public DummyService
+class DummyService
 {
 public:
-	explicit DummyService1(const int value = 0) : DummyService(value) {}
+	int _value;
+	explicit DummyService(const int value = 0) : _value(value) {}
+	DummyService(const DummyService &other) = default;
+	DummyService(DummyService &&other) = default;
+	DummyService &operator=(const DummyService &other) = default;
+	DummyService &operator=(DummyService &&other) = default;
 };
 
-class DummyService2 : public DummyService
+struct DummyService1
 {
-public:
-	explicit DummyService2(const int value = 0) : DummyService(value) {}
+	int _value;
+	explicit DummyService1(const int value = 0) : _value(value) {}
+};
+
+struct DummyService2
+{
+	int _value;
+	explicit DummyService2(const int value = 0) : _value(value) {}
 };
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughPointer)
