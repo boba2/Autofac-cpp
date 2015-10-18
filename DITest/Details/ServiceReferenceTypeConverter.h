@@ -10,16 +10,20 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter
 		{
-			static const T& convertFrom(ServiceResolver<T>& resolver)
+			using Result = typename ServiceResolver<T>::ServiceType;
+
+			static Result convertFrom(ServiceResolver<T>& resolver)
 			{	
-				return resolver.getServiceAsConstRef();
+				return resolver.getService();
 			}
 		};
 
 		template<class T>
 		struct ServiceReferenceTypeConverter<T&>
 		{
-			static T& convertFrom(ServiceResolver<T>& resolver)
+			using Result = typename ServiceResolver<T>::ServiceRefType;
+
+			static Result convertFrom(ServiceResolver<T>& resolver)
 			{
 				return resolver.getServiceAsRef();
 			}
@@ -28,7 +32,9 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter<T*>
 		{
-			static T* convertFrom(ServiceResolver<T>& resolver)
+			using Result = typename ServiceResolver<T>::ServicePtrType;
+
+			static Result convertFrom(ServiceResolver<T>& resolver)
 			{
 				return resolver.getServiceAsPtr();
 			}
@@ -37,7 +43,9 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter<std::shared_ptr<T>>
 		{
-			static std::shared_ptr<T> convertFrom(ServiceResolver<T>& resolver)
+			using Result = typename ServiceResolver<T>::ServiceSharedPtrType;
+
+			static Result convertFrom(ServiceResolver<T>& resolver)
 			{
 				return resolver.getServiceAsSharedPtr();
 			}
@@ -46,7 +54,9 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter<std::shared_ptr<T> &>
 		{
-			static std::shared_ptr<T> convertFrom(ServiceResolver<T>& resolver)
+			using Result = typename ServiceResolver<T>::ServiceUniquePtrType;
+
+			static Result convertFrom(ServiceResolver<T>& resolver)
 			{
 				return resolver.getServiceAsSharedPtr();
 			}
@@ -55,7 +65,9 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter<std::unique_ptr<T>>
 		{
-			static std::unique_ptr<T> convertFrom(ServiceResolver<T>& resolver)
+			using Result = std::unique_ptr<T>;
+
+			static Result convertFrom(ServiceResolver<T>& resolver)
 			{
 				return resolver.getServiceAsUniquePtr();
 			}

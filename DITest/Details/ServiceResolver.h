@@ -24,16 +24,23 @@ namespace DI
 		class ServiceResolver : public ServiceResolver<>
 		{
 		public:
+			using ServiceType = std::conditional_t<std::is_abstract<T>::value, const T&, T>;
+			using ServiceRefType = T&;
+			using ServicePtrType = T*;
+			using ServiceSharedPtrType = std::shared_ptr<T>;
+			using ServiceUniquePtrType = std::unique_ptr<T>;
+
+		public:
 			virtual TypeIndex<> getServiceType() const override
 			{
 				return TypeIndex<T>();
 			}
 
-			virtual const T& getServiceAsConstRef() const = 0;
-			virtual T& getServiceAsRef() const = 0;
-			virtual T* getServiceAsPtr() const = 0;
-			virtual std::shared_ptr<T> getServiceAsSharedPtr() const = 0;
-			virtual std::unique_ptr<T> getServiceAsUniquePtr() const = 0;
+			virtual ServiceType getService() const = 0;
+			virtual ServiceRefType getServiceAsRef() const = 0;
+			virtual ServicePtrType getServiceAsPtr() const = 0;
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() const = 0;
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() const = 0;
 		};
 
 	}

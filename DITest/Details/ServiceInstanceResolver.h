@@ -11,32 +11,38 @@ namespace DI
 		template<class T>
 		class ServiceInstanceResolver : public ServiceResolver<T>
 		{
+			using ServiceResolver<T>::ServiceType;
+			using ServiceResolver<T>::ServiceRefType;
+			using ServiceResolver<T>::ServicePtrType;
+			using ServiceResolver<T>::ServiceSharedPtrType;
+			using ServiceResolver<T>::ServiceUniquePtrType;
+
 		public:
 			explicit ServiceInstanceResolver(std::shared_ptr<T> instance)
 				: _instance(instance)
 			{}
 
-			virtual const T& getServiceAsConstRef() const override
+			virtual ServiceType getService() const override
 			{
 				return *_instance.get();
 			}
 
-			virtual T& getServiceAsRef() const override
+			virtual ServiceRefType getServiceAsRef() const override
 			{
 				return *_instance.get();
 			}
 
-			virtual T* getServiceAsPtr() const override
+			virtual ServicePtrType getServiceAsPtr() const override
 			{
 				return _instance.get();
 			}
 
-			virtual std::shared_ptr<T> getServiceAsSharedPtr() const override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
 				return _instance;
 			}
 
-			virtual std::unique_ptr<T> getServiceAsUniquePtr() const override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
 				throw Error::ServiceInstanceNotResolvableAs();
 			}

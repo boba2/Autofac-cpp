@@ -12,7 +12,7 @@ namespace DI
 		virtual ~Container() {}
 
 		template<class T>
-		T resolve()
+		auto resolve() -> typename Details::ServiceReferenceTypeConverter<T>::Result
 		{
 			using ServiceReferenceTypeConverter = Details::ServiceReferenceTypeConverter<T>;
 
