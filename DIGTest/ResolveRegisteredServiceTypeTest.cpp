@@ -16,3 +16,10 @@ TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceTypeRegistered)
 
 	auto service = container().resolve<DummyService>();
 }
+
+TEST_F(ContainerBaseTest, ShouldResolveServiceBySharedPtr_WhenServiceTypeRegistered)
+{
+	builder().registerType<DummyService>();
+
+	ASSERT_TRUE(dynamic_cast<DummyService *>(container().resolve<std::shared_ptr<DummyService>>().get()) != nullptr);
+}
