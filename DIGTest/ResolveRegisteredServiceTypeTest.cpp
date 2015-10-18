@@ -22,7 +22,7 @@ TEST_F(ContainerBaseTest, ShouldResolveServiceByUniquePtr_WhenServiceTypeRegiste
 	ASSERT_TRUE(dynamic_cast<DummyService*>(container().resolve<std::unique_ptr<DummyService>>().get()) != nullptr);
 }
 
-TEST_F(ContainerBaseTest, ShouldResolveServiceByCopy_WhenServiceTypeRegistered)
+TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByCopy_AndServiceTypeRegisteredNotAsAutoManageable)
 {
 	builder().registerType<DummyService>();
 

@@ -6,13 +6,13 @@
 class DummyService1 : public DummyService
 {
 public:
-	using DummyService::DummyService;
+	explicit DummyService1(const int value = 0) : DummyService(value) {}
 };
 
 class DummyService2 : public DummyService
 {
 public:
-	using DummyService::DummyService;
+	explicit DummyService2(const int value = 0) : DummyService(value) {}
 };
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughPointer)
