@@ -24,6 +24,7 @@
     <ClInclude Include="Details\UnderlyingType.h" />
     <ClInclude Include="Error\ServiceInstanceNotResolvableAsUniquePtr.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
+    <ClInclude Include="Details\Container.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">

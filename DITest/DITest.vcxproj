@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
+    <ClInclude Include="Details\Container.h" />
     <ClInclude Include="Error\ServiceInstanceNotResolvableAsUniquePtr.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="DummyService.h" />

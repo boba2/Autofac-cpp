@@ -1,5 +1,6 @@
 #include "ContainerBaseTest.h"
 #include "DummyService.h"
+#include "../DITest/Error/ServiceNotRegistered.h"
 
 class DummyService1 : public DummyService
 {

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <iterator>
-#include "Container.h"
+#include "Details/Container.h"
 #include "Details/ServiceInstanceRegisterer.h"
 
 namespace DI
@@ -17,9 +17,9 @@ namespace DI
 			_service_registerers.insert(std::make_shared<Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>>(std::forward<T>(instance)));
 		}
 
-		std::unique_ptr<Container> build() const
+		std::unique_ptr<Details::Container> build() const
 		{
-			return std::make_unique<Container>(getServiceResolvers());
+			return std::make_unique<Details::Container>(getServiceResolvers());
 		}
 
 	private:

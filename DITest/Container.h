@@ -1,10 +1,7 @@
 #pragma once
 
-#include <set>
-#include <unordered_map>
 #include "Details/ServiceInstanceRegisterer.h"
 #include "Details/ServiceReferenceTypeConverter.h"
-#include "Error/ServiceNotRegistered.h"
 
 namespace DI 
 {
@@ -12,39 +9,28 @@ namespace DI
 	class Container
 	{
 	public:
-		explicit Container(std::set<std::shared_ptr<Details::ServiceResolver<>>> service_resolvers)
-		{
-			for (auto &resolver : service_resolvers)
-				_service_resolvers[resolver->getServiceType()] = resolver;
-
-			_service_resolvers[Details::TypeIndex<Container>()] = Details::ServiceInstanceRegisterer<Container>(this).getServiceResolver();
-		}
+		virtual ~Container() {}
 
 		template<class T>
 		T resolve()
 		{
-			if (!has<T>())
-				throw Error::ServiceNotRegistered::fromType<typename Details::UnderlyingType<T>::Type>();
+			using ServiceReferenceTypeConverter = Details::ServiceReferenceTypeConverter<T>;
 
-
-			return get<T>();
+			return ServiceReferenceTypeConverter::convert(getResolver<T>().getService());
 		}
+
+	protected:
+		virtual Details::ServiceResolver<> &getResolver(const Details::TypeIndex<>& type_index) const = 0;
 
 	private:
 		template<class T>
-		bool has()
+		auto& getResolver() const
 		{
-			return _service_resolvers.find(Details::TypeIndex<T>()) != _service_resolvers.end();
-		}
+			using ServiceResolverType = Details::ServiceResolver<typename Details::UnderlyingType<T>::Type>;
+			using TypeIndex = Details::TypeIndex<T>;
 
-		template<class T>
-		T get()
-		{
-			return Details::ServiceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<Details::ServiceResolver<typename Details::UnderlyingType<T>::Type>>(_service_resolvers.at(Details::TypeIndex<T>()))->getService());
+			return dynamic_cast<ServiceResolverType&>(getResolver(TypeIndex()));
 		}
-
-	private:
-		std::unordered_map<Details::TypeIndex<>, std::shared_ptr<Details::ServiceResolver<>>> _service_resolvers;
 	};
 
 }
