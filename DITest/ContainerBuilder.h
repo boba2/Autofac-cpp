@@ -1,7 +1,5 @@
 #pragma once
 
-#include <algorithm>
-#include <iterator>
 #include "Details/Container.h"
 #include "Details/ServiceInstanceRegisterer.h"
 
@@ -12,9 +10,12 @@ namespace DI
 	{
 	public:
 		template<class T>
-		void registerInstance(T &&instance)
+		auto& registerInstance(T &&instance)
 		{
-			_service_registerers.insert(std::make_shared<Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>>(std::forward<T>(instance)));
+			auto registerer = std::make_shared<Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>>(std::forward<T>(instance));
+			_service_registerers.insert(registerer);
+
+			return *registerer;
 		}
 
 		std::unique_ptr<Details::Container> build() const
@@ -27,12 +28,11 @@ namespace DI
 		{
 			std::set<std::shared_ptr<Details::ServiceResolver<>>> result;
 
-			std::transform(
-				begin(_service_registerers),
-				end(_service_registerers),
-				inserter(result, begin(result)),
-				[](auto registerer) { return registerer->getServiceResolver(); }
-			);
+			for (const auto& registerer : _service_registerers)
+			{
+				const auto& resolvers = registerer->getServiceResolvers();
+				result.insert(begin(resolvers), end(resolvers));
+			}
 
 			return result;
 		}

@@ -7,12 +7,12 @@ namespace DI
 	namespace Details
 	{
 		
-		template<class T, class U>
+		template<class T, class S>
 		class ServiceAliasResolver : public ServiceResolver<T>
 		{
 		public:
 			explicit ServiceAliasResolver(std::shared_ptr<ServiceResolver<>> inner_resolver)
-				: _inner_resolver(std::dynamic_pointer_cast<ServiceResolver<U>>(inner_resolver))
+				: _inner_resolver(std::dynamic_pointer_cast<ServiceResolver<S>>(inner_resolver))
 			{}
 
 			virtual std::shared_ptr<T> getService() const override
@@ -26,7 +26,7 @@ namespace DI
 			}
 
 		private:
-			std::shared_ptr<ServiceResolver<U>> const _inner_resolver;
+			std::shared_ptr<ServiceResolver<S>> const _inner_resolver;
 		};
 	}
 }

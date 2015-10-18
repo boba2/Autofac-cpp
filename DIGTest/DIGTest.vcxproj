@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DIGTest.cpp" />
+    <ClCompile Include="ResolveRegisteredServiceInstanceByTypeTest.cpp" />
     <ClCompile Include="ResolveRegisteredServiceInstanceTest.cpp" />
     <ClCompile Include="ResolveStandardServiceInstanceTest.cpp" />
     <ClCompile Include="Support\stdafx.cpp">

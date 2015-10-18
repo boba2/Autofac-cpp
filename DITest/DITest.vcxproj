@@ -161,6 +161,7 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="Details\Container.h" />
+    <ClInclude Include="Details\ServiceAliasRegisterer.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
     <ClInclude Include="Error\ServiceInstanceNotResolvableAsUniquePtr.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Details\ServiceInstanceResolver.h" />
     <ClInclude Include="Details\ServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceResolver.h" />
+    <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="Support\stdafx.h" />
     <ClInclude Include="Support\targetver.h" />
     <ClInclude Include="Details\TypeIndex.h" />

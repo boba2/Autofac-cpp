@@ -18,7 +18,6 @@
     <ClInclude Include="Details\ServiceInstanceRegisterer.h" />
     <ClInclude Include="Details\ServiceInstanceResolver.h" />
     <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
-    <ClInclude Include="Details\ServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceResolver.h" />
     <ClInclude Include="Details\TypeIndex.h" />
     <ClInclude Include="Details\UnderlyingType.h" />
@@ -26,6 +25,9 @@
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Details\Container.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
+    <ClInclude Include="ServiceRegisterer.h" />
+    <ClInclude Include="Details\ServiceAliasRegisterer.h" />
+    <ClInclude Include="Details\ServiceRegisterer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">

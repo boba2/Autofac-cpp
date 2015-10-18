@@ -39,10 +39,10 @@ namespace DI
 
 			void registerSelf()
 			{
-				using ContainerAliasResolver = ServiceAliasResolver<DI::Container, Container>;
+				auto registerer = ServiceInstanceRegisterer<Container>(this);
+				registerer.as<DI::Container>();
 
-				auto container_resolver = ServiceInstanceRegisterer<Container>(this).getServiceResolver();
-				_service_resolvers[TypeIndex<DI::Container>()] = std::make_shared<ContainerAliasResolver>(container_resolver);
+				registerResolvers(registerer.getServiceResolvers());
 			}
 
 		private:

@@ -10,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceInstanceRegisterer : public ServiceRegisterer<>
+		class ServiceInstanceRegisterer : public ServiceRegisterer<T>
 		{
 		public:
 			template<class U>
@@ -27,9 +27,17 @@ namespace DI
 				: _instance(std::move(instance))
 			{}
 
-			std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
+			std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override
 			{
-				return std::make_shared<ServiceInstanceResolver<T>>(_instance);
+				auto main_resolver = std::make_shared<ServiceInstanceResolver<T>>(_instance);
+
+				std::set<std::shared_ptr<ServiceResolver<>>> result;
+				result.insert(main_resolver);
+
+				auto alias_resolvers = getServiceAliasResolvers(main_resolver);
+				result.insert(begin(alias_resolvers), end(alias_resolvers));
+
+				return result;
 			}
 
 		private:
