@@ -15,9 +15,29 @@ namespace DI
 				: _inner_resolver(std::dynamic_pointer_cast<ServiceResolver<S>>(inner_resolver))
 			{}
 
+			virtual const T& getServiceAsConstRef() const override
+			{
+				return _inner_resolver->getServiceAsConstRef();
+			}
+
+			virtual T& getServiceAsRef() const override
+			{
+				return _inner_resolver->getServiceAsRef();
+			}
+
+			virtual T* getServiceAsPtr() const override
+			{
+				return _inner_resolver->getServiceAsPtr();
+			}
+
 			virtual std::shared_ptr<T> getServiceAsSharedPtr() const override
 			{
-				return std::static_pointer_cast<T>(_inner_resolver->getServiceAsSharedPtr());
+				return _inner_resolver->getServiceAsSharedPtr();
+			}
+
+			virtual std::unique_ptr<T> getServiceAsUniquePtr() const override
+			{
+				return std::move(_inner_resolver->getServiceAsUniquePtr());
 			}
 
 		private:

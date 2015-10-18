@@ -15,9 +15,29 @@ namespace DI
 				: _instance(instance)
 			{}
 
+			virtual const T& getServiceAsConstRef() const override
+			{
+				return *_instance.get();
+			}
+
+			virtual T& getServiceAsRef() const override
+			{
+				return *_instance.get();
+			}
+
+			virtual T* getServiceAsPtr() const override
+			{
+				return _instance.get();
+			}
+
 			virtual std::shared_ptr<T> getServiceAsSharedPtr() const override
 			{
 				return _instance;
+			}
+
+			virtual std::unique_ptr<T> getServiceAsUniquePtr() const override
+			{
+				throw Error::ServiceInstanceNotResolvableAsUniquePtr();
 			}
 
 		private:

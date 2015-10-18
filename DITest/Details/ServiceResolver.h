@@ -52,7 +52,7 @@ namespace DI
 
 			virtual std::unique_ptr<T> getServiceAsUniquePtr() const
 			{
-				throw Error::ServiceInstanceNotResolvableAsUniquePtr();
+				throw std::logic_error("Not implemented");
 			}
 		};
 
