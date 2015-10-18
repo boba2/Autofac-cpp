@@ -21,7 +21,6 @@
     <ClInclude Include="Details\ServiceResolver.h" />
     <ClInclude Include="Details\TypeIndex.h" />
     <ClInclude Include="Details\UnderlyingType.h" />
-    <ClInclude Include="Error\ServiceInstanceNotResolvableAsUniquePtr.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Details\Container.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
@@ -30,6 +29,7 @@
     <ClInclude Include="Details\ServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceTypeRegisterer.h" />
     <ClInclude Include="Details\ServiceTypeResolver.h" />
+    <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">

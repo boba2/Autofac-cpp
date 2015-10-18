@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <system_error>
 
 namespace DI
 {
@@ -10,8 +10,8 @@ namespace DI
 		class ServiceNotRegistered : public std::logic_error
 		{
 		public:
-			explicit ServiceNotRegistered(std::string type_name)
-				: logic_error(std::string("Trying to resolve service of an unknown type: ") + type_name)
+			explicit ServiceNotRegistered()
+				: logic_error("Trying to resolve service of an unknown type")
 			{}
 		};
 

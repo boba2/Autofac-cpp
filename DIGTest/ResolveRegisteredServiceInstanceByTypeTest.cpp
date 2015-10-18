@@ -1,4 +1,5 @@
 #include "ContainerBaseTest.h"
+#include "../DITest/Error/ServiceInstanceNotResolvableAs.h"
 
 struct DummyService1 { int _value; };
 struct DummyService2 {};
@@ -127,7 +128,7 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByBaseTypeAsU
 		.registerInstance(&service)
 		.as<DummyService1>();
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)

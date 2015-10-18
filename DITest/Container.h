@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Details/ServiceInstanceRegisterer.h"
 #include "Details/ServiceReferenceTypeConverter.h"
+#include "Details/ServiceResolver.h"
 
 namespace DI 
 {

@@ -1,6 +1,7 @@
 #include "ContainerBaseTest.h"
 #include "DummyService.h"
 #include "../DITest/Error/ServiceNotRegistered.h"
+#include "../DITest/Error/ServiceInstanceNotResolvableAs.h"
 
 class DummyService1 : public DummyService
 {
@@ -56,7 +57,7 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_A
 
 	builder().registerInstance(&service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughCopy)
@@ -101,7 +102,7 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_A
 
 	builder().registerInstance(service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughMove)
@@ -136,7 +137,7 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_A
 {
 	builder().registerInstance(DummyService());
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughSharedPtr)
@@ -181,7 +182,7 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_A
 
 	builder().registerInstance(service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveServiceByPointer_WhenServiceInstanceRegisteredThroughUniquePtr)
@@ -216,7 +217,7 @@ TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByUniquePtr_A
 {
 	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAsUniquePtr);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ContainerBaseTest, ShouldResolveCorrectServiceByPointer_WhenServicesInstanceOfDifferentTypesRegistered)

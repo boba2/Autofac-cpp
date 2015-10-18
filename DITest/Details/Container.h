@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "../Container.h"
 #include "../Error/ServiceNotRegistered.h"
-#include "ServiceAliasResolver.h"
+#include "ServiceInstanceRegisterer.h"
 
 namespace DI
 {
@@ -25,7 +25,7 @@ namespace DI
 			{
 				auto resolver_it = _service_resolvers.find(type_index);
 				if (resolver_it == end(_service_resolvers))
-					throw Error::ServiceNotRegistered(type_index.getTypeName());
+					throw Error::ServiceNotRegistered();
 
 				return *resolver_it->second;
 			}

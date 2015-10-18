@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ServiceResolver.h"
+#include "Error/ServiceInstanceNotResolvableAs.h"
 
 namespace DI
 {
@@ -37,7 +38,7 @@ namespace DI
 
 			virtual std::unique_ptr<T> getServiceAsUniquePtr() const override
 			{
-				throw Error::ServiceInstanceNotResolvableAsUniquePtr();
+				throw Error::ServiceInstanceNotResolvableAs();
 			}
 
 		private:

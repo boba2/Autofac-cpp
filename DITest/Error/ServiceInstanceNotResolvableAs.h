@@ -1,16 +1,17 @@
 #pragma once
 
-#include <stdexcept>
+#include <system_error>
+
 
 namespace DI
 {
 	namespace Error
 	{
 
-		class ServiceInstanceNotResolvableAsUniquePtr : public std::logic_error
+		class ServiceInstanceNotResolvableAs : public std::logic_error
 		{
 		public:
-			ServiceInstanceNotResolvableAsUniquePtr()
+			ServiceInstanceNotResolvableAs()
 				: logic_error("Cannot resolve service instance as std::unique_ptr")
 			{}
 		};

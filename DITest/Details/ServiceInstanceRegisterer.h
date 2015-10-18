@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include "ServiceRegisterer.h"
 #include "ServiceInstanceResolver.h"
 
