@@ -32,10 +32,12 @@ namespace DI
 				auto main_resolver = std::make_shared<ServiceInstanceResolver<T>>(_instance);
 
 				std::set<std::shared_ptr<ServiceResolver<>>> result;
-				result.insert(main_resolver);
 
 				auto alias_resolvers = getServiceAliasResolvers(main_resolver);
-				result.insert(begin(alias_resolvers), end(alias_resolvers));
+				if (alias_resolvers.empty())
+					result.insert(main_resolver);
+				else
+					result.insert(begin(alias_resolvers), end(alias_resolvers));
 
 				return result;
 			}

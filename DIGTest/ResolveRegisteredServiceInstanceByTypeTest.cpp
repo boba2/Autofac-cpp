@@ -28,6 +28,17 @@ TEST_F(ContainerBaseTest, ShouldResolveServiceByAnyBaseType_WhenServiceInstanceR
 	ASSERT_EQ(&service, container().resolve<DummyService2 *>());
 }
 
+TEST_F(ContainerBaseTest, ShouldThrowException_WhenResolvingServiceByItsType_AndServiceInstanceRegisteredOnlyWithAlias)
+{
+	SpecialDummyService service;
+
+	builder()
+		.registerInstance(&service)
+		.as<DummyService1>();
+
+	ASSERT_THROW(container().resolve<SpecialDummyService *>(), DI::Error::ServiceNotRegistered);
+}
+
 TEST_F(ContainerBaseTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasForVirtualBaseType)
 {
 //	SpecialDummyService service;

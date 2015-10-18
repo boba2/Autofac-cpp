@@ -17,11 +17,11 @@ namespace DI
 
 			virtual std::shared_ptr<T> getService() const override
 			{
-				return std::static_pointer_cast<T>(_inner_resolver.lock()->getService());
+				return std::static_pointer_cast<T>(_inner_resolver->getService());
 			}
 
 		private:
-			std::weak_ptr<ServiceResolver<S>> const _inner_resolver;
+			std::shared_ptr<ServiceResolver<S>> const _inner_resolver;
 		};
 	}
 }
