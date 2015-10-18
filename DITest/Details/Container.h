@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "../Container.h"
 #include "../Error/ServiceNotRegistered.h"
+#include "ServiceAliasResolver.h"
 
 namespace DI
 {
@@ -13,12 +14,10 @@ namespace DI
 		class Container : public DI::Container
 		{
 		public:
-			explicit Container(std::set<std::shared_ptr<ServiceResolver<>>> service_resolvers)
+			explicit Container(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
 			{
-				for (auto &resolver : service_resolvers)
-					_service_resolvers[resolver->getServiceType()] = resolver;
-
-				_service_resolvers[TypeIndex<Container>()] = ServiceInstanceRegisterer<Container>(this).getServiceResolver();
+				registerResolvers(service_resolvers);
+				registerSelf();
 			}
 
 		protected:
@@ -29,6 +28,21 @@ namespace DI
 					throw Error::ServiceNotRegistered(type_index.getTypeName());
 
 				return *resolver_it->second;
+			}
+
+		private:
+			void registerResolvers(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
+			{
+				for (auto &resolver : service_resolvers)
+					_service_resolvers[resolver->getServiceType()] = resolver;
+			}
+
+			void registerSelf()
+			{
+				using ContainerAliasResolver = ServiceAliasResolver<DI::Container, Container>;
+
+				auto container_resolver = ServiceInstanceRegisterer<Container>(this).getServiceResolver();
+				_service_resolvers[TypeIndex<DI::Container>()] = std::make_shared<ContainerAliasResolver>(container_resolver);
 			}
 
 		private:
