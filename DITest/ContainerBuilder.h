@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Container.h"
-#include "ServiceInstanceRegisterer.h"
 #include <algorithm>
 #include <iterator>
+#include "Container.h"
+#include "Details/ServiceInstanceRegisterer.h"
 
 namespace DI
 {

@@ -2,9 +2,9 @@
 
 #include <set>
 #include <unordered_map>
-#include "Error.h"
-#include "ServiceInstanceRegisterer.h"
-#include "ServiceReferenceTypeConverter.h"
+#include "Details/ServiceInstanceRegisterer.h"
+#include "Details/ServiceReferenceTypeConverter.h"
+#include "Details/Error/Error.h"
 
 namespace DI 
 {

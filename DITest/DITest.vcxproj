@@ -161,16 +161,16 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="DummyService.h" />
-    <ClInclude Include="Error.h" />
-    <ClInclude Include="ServiceInstanceRegisterer.h" />
-    <ClInclude Include="ServiceReferenceTypeConverter.h" />
-    <ClInclude Include="ServiceInstanceResolver.h" />
-    <ClInclude Include="ServiceRegisterer.h" />
-    <ClInclude Include="ServiceResolver.h" />
+    <ClInclude Include="Details\Error\Error.h" />
+    <ClInclude Include="Details\ServiceInstanceRegisterer.h" />
+    <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
+    <ClInclude Include="Details\ServiceInstanceResolver.h" />
+    <ClInclude Include="Details\ServiceRegisterer.h" />
+    <ClInclude Include="Details\ServiceResolver.h" />
     <ClInclude Include="Support\stdafx.h" />
     <ClInclude Include="Support\targetver.h" />
-    <ClInclude Include="TypeIndex.h" />
-    <ClInclude Include="UnderlyingType.h" />
+    <ClInclude Include="Details\TypeIndex.h" />
+    <ClInclude Include="Details\UnderlyingType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">

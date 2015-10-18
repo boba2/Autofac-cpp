@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "Error.h"
+#include "Error/Error.h"
 
 namespace DI
 {
