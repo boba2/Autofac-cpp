@@ -10,7 +10,7 @@ namespace DI
 	{
 	public:
 		template<class T>
-		auto& registerInstance(T &&instance)
+		auto registerInstance(T &&instance) -> ServiceRegisterer<typename Details::UnderlyingType<T>::Type>&
 		{
 			auto registerer = std::make_shared<Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>>(std::forward<T>(instance));
 			_service_registerers.insert(registerer);
