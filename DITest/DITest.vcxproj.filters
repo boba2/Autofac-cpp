@@ -28,6 +28,5 @@
     <ClCompile Include="Support\stdafx.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="ResolveRegisteredServiceInstanceTest.cpp" />
   </ItemGroup>
 </Project>
