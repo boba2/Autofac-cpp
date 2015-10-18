@@ -3,21 +3,29 @@
 #include <memory>
 #include "TypeIndex.h"
 
-template<class T = void>
-class ServiceResolver;
-
-template<>
-class ServiceResolver<void>
+namespace DI
 {
-public:
-	virtual ~ServiceResolver() {}
+	namespace Details
+	{
 
-	virtual TypeIndex<> getServiceType() const = 0;
-};
+		template<class T = void>
+		class ServiceResolver;
 
-template<class T>
-class ServiceResolver : public ServiceResolver<>
-{
-public:
-	virtual std::shared_ptr<T> getService() const = 0;
-};
+		template<>
+		class ServiceResolver<void>
+		{
+		public:
+			virtual ~ServiceResolver() {}
+
+			virtual TypeIndex<> getServiceType() const = 0;
+		};
+
+		template<class T>
+		class ServiceResolver : public ServiceResolver<>
+		{
+		public:
+			virtual std::shared_ptr<T> getService() const = 0;
+		};
+
+	}
+}

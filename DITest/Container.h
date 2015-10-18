@@ -12,19 +12,19 @@ namespace DI
 	class Container
 	{
 	public:
-		explicit Container(std::set<std::shared_ptr<ServiceResolver<>>> service_resolvers)
+		explicit Container(std::set<std::shared_ptr<Details::ServiceResolver<>>> service_resolvers)
 		{
 			for (auto &resolver : service_resolvers)
 				_service_resolvers[resolver->getServiceType()] = resolver;
 
-			_service_resolvers[TypeIndex<Container>()] = ServiceInstanceRegisterer<Container>(this).getServiceResolver();
+			_service_resolvers[Details::TypeIndex<Container>()] = Details::ServiceInstanceRegisterer<Container>(this).getServiceResolver();
 		}
 
 		template<class T>
 		T resolve()
 		{
 			if (!has<T>())
-				throw Error::ServiceNotRegistered::fromType<T>();
+				throw Error::ServiceNotRegistered::fromType<typename Details::UnderlyingType<T>::Type>();
 
 
 			return get<T>();
@@ -34,17 +34,17 @@ namespace DI
 		template<class T>
 		bool has()
 		{
-			return _service_resolvers.find(TypeIndex<T>()) != _service_resolvers.end();
+			return _service_resolvers.find(Details::TypeIndex<T>()) != _service_resolvers.end();
 		}
 
 		template<class T>
 		T get()
 		{
-			return ServiceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<ServiceResolver<typename UnderlyingType<T>::Type>>(_service_resolvers.at(TypeIndex<T>()))->getService());
+			return Details::ServiceReferenceTypeConverter<T>::convert(std::dynamic_pointer_cast<Details::ServiceResolver<typename Details::UnderlyingType<T>::Type>>(_service_resolvers.at(Details::TypeIndex<T>()))->getService());
 		}
 
 	private:
-		std::unordered_map<TypeIndex<>, std::shared_ptr<ServiceResolver<>>> _service_resolvers;
+		std::unordered_map<Details::TypeIndex<>, std::shared_ptr<Details::ServiceResolver<>>> _service_resolvers;
 	};
 
 }

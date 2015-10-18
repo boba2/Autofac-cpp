@@ -14,7 +14,7 @@ namespace DI
 		template<class T>
 		void registerInstance(T &&instance)
 		{
-			_service_registerers.insert(std::make_shared<ServiceInstanceRegisterer<typename UnderlyingType<T>::Type>>(std::forward<T>(instance)));
+			_service_registerers.insert(std::make_shared<Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>>(std::forward<T>(instance)));
 		}
 
 		std::unique_ptr<Container> build() const
@@ -23,9 +23,9 @@ namespace DI
 		}
 
 	private:
-		std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const
+		std::set<std::shared_ptr<Details::ServiceResolver<>>> getServiceResolvers() const
 		{
-			std::set<std::shared_ptr<ServiceResolver<>>> result;
+			std::set<std::shared_ptr<Details::ServiceResolver<>>> result;
 
 			std::transform(
 				begin(_service_registerers),
@@ -38,7 +38,7 @@ namespace DI
 		}
 
 	private:
-		std::set<std::shared_ptr<ServiceRegisterer<>>> _service_registerers;
+		std::set<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
 	};
 
 }

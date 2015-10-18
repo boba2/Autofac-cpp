@@ -11,7 +11,7 @@ namespace Error
 		template<class T>
 		auto static fromType()
 		{
-			return ServiceNotRegistered(typeid(typename UnderlyingType<T>::Type).name());
+			return ServiceNotRegistered(typeid(T).name());
 		}
 
 	private:
