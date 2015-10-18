@@ -15,7 +15,7 @@ namespace DI
 				: _instance(instance)
 			{}
 
-			virtual std::shared_ptr<T> getService() const override
+			virtual std::shared_ptr<T> getServiceAsSharedPtr() const override
 			{
 				return _instance;
 			}

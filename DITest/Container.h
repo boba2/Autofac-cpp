@@ -16,7 +16,7 @@ namespace DI
 		{
 			using ServiceReferenceTypeConverter = Details::ServiceReferenceTypeConverter<T>;
 
-			return ServiceReferenceTypeConverter::convert(getResolver<T>().getService());
+			return ServiceReferenceTypeConverter::convertFrom(getResolver<T>());
 		}
 
 	protected:

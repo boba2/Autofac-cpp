@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "TypeIndex.h"
+#include "../Error/ServiceInstanceNotResolvableAsUniquePtr.h"
 
 namespace DI
 {
@@ -29,7 +30,30 @@ namespace DI
 				return TypeIndex<T>();
 			}
 
-			virtual std::shared_ptr<T> getService() const = 0;
+			virtual const T& getServiceAsConstRef() const
+			{
+				return *getServiceAsSharedPtr().get();
+			}
+
+			virtual T& getServiceAsRef() const
+			{
+				return *getServiceAsSharedPtr().get();
+			}
+
+			virtual T* getServiceAsPtr() const
+			{
+				return getServiceAsSharedPtr().get();
+			}
+
+			virtual std::shared_ptr<T> getServiceAsSharedPtr() const
+			{
+				return std::shared_ptr<T>(std::move(getServiceAsUniquePtr()));
+			}
+
+			virtual std::unique_ptr<T> getServiceAsUniquePtr() const
+			{
+				throw Error::ServiceInstanceNotResolvableAsUniquePtr();
+			}
 		};
 
 	}

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "../Error/ServiceInstanceNotResolvableAsUniquePtr.h"
 
 namespace DI
 {
@@ -11,54 +10,54 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter
 		{
-			static const T &convert(std::shared_ptr<T> instance)
-			{
-				return *instance.get();
+			static const T& convertFrom(ServiceResolver<T>& resolver)
+			{	
+				return resolver.getServiceAsConstRef();
 			}
 		};
 
 		template<class T>
-		struct ServiceReferenceTypeConverter<T &>
+		struct ServiceReferenceTypeConverter<T&>
 		{
-			static T &convert(std::shared_ptr<T> instance)
+			static T& convertFrom(ServiceResolver<T>& resolver)
 			{
-				return *instance.get();
+				return resolver.getServiceAsRef();
 			}
 		};
 
 		template<class T>
-		struct ServiceReferenceTypeConverter<T *>
+		struct ServiceReferenceTypeConverter<T*>
 		{
-			static T *convert(std::shared_ptr<T> instance)
+			static T* convertFrom(ServiceResolver<T>& resolver)
 			{
-				return instance.get();
+				return resolver.getServiceAsPtr();
 			}
 		};
 
 		template<class T>
 		struct ServiceReferenceTypeConverter<std::shared_ptr<T>>
 		{
-			static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
+			static std::shared_ptr<T> convertFrom(ServiceResolver<T>& resolver)
 			{
-				return instance;
+				return resolver.getServiceAsSharedPtr();
 			}
 		};
 
 		template<class T>
 		struct ServiceReferenceTypeConverter<std::shared_ptr<T> &>
 		{
-			static std::shared_ptr<T> convert(std::shared_ptr<T> instance)
+			static std::shared_ptr<T> convertFrom(ServiceResolver<T>& resolver)
 			{
-				return instance;
+				return resolver.getServiceAsSharedPtr();
 			}
 		};
 
 		template<class T>
 		struct ServiceReferenceTypeConverter<std::unique_ptr<T>>
 		{
-			static std::unique_ptr<T> convert(std::shared_ptr<T>)
+			static std::unique_ptr<T> convertFrom(ServiceResolver<T>& resolver)
 			{
-				throw Error::ServiceInstanceNotResolvableAsUniquePtr();
+				return resolver.getServiceAsUniquePtr();
 			}
 		};
 
