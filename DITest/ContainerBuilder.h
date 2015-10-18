@@ -2,6 +2,7 @@
 
 #include "Details/Container.h"
 #include "Details/ServiceInstanceRegisterer.h"
+#include "Details/ServiceTypeRegisterer.h"
 
 namespace DI
 {
@@ -16,6 +17,12 @@ namespace DI
 			_service_registerers.insert(registerer);
 
 			return *registerer;
+		}
+
+		template<class T>
+		void registerType()
+		{
+			_service_registerers.insert(std::make_shared<Details::ServiceTypeRegisterer<T>>());
 		}
 
 		std::unique_ptr<Details::Container> build() const

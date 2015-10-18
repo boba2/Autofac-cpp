@@ -163,6 +163,8 @@
     <ClInclude Include="Details\Container.h" />
     <ClInclude Include="Details\ServiceAliasRegisterer.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
+    <ClInclude Include="Details\ServiceTypeRegisterer.h" />
+    <ClInclude Include="Details\ServiceTypeResolver.h" />
     <ClInclude Include="Error\ServiceInstanceNotResolvableAsUniquePtr.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="DummyService.h" />

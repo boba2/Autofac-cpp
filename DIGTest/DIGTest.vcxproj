@@ -163,6 +163,7 @@
     <ClCompile Include="DIGTest.cpp" />
     <ClCompile Include="ResolveRegisteredServiceInstanceByTypeTest.cpp" />
     <ClCompile Include="ResolveRegisteredServiceInstanceTest.cpp" />
+    <ClCompile Include="ResolveRegisteredServiceTypeTest.cpp" />
     <ClCompile Include="ResolveStandardServiceInstanceTest.cpp" />
     <ClCompile Include="Support\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
