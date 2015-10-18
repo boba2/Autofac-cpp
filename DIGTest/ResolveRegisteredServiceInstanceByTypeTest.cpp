@@ -74,6 +74,17 @@ TEST_F(ContainerBaseTest, ShouldResolveServiceByBaseType_WhenServiceInstanceRegi
 	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
 }
 
+TEST_F(ContainerBaseTest, ShouldResolveServiceByItsType_WhenServiceInstanceRegisteredOnlyAsSelf)
+{
+	SpecialDummyService service;
+
+	builder()
+		.registerInstance(&service)
+		.asSelf();
+
+	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
+}
+
 TEST_F(ContainerBaseTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
 //	SpecialDummyService service;
