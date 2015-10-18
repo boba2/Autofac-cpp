@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "TypeIndex.h"
 
 template<class T = void>
 class ServiceResolver;

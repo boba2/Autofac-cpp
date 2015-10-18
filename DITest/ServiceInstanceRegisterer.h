@@ -1,36 +1,25 @@
 #pragma once
 
 #include <memory>
+#include "ServiceRegisterer.h"
 #include "ServiceInstanceResolver.h"
 
 
-template<class T = void>
-class ServiceInstanceHolder;
-
-template<>
-class ServiceInstanceHolder<void>
-{
-public:
-	virtual ~ServiceInstanceHolder() {};
-
-	virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const = 0;
-};
-
 template<class T>
-class ServiceInstanceHolder : public ServiceInstanceHolder<>
+class ServiceInstanceRegisterer : public ServiceRegisterer<>
 {
 public:
 	template<class U>
-	explicit ServiceInstanceHolder(U &&instance)
+	explicit ServiceInstanceRegisterer(U &&instance)
 		: _instance(std::make_shared<std::remove_reference_t<U>>(std::forward<U>(instance)))
 	{}
-	explicit ServiceInstanceHolder(T *const instance)
+	explicit ServiceInstanceRegisterer(T *const instance)
 		: _instance(std::shared_ptr<T>(instance, NullDeleter()))
 	{}
-	explicit ServiceInstanceHolder(std::shared_ptr<T> instance)
+	explicit ServiceInstanceRegisterer(std::shared_ptr<T> instance)
 		: _instance(instance)
 	{}
-	explicit ServiceInstanceHolder(std::unique_ptr<T> instance)
+	explicit ServiceInstanceRegisterer(std::unique_ptr<T> instance)
 		: _instance(std::move(instance))
 	{}
 

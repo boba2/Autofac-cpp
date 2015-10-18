@@ -2,7 +2,6 @@
 
 #include <set>
 #include <unordered_map>
-#include "TypeIndex.h"
 #include "ServiceResolver.h"
 #include "ServiceReferenceTypeConverter.h"
 
@@ -18,7 +17,7 @@ public:
 	template<class T>
 	void add(T &&instance)
 	{
-		_service_resolvers[TypeIndex<T>()] = ServiceInstanceHolder<typename UnderlyingType<T>::Type>(instance).getServiceResolver();
+		_service_resolvers[TypeIndex<T>()] = ServiceInstanceRegisterer<typename UnderlyingType<T>::Type>(instance).getServiceResolver();
 	}
 
 	template<class T>

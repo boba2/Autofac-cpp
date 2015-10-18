@@ -162,10 +162,11 @@
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="DummyService.h" />
     <ClInclude Include="Error.h" />
-    <ClInclude Include="ServiceInstanceHolder.h" />
+    <ClInclude Include="ServiceInstanceRegisterer.h" />
     <ClInclude Include="ServiceReferenceTypeConverter.h" />
     <ClInclude Include="ServiceInstanceResolver.h" />
     <ClInclude Include="ServiceInstances.h" />
+    <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="ServiceResolver.h" />
     <ClInclude Include="ServiceResolvers.h" />
     <ClInclude Include="Support\stdafx.h" />

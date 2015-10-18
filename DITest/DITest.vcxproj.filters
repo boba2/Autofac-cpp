@@ -14,7 +14,6 @@
     </ClInclude>
     <ClInclude Include="UnderlyingType.h" />
     <ClInclude Include="Error.h" />
-    <ClInclude Include="ServiceInstanceHolder.h" />
     <ClInclude Include="TypeIndex.h" />
     <ClInclude Include="ServiceInstances.h" />
     <ClInclude Include="Container.h" />
@@ -24,6 +23,8 @@
     <ClInclude Include="ServiceResolver.h" />
     <ClInclude Include="ServiceInstanceResolver.h" />
     <ClInclude Include="ServiceReferenceTypeConverter.h" />
+    <ClInclude Include="ServiceRegisterer.h" />
+    <ClInclude Include="ServiceInstanceRegisterer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\stdafx.cpp">
