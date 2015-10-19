@@ -52,20 +52,9 @@ namespace DI
 		};
 
 		template<class T>
-		struct ServiceReferenceTypeConverter<std::shared_ptr<T> &>
-		{
-			using Result = typename ServiceResolver<T>::ServiceUniquePtrType;
-
-			static Result convertFrom(ServiceResolver<T>& resolver)
-			{
-				return resolver.getServiceAsSharedPtr();
-			}
-		};
-
-		template<class T>
 		struct ServiceReferenceTypeConverter<std::unique_ptr<T>>
 		{
-			using Result = std::unique_ptr<T>;
+			using Result = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 			static Result convertFrom(ServiceResolver<T>& resolver)
 			{

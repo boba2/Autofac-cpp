@@ -14,6 +14,8 @@ namespace DI
 		public:
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
+				static_assert(!std::is_abstract<T>::value, "Cannot register an abstract type");
+
 				return std::make_shared<ServiceTypeResolver<T>>();
 			}
 		};

@@ -10,73 +10,29 @@ namespace DI
 		template<class T>
 		class ServiceTypeResolver : public ServiceResolver<T>
 		{
-			using ServiceType = typename ServiceResolver<T>::ServiceType;
-			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
-			using ServicePtrType = typename ServiceResolver<T>::ServicePtrType;
-			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
-			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
-
-			template<class U>
-			struct ServiceCreator
+			virtual typename ServiceResolver<T>::ServiceType getService() const override
 			{
-				static U createInstance()
-				{
-					return U();
-				}
-
-				static std::unique_ptr<U> createUniquePtr()
-				{
-					return std::make_unique<U>();
-				}
-
-				static std::shared_ptr<U> createSharedPtr()
-				{
-					return std::make_shared<U>();
-				}
-			};
-
-			template<class U>
-			struct ServiceCreator<const U&>
-			{
-				static const U& createInstance()
-				{
-					throw Error::ServiceInstanceNotResolvableAs();
-				}
-
-				static std::unique_ptr<U> createUniquePtr()
-				{
-					throw Error::ServiceInstanceNotResolvableAs();
-				}
-
-				static std::shared_ptr<U> createSharedPtr()
-				{
-					throw Error::ServiceInstanceNotResolvableAs();
-				}
-			};
-
-			virtual ServiceType getService() const override
-			{
-				return ServiceCreator<ServiceType>::createInstance();
+				return T();
 			}
 
-			virtual ServiceRefType getServiceAsRef() const override
+			virtual typename ServiceResolver<T>::ServiceRefType getServiceAsRef() const override
 			{
 				throw Error::ServiceInstanceNotResolvableAs();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() const override
+			virtual typename ServiceResolver<T>::ServicePtrType getServiceAsPtr() const override
 			{
 				throw Error::ServiceInstanceNotResolvableAs();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
+			virtual typename ServiceResolver<T>::ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
-				return ServiceCreator<ServiceType>::createSharedPtr();
+				return std::make_shared<T>();
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
+			virtual typename ServiceResolver<T>::ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
-				return ServiceCreator<ServiceType>::createUniquePtr();
+				return std::make_unique<T>();
 			}
 		};
 
