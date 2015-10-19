@@ -134,6 +134,13 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldThrowException_WhenReso
 	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
+TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldBreakStaticAssert_WhenRegisteringAliasedAsUnrelatedType)
+{
+//	builder()
+//		.registerInstance(DummyService1())
+//		.as<DummyService2>();
+}
+
 TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
 //	SpecialDummyService service;
