@@ -12,7 +12,7 @@ namespace DI
 		{
 		public:
 			ServiceInstanceNotResolvableAs()
-				: logic_error("Cannot resolve service instance as std::unique_ptr")
+				: logic_error("Cannot resolve service instance through {xxx}")
 			{}
 		};
 
