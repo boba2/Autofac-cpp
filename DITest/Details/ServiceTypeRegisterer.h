@@ -12,14 +12,9 @@ namespace DI
 		class ServiceTypeRegisterer : public ServiceRegisterer<T>
 		{
 		public:
-			virtual std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override
+			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
-				std::set<std::shared_ptr<ServiceResolver<>>> result;
-
-				auto resolver = std::make_shared<ServiceTypeResolver<T>>();
-				result.insert(resolver);
-
-				return result;
+				return std::make_shared<ServiceTypeResolver<T>>();
 			}
 		};
 

@@ -10,11 +10,11 @@ namespace DI
 		template<class T>
 		class ServiceTypeResolver : public ServiceResolver<T>
 		{
-			using ServiceResolver<T>::ServiceType;
-			using ServiceResolver<T>::ServiceRefType;
-			using ServiceResolver<T>::ServicePtrType;
-			using ServiceResolver<T>::ServiceSharedPtrType;
-			using ServiceResolver<T>::ServiceUniquePtrType;
+			using ServiceType = typename ServiceResolver<T>::ServiceType;
+			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
+			using ServicePtrType = typename ServiceResolver<T>::ServicePtrType;
+			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
+			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 			template<class U>
 			struct ServiceCreator

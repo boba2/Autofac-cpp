@@ -15,7 +15,7 @@ namespace DI
 		struct TypeIndex<void> : std::type_index
 		{
 		protected:
-			explicit TypeIndex(const type_info& type_info)
+			explicit TypeIndex(const std::type_info& type_info)
 				: type_index(type_info)
 			{}
 		};
@@ -24,7 +24,7 @@ namespace DI
 		struct TypeIndex : TypeIndex<>
 		{
 			TypeIndex()
-				: TypeIndex<>(typeid(UnderlyingType<T>::Type))
+				: TypeIndex<>(typeid(typename UnderlyingType<T>::Type))
 			{}
 		};
 
