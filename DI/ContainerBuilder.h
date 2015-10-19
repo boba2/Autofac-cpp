@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Details/Container.h"
+#include "Container.h"
 #include "Details/ServiceInstanceRegisterer.h"
 #include "Details/ServiceTypeRegisterer.h"
 
@@ -25,9 +25,9 @@ namespace DI
 			_service_registerers.insert(std::make_shared<Details::ServiceTypeRegisterer<T>>());
 		}
 
-		std::unique_ptr<Details::Container> build() const
+		Container build() const
 		{
-			return std::make_unique<Details::Container>(getServiceResolvers());
+			return Container(getServiceResolvers());
 		}
 
 	private:

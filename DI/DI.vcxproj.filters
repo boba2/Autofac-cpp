@@ -2,38 +2,37 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Support">
-      <UniqueIdentifier>{7d5ca4ba-66ea-4125-811f-7382977651b7}</UniqueIdentifier>
+      <UniqueIdentifier>{914d6c54-42ca-46de-aedc-2face0c2f26e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Support\stdafx.h">
+    <ClInclude Include="Support\DIdecl.h">
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="Support\targetver.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="Container.h" />
-    <ClInclude Include="ContainerBuilder.h" />
-    <ClInclude Include="DummyService.h" />
+    <ClInclude Include="Details\ServiceAliasRegisterer.h" />
+    <ClInclude Include="Details\ServiceAliasResolver.h" />
     <ClInclude Include="Details\ServiceInstanceRegisterer.h" />
     <ClInclude Include="Details\ServiceInstanceResolver.h" />
     <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
-    <ClInclude Include="Details\ServiceResolver.h" />
-    <ClInclude Include="Details\TypeIndex.h" />
-    <ClInclude Include="Details\UnderlyingType.h" />
-    <ClInclude Include="Error\ServiceNotRegistered.h" />
-    <ClInclude Include="Details\Container.h" />
-    <ClInclude Include="Details\ServiceAliasResolver.h" />
-    <ClInclude Include="ServiceRegisterer.h" />
-    <ClInclude Include="Details\ServiceAliasRegisterer.h" />
     <ClInclude Include="Details\ServiceRegisterer.h" />
+    <ClInclude Include="Details\ServiceResolver.h" />
     <ClInclude Include="Details\ServiceTypeRegisterer.h" />
     <ClInclude Include="Details\ServiceTypeResolver.h" />
+    <ClInclude Include="Details\TypeIndex.h" />
+    <ClInclude Include="Details\UnderlyingType.h" />
     <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h" />
+    <ClInclude Include="Error\ServiceNotRegistered.h" />
+    <ClInclude Include="Container.h" />
+    <ClInclude Include="ContainerBuilder.h" />
+    <ClInclude Include="ServiceRegisterer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Support\stdafx.cpp">
+    <ClCompile Include="Support\dllmain.cpp">
       <Filter>Support</Filter>
     </ClCompile>
+    <ClCompile Include="Container.cpp" />
   </ItemGroup>
 </Project>

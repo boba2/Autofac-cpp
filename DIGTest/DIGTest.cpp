@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../DITest/ContainerBuilder.h"
+#include "../DI/ContainerBuilder.h"
 
 struct AB
 {
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
 	std::cout << "-----------------" << std::endl;
 
-	auto ab = builder.build()->resolve<AB>();
+	auto ab = builder.build().resolve<AB>();
 	ab.out();
 
 	std::cout << "-----------------" << std::endl;
