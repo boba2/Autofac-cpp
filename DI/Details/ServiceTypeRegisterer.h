@@ -30,6 +30,11 @@ namespace DI
 				_single_instance = true;
 			}
 
+			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer) override
+			{
+				ServiceRegisterer<T>::registerAlias(alias_registerer);
+			}
+
 		private:
 			bool _single_instance = false;
 		};
