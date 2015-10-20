@@ -2,28 +2,31 @@
 #include "../DI/Error/ServiceNotRegistered.h"
 #include "../DI/Error/ServiceInstanceNotResolvableAs.h"
 
-class DummyService
+namespace
 {
-public:
-	int _value;
-	explicit DummyService(const int value = 0) : _value(value) {}
-	DummyService(const DummyService &other) = default;
-	DummyService(DummyService &&other) = default;
-	DummyService &operator=(const DummyService &other) = default;
-	DummyService &operator=(DummyService &&other) = default;
-};
+	class DummyService
+	{
+	public:
+		int _value;
+		explicit DummyService(const int value = 0) : _value(value) {}
+		DummyService(const DummyService &other) = default;
+		DummyService(DummyService &&other) = default;
+		DummyService &operator=(const DummyService &other) = default;
+		DummyService &operator=(DummyService &&other) = default;
+	};
 
-struct DummyService1
-{
-	int _value;
-	explicit DummyService1(const int value = 0) : _value(value) {}
-};
+	struct DummyService1
+	{
+		int _value;
+		explicit DummyService1(const int value = 0) : _value(value) {}
+	};
 
-struct DummyService2
-{
-	int _value;
-	explicit DummyService2(const int value = 0) : _value(value) {}
-};
+	struct DummyService2
+	{
+		int _value;
+		explicit DummyService2(const int value = 0) : _value(value) {}
+	};
+}
 
 using ResolveRegisteredServiceInstanceTest = ContainerBaseTest;
 

@@ -18,30 +18,36 @@ namespace DI
 
 			virtual ServiceType getService() const override
 			{
-				throw std::logic_error("Not implemented");
+				return *getServiceInstance().get();
 			}
 
 			virtual ServiceRefType getServiceAsRef() const override
 			{
-				throw std::logic_error("Not implemented");
+				return *getServiceInstance().get();
 			}
 
 			virtual ServicePtrType getServiceAsPtr() const override
 			{
-				throw std::logic_error("Not implemented");
+				return getServiceInstance().get();
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
+			{
+				return getServiceInstance();
+			}
+
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
+			{
+				throw Error::ServiceInstanceNotResolvableAs();
+			}
+
+		private:
+			std::shared_ptr<T> getServiceInstance() const
 			{
 				if (!_instance)
 					_instance = std::make_shared<T>();
 
 				return _instance;
-			}
-
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
-			{
-				throw std::logic_error("Not implemented");
 			}
 
 		private:

@@ -1,6 +1,9 @@
 #include "ContainerBaseTest.h"
 
-struct DummyService {};
+namespace
+{
+	struct DummyService {};
+}
 
 using ResolveStandardServiceInstanceTest = ContainerBaseTest;
 

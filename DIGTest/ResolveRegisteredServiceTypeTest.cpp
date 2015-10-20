@@ -1,11 +1,11 @@
 #include "ContainerBaseTest.h"
 #include "../DI/Error/ServiceInstanceNotResolvableAs.h"
 
-struct DummyService {};
-struct AbstractDummyService
+namespace
 {
-	virtual ~AbstractDummyService() = 0;
-};
+	struct DummyService {};
+	struct AbstractDummyService { virtual ~AbstractDummyService() = 0; };
+}
 
 using ResolveRegisteredServiceTypeTest = ContainerBaseTest;
 

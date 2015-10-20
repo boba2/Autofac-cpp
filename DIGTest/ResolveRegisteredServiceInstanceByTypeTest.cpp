@@ -2,9 +2,12 @@
 #include "../DI/Error/ServiceInstanceNotResolvableAs.h"
 #include "../DI/Error/ServiceNotRegistered.h"
 
-struct DummyService1 { int _value; };
-struct DummyService2 {};
-struct SpecialDummyService : DummyService1, DummyService2 {};
+namespace
+{
+	struct DummyService1 { int _value; };
+	struct DummyService2 {};
+	struct SpecialDummyService : DummyService1, DummyService2 {};
+}
 
 using ResolveRegisteredServiceInstanceByTypeTest = ContainerBaseTest;
 
