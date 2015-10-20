@@ -11,38 +11,56 @@ namespace DI
 		template<class T>
 		class ServiceInstanceResolver : public ServiceResolver<T>
 		{
+			using ServiceType = typename ServiceResolver<T>::ServiceType;
+			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
+			using ServicePtrType = typename ServiceResolver<T>::ServicePtrType;
+			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
+			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
+
 		public:
+			ServiceInstanceResolver()
+			{}
+
 			explicit ServiceInstanceResolver(std::shared_ptr<T> instance)
 				: _instance(instance)
 			{}
 
-			virtual typename ServiceResolver<T>::ServiceType getService() const override
+			virtual ServiceType getService() const override
 			{
-				return *_instance.get();
+				return *getServiceInstance().get();
 			}
 
-			virtual typename ServiceResolver<T>::ServiceRefType getServiceAsRef() const override
+			virtual ServiceRefType getServiceAsRef() const override
 			{
-				return *_instance.get();
+				return *getServiceInstance().get();
 			}
 
-			virtual typename ServiceResolver<T>::ServicePtrType getServiceAsPtr() const override
+			virtual ServicePtrType getServiceAsPtr() const override
 			{
-				return _instance.get();
+				return getServiceInstance().get();
 			}
 
-			virtual typename ServiceResolver<T>::ServiceSharedPtrType getServiceAsSharedPtr() const override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
-				return _instance;
+				return getServiceInstance();
 			}
 
-			virtual typename ServiceResolver<T>::ServiceUniquePtrType getServiceAsUniquePtr() const override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
 				throw Error::ServiceInstanceNotResolvableAs();
 			}
 
 		private:
-			std::shared_ptr<T> const _instance;
+			std::shared_ptr<T> getServiceInstance() const
+			{
+				if (!_instance)
+					_instance = std::make_shared<T>();
+
+				return _instance;
+			}
+
+		private:
+			mutable std::shared_ptr<T> _instance;
 		};
 
 	}

@@ -2,7 +2,7 @@
 
 #include "ServiceRegisterer.h"
 #include "ServiceTypeResolver.h"
-#include "SingleInstanceServiceTypeResolver.h"
+#include "ServiceInstanceResolver.h"
 #include "../ServiceTypeRegisterer.h"
 
 namespace DI
@@ -19,7 +19,7 @@ namespace DI
 				static_assert(!std::is_abstract<T>::value, "Cannot register an abstract type");
 
 				if (_single_instance)
-					return std::make_shared<SingleInstanceServiceTypeResolver<T>>();
+					return std::make_shared<ServiceInstanceResolver<T>>();
 
 				return std::make_shared<ServiceTypeResolver<T>>();
 			}
