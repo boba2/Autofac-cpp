@@ -28,6 +28,8 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="ServiceRegisterer.h" />
+    <ClInclude Include="Details\ServiceFactoryRegisterer.h" />
+    <ClInclude Include="Details\ServiceFactoryResolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">

@@ -160,10 +160,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DIGTest.cpp" />
-    <ClCompile Include="ResolveRegisteredServiceInstanceByTypeTest.cpp" />
-    <ClCompile Include="ResolveRegisteredServiceInstanceTest.cpp" />
-    <ClCompile Include="ResolveRegisteredServiceTypeByTypeTest.cpp" />
-    <ClCompile Include="ResolveRegisteredServiceTypeTest.cpp" />
+    <ClCompile Include="ResolveServiceFromFactoryTest.cpp" />
+    <ClCompile Include="ResolveServiceInstanceByTypeTest.cpp" />
+    <ClCompile Include="ResolveServiceInstanceTest.cpp" />
+    <ClCompile Include="ResolveServiceTypeByTypeTest.cpp" />
+    <ClCompile Include="ResolveServiceTypeTest.cpp" />
     <ClCompile Include="ResolveStandardServiceInstanceTest.cpp" />
     <ClCompile Include="Support\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

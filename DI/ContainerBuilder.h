@@ -3,6 +3,7 @@
 #include "Container.h"
 #include "Details/ServiceInstanceRegisterer.h"
 #include "Details/ServiceTypeRegisterer.h"
+#include "Details/ServiceFactoryRegisterer.h"
 
 namespace DI
 {
@@ -26,6 +27,13 @@ namespace DI
 			_service_registerers.insert(registerer);
 
 			return *registerer;
+		}
+
+		template<class T>
+		void registerFactory(T factory)
+		{
+			auto registerer = std::make_shared<Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>>(factory);
+			_service_registerers.insert(registerer);
 		}
 
 		Container build() const

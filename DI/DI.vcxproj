@@ -146,6 +146,8 @@
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="Details\ServiceAliasRegisterer.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
+    <ClInclude Include="Details\ServiceFactoryRegisterer.h" />
+    <ClInclude Include="Details\ServiceFactoryResolver.h" />
     <ClInclude Include="Details\ServiceInstanceRegisterer.h" />
     <ClInclude Include="Details\ServiceInstanceResolver.h" />
     <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
