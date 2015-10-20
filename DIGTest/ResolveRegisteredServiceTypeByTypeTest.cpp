@@ -1,8 +1,7 @@
 #include "ContainerBaseTest.h"
 
-struct DummyService1 { int _value; virtual ~DummyService1() {} };
-struct DummyService2 {};
-struct SpecialDummyService : DummyService1, DummyService2 {};
+struct DummyService1 { virtual ~DummyService1() {} };
+struct SpecialDummyService : DummyService1 {};
 
 using ResolveRegisteredServiceTypeByTypeTest = ContainerBaseTest;
 

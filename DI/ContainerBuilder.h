@@ -20,7 +20,7 @@ namespace DI
 		}
 
 		template<class T>
-		auto registerType() -> ServiceRegisterer<typename Details::UnderlyingType<T>::Type>&
+		auto registerType() -> ServiceTypeRegisterer<typename Details::UnderlyingType<T>::Type>&
 		{
 			auto registerer = std::make_shared<Details::ServiceTypeRegisterer<T>>();
 			_service_registerers.insert(registerer);

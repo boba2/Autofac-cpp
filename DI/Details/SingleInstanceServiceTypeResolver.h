@@ -8,7 +8,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceTypeResolver : public ServiceResolver<T>
+		class SingleInstanceServiceTypeResolver : public ServiceResolver<T>
 		{
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -18,28 +18,34 @@ namespace DI
 
 			virtual ServiceType getService() const override
 			{
-				return T();
+				throw std::logic_error("Not implemented");
 			}
 
 			virtual ServiceRefType getServiceAsRef() const override
 			{
-				throw Error::ServiceInstanceNotResolvableAs();
+				throw std::logic_error("Not implemented");
 			}
 
 			virtual ServicePtrType getServiceAsPtr() const override
 			{
-				throw Error::ServiceInstanceNotResolvableAs();
+				throw std::logic_error("Not implemented");
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
-				return std::make_shared<T>();
+				if (!_instance)
+					_instance = std::make_shared<T>();
+
+				return _instance;
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
-				return std::make_unique<T>();
+				throw std::logic_error("Not implemented");
 			}
+
+		private:
+			mutable ServiceSharedPtrType _instance; // @todo: remove 'mutable'
 		};
 
 	}

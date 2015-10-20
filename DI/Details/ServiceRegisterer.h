@@ -22,7 +22,7 @@ namespace DI
 		};
 
 		template<class T>
-		class ServiceRegisterer : public ServiceRegisterer<>, public DI::ServiceRegisterer<T>
+		class ServiceRegisterer : public ServiceRegisterer<>, public virtual DI::ServiceRegisterer<T>
 		{
 		public:
 			virtual std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override

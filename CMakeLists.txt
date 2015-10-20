@@ -15,6 +15,7 @@ set(SOURCE_FILES
     DIGTest/ResolveRegisteredServiceInstanceTest.cpp
     DIGTest/ResolveRegisteredServiceTypeByTypeTest.cpp
     DIGTest/ResolveRegisteredServiceTypeTest.cpp
+    DIGTest/ResolveServiceTypeAsSingleInstance.cpp
     DIGTest/ResolveStandardServiceInstanceTest.cpp
 )
 
