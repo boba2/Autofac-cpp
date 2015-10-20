@@ -1,5 +1,9 @@
-#ifdef DI_EXPORTS
-#define DI_API __declspec(dllexport)
+#ifdef NO_DI_API
+#  define DI_API
 #else
-#define DI_API __declspec(dllimport)
+#  ifdef DI_EXPORTS
+#    define DI_API __declspec(dllexport)
+#  else
+#    define DI_API __declspec(dllimport)
+#  endif
 #endif
