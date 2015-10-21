@@ -37,11 +37,11 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByRef_WhenS
 TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceBySharedPtr_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
-		.registerType<SpecialDummyService>()
+		.registerType<DummyService>()
 		.singleInstance();
 
-	auto service1 = container().resolve<std::shared_ptr<SpecialDummyService>>();
-	auto service2 = container().resolve<std::shared_ptr<SpecialDummyService>>();
+	auto service1 = container().resolve<std::shared_ptr<DummyService>>();
+	auto service2 = container().resolve<std::shared_ptr<DummyService>>();
 
 	ASSERT_EQ(service1, service2);
 }
@@ -49,10 +49,10 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceBySharedPtr
 TEST_F(ResolveServiceTypeAsSingleInstance, ShouldThrowException_WhenResolvingSingleServiceByUniquePtr)
 {
 	builder()
-		.registerType<SpecialDummyService>()
+		.registerType<DummyService>()
 		.singleInstance();
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<SpecialDummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
 TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByCopy_WhenServiceTypeRegisteredAsSingleInstance)

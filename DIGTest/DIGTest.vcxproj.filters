@@ -56,6 +56,12 @@
     <ClCompile Include="ResolveServiceFromFactoryTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ResolveEfficiencyTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResolveServiceTypeAsSingleInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\GoogleTest\msvc\gtest\Debug\gtestd.lib">
