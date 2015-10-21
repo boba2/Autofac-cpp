@@ -19,7 +19,7 @@ namespace DI
 		template<class U>
 		ServiceTypeRegisterer& as()
 		{
-			ServiceRegisterer<T>::as<U>();
+			static_cast<ServiceRegisterer<T>&>(*this).as<U>(); // this made that complicated due to g++14 reporting error
 
 			return *this;
 		}

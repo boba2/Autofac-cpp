@@ -11,10 +11,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_DI_API")
 set(SOURCE_FILES
     DI/Container.cpp
     DIGTest/DIGTest.cpp
-    DIGTest/ResolveRegisteredServiceInstanceByTypeTest.cpp
-    DIGTest/ResolveRegisteredServiceInstanceTest.cpp
-    DIGTest/ResolveRegisteredServiceTypeByTypeTest.cpp
-    DIGTest/ResolveRegisteredServiceTypeTest.cpp
+    DIGTest/ResolveServiceFromFactoryTest.cpp
+    DIGTest/ResolveServiceInstanceByTypeTest.cpp
+    DIGTest/ResolveServiceInstanceTest.cpp
+    DIGTest/ResolveServiceTypeByTypeTest.cpp
+    DIGTest/ResolveServiceTypeTest.cpp
     DIGTest/ResolveServiceTypeAsSingleInstance.cpp
     DIGTest/ResolveStandardServiceInstanceTest.cpp
 )
