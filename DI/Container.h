@@ -27,13 +27,16 @@ namespace DI
 		}
 
 	private:
+		class Impl;
+
 		explicit Container(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers);
-		friend class ContainerBuilder;
+		explicit Container(std::shared_ptr<Impl> impl);
 
 		Details::ServiceResolver<> &getResolver(const Details::TypeIndex<>& type_index) const;
 
+		friend class ContainerBuilder;
+
 	private:
-		class Impl;
 #pragma warning(disable:4251)
 		std::shared_ptr<Impl> _impl;
 #pragma warning(default:4251)

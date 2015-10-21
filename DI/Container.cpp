@@ -2,14 +2,14 @@
 
 #include <set>
 #include <unordered_map>
-#include "Details/ServiceInstanceRegisterer.h"
+#include "Details/ServiceFactoryRegisterer.h"
 #include "Error/ServiceNotRegistered.h"
 
 namespace DI
 {
 	using namespace Details;
 
-	class Container::Impl
+	class Container::Impl : public std::enable_shared_from_this<Container::Impl>
 	{
 	public:
 		explicit Impl(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
@@ -26,9 +26,11 @@ namespace DI
 			return *resolver_it->second;
 		}
 
-		void registerContainer(Container& container)
+		void registerContainer()
 		{
-			registerResolvers(ServiceInstanceRegisterer<Container>(container).getServiceResolvers());
+			std::weak_ptr<Container::Impl> this_ptr = shared_from_this();
+			auto container_factory = static_cast<std::function<Container()>>([this_ptr] {	return Container(this_ptr.lock()); });
+			registerResolvers(ServiceFactoryRegisterer<Container>(container_factory).getServiceResolvers());
 		}
 
 	private:
@@ -49,7 +51,12 @@ namespace DI
 	Container::Container(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		: _impl(std::make_unique<Impl>(service_resolvers))
 	{	
-		_impl->registerContainer(*this);
+		_impl->registerContainer();
+	}
+
+	Container::Container(std::shared_ptr<Impl> impl)
+		: _impl(impl)
+	{
 	}
 
 	Container::Container(const Container& other)
