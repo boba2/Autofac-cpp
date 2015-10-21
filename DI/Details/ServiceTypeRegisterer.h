@@ -2,7 +2,7 @@
 
 #include "ServiceRegisterer.h"
 #include "ServiceTypeResolver.h"
-#include "ServiceInstanceResolver.h"
+#include "ServiceSingletonResolver.h"
 #include "../ServiceTypeRegisterer.h"
 
 namespace DI
@@ -18,10 +18,11 @@ namespace DI
 			{
 				static_assert(!std::is_abstract<T>::value, "Cannot register an abstract type");
 
-				if (_single_instance)
-					return std::make_shared<ServiceInstanceResolver<T>>();
+				auto resolver = std::make_shared<ServiceTypeResolver<T>>();
+				if (!_single_instance)
+					return resolver;
 
-				return std::make_shared<ServiceTypeResolver<T>>();
+				return std::make_shared<ServiceSingletonResolver<T>>(resolver);
 			}
 
 		protected:

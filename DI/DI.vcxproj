@@ -153,6 +153,7 @@
     <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
     <ClInclude Include="Details\ServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceResolver.h" />
+    <ClInclude Include="Details\ServiceSingletonResolver.h" />
     <ClInclude Include="Details\ServiceTypeRegisterer.h" />
     <ClInclude Include="Details\ServiceTypeResolver.h" />
     <ClInclude Include="Details\TypeIndex.h" />

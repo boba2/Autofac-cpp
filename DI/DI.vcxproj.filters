@@ -30,6 +30,7 @@
     <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceFactoryRegisterer.h" />
     <ClInclude Include="Details\ServiceFactoryResolver.h" />
+    <ClInclude Include="Details\ServiceSingletonResolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">
