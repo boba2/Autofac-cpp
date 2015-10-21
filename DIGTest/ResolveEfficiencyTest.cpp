@@ -23,18 +23,20 @@ namespace
 	};
 }
 
-TEST_F(ResolveEfficiencyTest, Should_)
+TEST_F(ResolveEfficiencyTest, ShouldConstructServiceOnlyOnce_WhenResolvingServiceByCopy_AndServiceRegisteredByType)
 {
 	{
 		auto container_builder = DI::ContainerBuilder();
 		container_builder.registerType<DummyService>();
-		container_builder.build().resolve<DummyService>();
+
+		auto container = container_builder.build();
+		container.resolve<DummyService>();
 	}
 
 	ASSERT_EQ("Constructed, Destructed", log);
 }
 
-TEST_F(ResolveEfficiencyTest, Should_2)
+TEST_F(ResolveEfficiencyTest, ShouldMoveConstructServiceInstance_WhenRegisteringServiceInstanceByConcreteObject)
 {
 	{
 		auto container_builder = DI::ContainerBuilder();
@@ -49,7 +51,9 @@ TEST_F(ResolveEfficiencyTest, Should_3)
 	{
 		auto container_builder = DI::ContainerBuilder();
 		container_builder.registerInstance(DummyService());
-		container_builder.build().resolve<std::shared_ptr<DummyService>>();
+
+		auto container = container_builder.build();
+		container.resolve<std::shared_ptr<DummyService>>();
 	}
 
 	ASSERT_EQ("Constructed, Move constructed, Destructed, Destructed", log);
