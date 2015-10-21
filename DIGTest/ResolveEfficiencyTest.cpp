@@ -13,13 +13,18 @@ namespace
 {
 	struct DummyService
 	{
-		DummyService() { ResolveEfficiencyTest::logMessage("Constructed"); }
-		DummyService(const DummyService&) { ResolveEfficiencyTest::logMessage("Copy constructed"); }
-		DummyService(DummyService&&) { ResolveEfficiencyTest::logMessage("Move constructed"); }
-		virtual ~DummyService() { ResolveEfficiencyTest::logMessage("Destructed"); }
+		DummyService() { logMessage("Constructed"); }
+		DummyService(const DummyService&) { logMessage("Copy constructed"); }
+		DummyService(DummyService&&) { logMessage("Move constructed"); }
+		virtual ~DummyService() { logMessage("Destructed"); }
 
-		DummyService& operator=(const DummyService&) { ResolveEfficiencyTest::logMessage("Copy assigned"); return *this; }
-		DummyService& operator=(DummyService&&) { ResolveEfficiencyTest::logMessage("Move assigned"); return *this; }
+		DummyService& operator=(const DummyService&) { logMessage("Copy assigned"); return *this; }
+		DummyService& operator=(DummyService&&) { logMessage("Move assigned"); return *this; }
+
+		void logMessage(std::string message) const
+		{
+				ResolveEfficiencyTest::logMessage(message);
+		}
 	};
 }
 
@@ -46,15 +51,15 @@ TEST_F(ResolveEfficiencyTest, ShouldMoveConstructServiceInstance_WhenRegistering
 	ASSERT_EQ("Constructed, Move constructed, Destructed, Destructed", log);
 }
 
-TEST_F(ResolveEfficiencyTest, Should_3)
+TEST_F(ResolveEfficiencyTest, ShouldCopyConstructService_WhenResolvingServiceByCopy_AndServiceRegisteredByInstance)
 {
 	{
 		auto container_builder = DI::ContainerBuilder();
 		container_builder.registerInstance(DummyService());
 
 		auto container = container_builder.build();
-		container.resolve<std::shared_ptr<DummyService>>();
+		container.resolve<DummyService>();
 	}
 
-	ASSERT_EQ("Constructed, Move constructed, Destructed, Destructed", log);
+	ASSERT_EQ("Constructed, Move constructed, Destructed, Copy constructed, Destructed, Destructed", log);
 }
