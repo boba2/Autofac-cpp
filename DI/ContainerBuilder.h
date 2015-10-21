@@ -32,7 +32,7 @@ namespace DI
 		template<class T>
 		void registerFactory(T factory)
 		{
-			auto registerer = std::make_shared<Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>>(factory);
+			auto registerer = std::make_shared<Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>>(static_cast<std::function<decltype(factory())()>>(factory));
 			_service_registerers.insert(registerer);
 		}
 

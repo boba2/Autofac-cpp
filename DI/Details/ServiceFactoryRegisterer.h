@@ -13,16 +13,16 @@ namespace DI
 		class ServiceFactoryRegisterer : public ServiceRegisterer<T>
 		{
 		public:
-			explicit ServiceFactoryRegisterer(T(factory)())
+			explicit ServiceFactoryRegisterer(std::function<T()> factory)
 				: _factory([factory] { return std::make_shared<T>(factory()); })
 			{}
-			explicit ServiceFactoryRegisterer(T*(factory)())
+			explicit ServiceFactoryRegisterer(std::function<T*()> factory)
 				: _factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); })
 			{}
-			explicit ServiceFactoryRegisterer(std::shared_ptr<T>(factory)())
+			explicit ServiceFactoryRegisterer(std::function<std::shared_ptr<T>()> factory)
 				: _factory(factory)
 			{}
-			explicit ServiceFactoryRegisterer(std::unique_ptr<T>(factory)())
+			explicit ServiceFactoryRegisterer(std::function<std::unique_ptr<T>()> factory)
 				: _factory([factory] { return std::move(factory());  })
 			{}
 

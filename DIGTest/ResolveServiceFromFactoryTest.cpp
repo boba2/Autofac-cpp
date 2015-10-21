@@ -38,3 +38,13 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceBySharedPtr_WhenServic
 
 	ASSERT_TRUE(std::dynamic_pointer_cast<DummyService>(container().resolve<std::shared_ptr<DummyService>>()) != nullptr);
 }
+
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceBySharedPtr_WhenServiceRegisteredAsInstanceFactoryFunction)
+{
+	std::function<DummyService()> factory = [] { return DummyService(); };
+
+	builder()
+		.registerFactory(factory);
+
+	ASSERT_TRUE(std::dynamic_pointer_cast<DummyService>(container().resolve<std::shared_ptr<DummyService>>()) != nullptr);
+}
