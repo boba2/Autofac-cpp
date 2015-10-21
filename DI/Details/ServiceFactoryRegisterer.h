@@ -13,6 +13,9 @@ namespace DI
 		class ServiceFactoryRegisterer : public ServiceRegisterer<T>
 		{
 		public:
+			explicit ServiceFactoryRegisterer(T(factory)())
+				: _factory([factory] { return std::make_shared<T>(factory()); })
+			{}
 			explicit ServiceFactoryRegisterer(T*(factory)())
 				: _factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); })
 			{}
