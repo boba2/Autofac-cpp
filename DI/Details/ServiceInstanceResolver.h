@@ -18,31 +18,28 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			ServiceInstanceResolver()
-			{}
-
 			explicit ServiceInstanceResolver(std::shared_ptr<T> instance)
 				: _instance(instance)
 			{}
 
 			virtual ServiceType getService() const override
 			{
-				return *getServiceInstance().get();
+				return *_instance.get();
 			}
 
 			virtual ServiceRefType getServiceAsRef() const override
 			{
-				return *getServiceInstance().get();
+				return *_instance.get();
 			}
 
 			virtual ServicePtrType getServiceAsPtr() const override
 			{
-				return getServiceInstance().get();
+				return _instance.get();
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
-				return getServiceInstance();
+				return _instance;
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
@@ -51,16 +48,7 @@ namespace DI
 			}
 
 		private:
-			std::shared_ptr<T> getServiceInstance() const
-			{
-				if (!_instance)
-					_instance = std::make_shared<T>();
-
-				return _instance;
-			}
-
-		private:
-			mutable std::shared_ptr<T> _instance;
+			std::shared_ptr<T> const _instance;
 		};
 
 	}
