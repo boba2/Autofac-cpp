@@ -14,5 +14,5 @@ TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseType_Wh
 		.registerType<SpecialDummyService>()
 		.as<DummyService1>();
 
-	ASSERT_TRUE(std::dynamic_pointer_cast<SpecialDummyService>(container().resolve<std::shared_ptr<DummyService1>>()) != nullptr);
+	ASSERT_TRUE(dynamic_cast<SpecialDummyService*>(container().resolve<std::shared_ptr<DummyService1>>().get()) != nullptr);
 }

@@ -7,7 +7,7 @@ namespace
 	struct DummyService
 	{
 		int _value;
-		DummyService(int value = 0) : _value(value) {}
+		explicit DummyService(int value = 0) : _value(value) {}
 	};
 
 	struct AbstractDummyService { virtual ~AbstractDummyService() {}; virtual void abstract() = 0; };
@@ -25,7 +25,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegi
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service(13);  return &service; });
+		.registerFactory([] { static auto service = DummyService(13);  return &service; });
 
 	ASSERT_EQ(13, container().resolve<DummyService>()._value);
 }
@@ -57,7 +57,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceA
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service(20);  return &service; });
+		.registerFactory([] { static auto service = DummyService(20);  return &service; });
 
 	ASSERT_EQ(20, container().resolve<DummyService&>()._value);
 }
@@ -99,7 +99,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceA
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service(20);  return &service; });
+		.registerFactory([] { static auto service = DummyService(20);  return &service; });
 
 	ASSERT_EQ(20, container().resolve<DummyService*>()->_value);
 }
@@ -141,7 +141,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsUniquePtr_WhenServic
 TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceAsUniquePtr_AndServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service;  return &service; });
+		.registerFactory([] { static auto service = DummyService();  return &service; });
 
 	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
@@ -173,7 +173,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServic
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service(16);  return &service; });
+		.registerFactory([] { static auto service = DummyService(16);  return &service; });
 
 	ASSERT_EQ(16, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
@@ -206,7 +206,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveService_WhenServiceRegistered
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveService_WhenServiceRegisteredAsPtrFactoryFunction)
 {
-	std::function<DummyService*()> factory = [] { static DummyService service(14); return &service; };
+	std::function<DummyService*()> factory = [] { static auto service = DummyService(14); return &service; };
 
 	builder()
 		.registerFactory(factory);
@@ -279,5 +279,5 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServic
 	builder()
 		.registerFactory([] { return std::shared_ptr<AbstractDummyService>(std::make_shared<ConcreteDummyService>()); });
 
-	ASSERT_TRUE(std::dynamic_pointer_cast<ConcreteDummyService>(container().resolve<std::shared_ptr<AbstractDummyService>>()) != nullptr);
+	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<std::shared_ptr<AbstractDummyService>>().get()) != nullptr);
 }

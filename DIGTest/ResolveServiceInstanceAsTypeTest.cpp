@@ -13,7 +13,7 @@ using ResolveRegisteredServiceInstanceAsTypeTest = ContainerBaseTest;
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -24,7 +24,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTyp
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsAnyBaseType_WhenServiceInstanceRegisteredAliasedAsManyBaseTypes)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -37,7 +37,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsAnyBase
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsItsType_AndServiceInstanceRegisteredOnlyWithAlias)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -48,7 +48,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenReso
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredOnlyAliasedAsItsOwnType)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -59,7 +59,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredWithAliasAndAsSelf)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -71,7 +71,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseTypeAndAsSelf)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -83,7 +83,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTyp
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredOnlyAsSelf)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -94,7 +94,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsCopy_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 	service._value = 13;
 
 	builder()
@@ -106,7 +106,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTyp
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsReference_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -117,7 +117,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTyp
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsSharedPtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -128,7 +128,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTyp
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsBaseTypeAsUniquePtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	SpecialDummyService service;
+	auto service = SpecialDummyService();
 
 	builder()
 		.registerInstance(&service)
@@ -146,7 +146,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldBreakStaticAssert_WhenR
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
-//	SpecialDummyService service;
+//	auto service = SpecialDummyService();
 //
 //	builder()
 //		.registerInstance(&service)

@@ -236,8 +236,8 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsPointer_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService1 service1;
-	DummyService2 service2;
+	auto service1 = DummyService1();
+	auto service2 = DummyService2();
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
@@ -248,8 +248,8 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsPointe
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsReference_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService1 service1;
-	DummyService2 service2;
+	auto service1 = DummyService1();
+	auto service2 = DummyService2();
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
@@ -260,8 +260,8 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsRefere
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsCopy_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService1 service1(13);
-	DummyService2 service2(14);
+	auto service1 = DummyService1(13);
+	auto service2 = DummyService2(14);
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
@@ -272,8 +272,8 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsCopy_W
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsSharedPtr_WhenServicesInstanceOfDifferentTypesRegistered)
 {
-	DummyService1 service1;
-	DummyService2 service2;
+	auto service1 = DummyService1();
+	auto service2 = DummyService2();
 
 	builder().registerInstance(&service1);
 	builder().registerInstance(&service2);
@@ -284,7 +284,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsShared
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingServiceOfOtherTypeThanRegistered)
 {
-	DummyService1 service1;
+	auto service1 = DummyService1();
 
 	builder().registerInstance(&service1);
 
@@ -293,7 +293,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldNotMove_WhenRegisteringServiceInstanceAsLValue)
 {
-	DummyService service(13);
+	auto service = DummyService(13);
 
 	builder().registerInstance(service);
 
