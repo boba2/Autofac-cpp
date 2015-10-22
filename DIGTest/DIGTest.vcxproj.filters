@@ -41,13 +41,7 @@
     <ClCompile Include="ResolveStandardServiceInstanceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResolveServiceInstanceByTypeTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ResolveServiceInstanceTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResolveServiceTypeByTypeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResolveServiceTypeTest.cpp">
@@ -60,6 +54,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResolveServiceTypeAsSingleInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResolveServiceInstanceAsTypeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResolveServiceTypeAsTypeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

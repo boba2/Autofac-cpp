@@ -6,9 +6,9 @@ namespace
 	struct SpecialDummyService : DummyService1 {};
 }
 
-using ResolveRegisteredServiceTypeByTypeTest = ContainerBaseTest;
+using ResolveRegisteredServiceTypeAsTypeTest = ContainerBaseTest;
 
-TEST_F(ResolveRegisteredServiceTypeByTypeTest, ShouldResolveServiceByBaseType_WhenServiceTypeRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceTypeRegisteredAliasedAsBaseType)
 {
 	builder()
 		.registerType<SpecialDummyService>()

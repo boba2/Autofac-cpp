@@ -162,10 +162,10 @@
     <ClCompile Include="DIGTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
     <ClCompile Include="ResolveServiceFromFactoryTest.cpp" />
-    <ClCompile Include="ResolveServiceInstanceByTypeTest.cpp" />
+    <ClCompile Include="ResolveServiceInstanceAsTypeTest.cpp" />
     <ClCompile Include="ResolveServiceInstanceTest.cpp" />
     <ClCompile Include="ResolveServiceTypeAsSingleInstance.cpp" />
-    <ClCompile Include="ResolveServiceTypeByTypeTest.cpp" />
+    <ClCompile Include="ResolveServiceTypeAsTypeTest.cpp" />
     <ClCompile Include="ResolveServiceTypeTest.cpp" />
     <ClCompile Include="ResolveStandardServiceInstanceTest.cpp" />
     <ClCompile Include="Support\stdafx.cpp">

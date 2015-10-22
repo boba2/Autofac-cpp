@@ -10,7 +10,7 @@ namespace
 
 using ResolveServiceTypeAsSingleInstance = ContainerBaseTest;
 
-TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByPtr_WhenServiceTypeRegisteredAsSingleInstance)
+TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsPtr_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
 		.registerType<DummyService>()
@@ -22,7 +22,7 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByPtr_WhenS
 	ASSERT_EQ(service1, service2);
 }
 
-TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByRef_WhenServiceTypeRegisteredAsSingleInstance)
+TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsRef_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
 		.registerType<DummyService>()
@@ -34,7 +34,7 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByRef_WhenS
 	ASSERT_EQ(&service1, &service2);
 }
 
-TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceBySharedPtr_WhenServiceTypeRegisteredAsSingleInstance)
+TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsSharedPtr_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
 		.registerType<DummyService>()
@@ -46,7 +46,7 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceBySharedPtr
 	ASSERT_EQ(service1, service2);
 }
 
-TEST_F(ResolveServiceTypeAsSingleInstance, ShouldThrowException_WhenResolvingSingleServiceByUniquePtr)
+TEST_F(ResolveServiceTypeAsSingleInstance, ShouldThrowException_WhenResolvingSingleServiceAsUniquePtr)
 {
 	builder()
 		.registerType<DummyService>()
@@ -55,7 +55,7 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldThrowException_WhenResolvingSin
 	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
-TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByCopy_WhenServiceTypeRegisteredAsSingleInstance)
+TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsCopy_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
 		.registerType<DummyService>()
@@ -67,7 +67,7 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByCopy_When
 	ASSERT_EQ(13, service._value);
 }
 
-TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceByBaseType_WhenServiceTypeRegisteredAliasedAsBaseType_AndAsSingleInstance)
+TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsBaseType_WhenServiceTypeRegisteredAliasedAsBaseType_AndAsSingleInstance)
 {
 	builder()
 		.registerType<SpecialDummyService>()

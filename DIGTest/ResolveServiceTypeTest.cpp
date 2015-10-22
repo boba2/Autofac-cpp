@@ -9,21 +9,21 @@ namespace
 
 using ResolveRegisteredServiceTypeTest = ContainerBaseTest;
 
-TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceBySharedPtr_WhenServiceTypeRegistered)
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceAsSharedPtr_WhenServiceTypeRegistered)
 {
 	builder().registerType<DummyService>();
 
 	ASSERT_TRUE(dynamic_cast<DummyService*>(container().resolve<std::shared_ptr<DummyService>>().get()) != nullptr);
 }
 
-TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceByUniquePtr_WhenServiceTypeRegistered)
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceAsUniquePtr_WhenServiceTypeRegistered)
 {
 	builder().registerType<DummyService>();
 
 	ASSERT_TRUE(dynamic_cast<DummyService*>(container().resolve<std::unique_ptr<DummyService>>().get()) != nullptr);
 }
 
-TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceByCopy_WhenNonAbstractServiceTypeRegistered)
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceAsCopy_WhenNonAbstractServiceTypeRegistered)
 {
 	builder().registerType<DummyService>();
 
@@ -37,14 +37,14 @@ TEST_F(ResolveRegisteredServiceTypeTest, ShouldBreakStaticAssert_WhenRegistering
 //	builder().registerType<AbstractDummyService>();
 }
 
-TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServiceByPointer_AndServiceTypeRegisteredNotAsAutoManageable)
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServiceAsPointer_AndServiceTypeRegisteredNotAsAutoManageable)
 {
 	builder().registerType<DummyService>();
 
 	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
-TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServiceByReference_AndServiceTypeRegisteredNotAsAutoManageable)
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServiceAsReference_AndServiceTypeRegisteredNotAsAutoManageable)
 {
 	builder().registerType<DummyService>();
 

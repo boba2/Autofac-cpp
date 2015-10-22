@@ -28,7 +28,7 @@ namespace
 	};
 }
 
-TEST_F(ResolveEfficiencyTest, ShouldConstructServiceOnlyOnce_WhenResolvingServiceByCopy_AndServiceRegisteredByType)
+TEST_F(ResolveEfficiencyTest, ShouldConstructServiceOnlyOnce_WhenResolvingServiceAsCopy_AndServiceRegisteredAsType)
 {
 	{
 		auto container_builder = DI::ContainerBuilder();
@@ -41,7 +41,7 @@ TEST_F(ResolveEfficiencyTest, ShouldConstructServiceOnlyOnce_WhenResolvingServic
 	ASSERT_EQ("Constructed, Destructed", log);
 }
 
-TEST_F(ResolveEfficiencyTest, ShouldMoveConstructServiceInstance_WhenRegisteringServiceInstanceByConcreteObject)
+TEST_F(ResolveEfficiencyTest, ShouldMoveConstructServiceInstance_WhenRegisteringServiceInstanceAsConcreteObject)
 {
 	{
 		auto container_builder = DI::ContainerBuilder();
@@ -51,7 +51,7 @@ TEST_F(ResolveEfficiencyTest, ShouldMoveConstructServiceInstance_WhenRegistering
 	ASSERT_EQ("Constructed, Move constructed, Destructed, Destructed", log);
 }
 
-TEST_F(ResolveEfficiencyTest, ShouldCopyConstructService_WhenResolvingServiceByCopy_AndServiceRegisteredByInstance)
+TEST_F(ResolveEfficiencyTest, ShouldCopyConstructService_WhenResolvingServiceAsCopy_AndServiceRegisteredAsInstance)
 {
 	{
 		auto container_builder = DI::ContainerBuilder();

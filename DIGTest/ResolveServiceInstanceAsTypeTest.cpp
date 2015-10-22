@@ -9,9 +9,9 @@ namespace
 	struct SpecialDummyService : DummyService1, DummyService2 {};
 }
 
-using ResolveRegisteredServiceInstanceByTypeTest = ContainerBaseTest;
+using ResolveRegisteredServiceInstanceAsTypeTest = ContainerBaseTest;
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseType_WhenServiceInstanceRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
 	SpecialDummyService service;
 
@@ -22,7 +22,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTyp
 	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByAnyBaseType_WhenServiceInstanceRegisteredAliasedAsManyBaseTypes)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsAnyBaseType_WhenServiceInstanceRegisteredAliasedAsManyBaseTypes)
 {
 	SpecialDummyService service;
 
@@ -35,7 +35,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByAnyBase
 	ASSERT_EQ(&service, container().resolve<DummyService2 *>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldThrowException_WhenResolvingServiceByItsType_AndServiceInstanceRegisteredOnlyWithAlias)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsItsType_AndServiceInstanceRegisteredOnlyWithAlias)
 {
 	SpecialDummyService service;
 
@@ -46,7 +46,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldThrowException_WhenReso
 	ASSERT_THROW(container().resolve<SpecialDummyService *>(), DI::Error::ServiceNotRegistered);
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByItsType_WhenServiceInstanceRegisteredOnlyAliasedAsItsOwnType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredOnlyAliasedAsItsOwnType)
 {
 	SpecialDummyService service;
 
@@ -57,7 +57,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByItsType
 	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByItsType_WhenServiceInstanceRegisteredWithAliasAndAsSelf)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredWithAliasAndAsSelf)
 {
 	SpecialDummyService service;
 
@@ -69,7 +69,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByItsType
 	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseType_WhenServiceInstanceRegisteredAliasedAsBaseTypeAndAsSelf)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseTypeAndAsSelf)
 {
 	SpecialDummyService service;
 
@@ -81,7 +81,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTyp
 	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByItsType_WhenServiceInstanceRegisteredOnlyAsSelf)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredOnlyAsSelf)
 {
 	SpecialDummyService service;
 
@@ -92,7 +92,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByItsType
 	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTypeAsCopy_WhenServiceInstanceRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsCopy_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
 	SpecialDummyService service;
 	service._value = 13;
@@ -104,7 +104,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTyp
 	ASSERT_EQ(13, container().resolve<DummyService1>()._value);
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTypeAsReference_WhenServiceInstanceRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsReference_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
 	SpecialDummyService service;
 
@@ -115,7 +115,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTyp
 	ASSERT_EQ(&service, &container().resolve<DummyService1 &>());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTypeAsSharedPtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsSharedPtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
 	SpecialDummyService service;
 
@@ -126,7 +126,7 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByBaseTyp
 	ASSERT_EQ(&service, container().resolve<std::shared_ptr<DummyService1>>().get());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldThrowException_WhenResolvingServiceByBaseTypeAsUniquePtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsBaseTypeAsUniquePtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
 	SpecialDummyService service;
 
@@ -137,14 +137,14 @@ TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldThrowException_WhenReso
 	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldBreakStaticAssert_WhenRegisteringAliasedAsUnrelatedType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldBreakStaticAssert_WhenRegisteringAliasedAsUnrelatedType)
 {
 //	builder()
 //		.registerInstance(DummyService1())
 //		.as<DummyService2>();
 }
 
-TEST_F(ResolveRegisteredServiceInstanceByTypeTest, ShouldResolveServiceByVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
 //	SpecialDummyService service;
 //
