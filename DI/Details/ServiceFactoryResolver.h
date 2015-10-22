@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "ServiceResolver.h"
+#include "Details/ServiceResolver.h"
 #include "Error/ServiceInstanceNotResolvableAs.h"
 
 namespace DI
@@ -10,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class SharedServiceFactoryResolver : public ServiceResolver<T>
+		class ServiceFactoryResolver : public ServiceResolver<T>
 		{
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -19,13 +19,14 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit SharedServiceFactoryResolver(std::function<std::shared_ptr<T>()> factory)
-			: _factory(factory)
+			explicit ServiceFactoryResolver(std::function<std::shared_ptr<T>()> shared_service_factory, std::function<std::unique_ptr<T>()> unique_service_factory)
+				: _shared_service_factory(shared_service_factory),
+				_unique_service_factory(unique_service_factory)
 			{}
 
 			virtual ServiceType getService() const override
 			{
-				return *_factory().get();
+				return *_shared_service_factory().get();
 			}
 
 			virtual ServiceRefType getServiceAsRef() const override
@@ -40,16 +41,17 @@ namespace DI
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
-				return _factory();
+				return _shared_service_factory();
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
-				throw std::logic_error("Not implemented");
+				return _unique_service_factory();
 			}
 
 		private:
-			std::function<std::shared_ptr<T>()> _factory;
+			std::function<std::shared_ptr<T>()> _shared_service_factory;
+			std::function<std::unique_ptr<T>()> _unique_service_factory;
 		};
 
 	}

@@ -155,12 +155,11 @@
     <ClInclude Include="Details\ServiceSingletonResolver.h" />
     <ClInclude Include="Details\ServiceTypeRegisterer.h" />
     <ClInclude Include="Details\ServiceTypeResolver.h" />
-    <ClInclude Include="Details\SharedServiceFactoryResolver.h" />
     <ClInclude Include="Details\TypeIndex.h" />
     <ClInclude Include="Details\UnderlyingType.h" />
-    <ClInclude Include="Details\UniqueServiceFactoryResolver.h" />
     <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
+    <ClInclude Include="Details\ServiceFactoryResolver.h" />
     <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="ServiceTypeRegisterer.h" />
     <ClInclude Include="Support\DIdecl.h" />

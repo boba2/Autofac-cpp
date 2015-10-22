@@ -45,12 +45,6 @@
     <ClInclude Include="Details\ServiceTypeResolver.h">
       <Filter>Details\Resolvers</Filter>
     </ClInclude>
-    <ClInclude Include="Details\SharedServiceFactoryResolver.h">
-      <Filter>Details\Resolvers</Filter>
-    </ClInclude>
-    <ClInclude Include="Details\UniqueServiceFactoryResolver.h">
-      <Filter>Details\Resolvers</Filter>
-    </ClInclude>
     <ClInclude Include="Details\ServiceAliasRegisterer.h">
       <Filter>Details\Registerers</Filter>
     </ClInclude>
@@ -79,6 +73,9 @@
       <Filter>Details</Filter>
     </ClInclude>
     <ClInclude Include="ServiceTypeRegisterer.h" />
+    <ClInclude Include="Details\ServiceFactoryResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">

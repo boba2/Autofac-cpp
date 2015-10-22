@@ -2,8 +2,7 @@
 
 #include <functional>
 #include "ServiceRegisterer.h"
-#include "SharedServiceFactoryResolver.h"
-#include "UniqueServiceFactoryResolver.h"
+#include "ServiceFactoryResolver.h"
 
 namespace DI
 {
@@ -16,7 +15,8 @@ namespace DI
 		public:
 			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value>>
 			explicit ServiceFactoryRegisterer(std::function<U()> factory)
-				: _unique_service_factory([factory] { return std::make_unique<T>(factory()); })
+				: _shared_service_factory([factory] { return std::make_shared<T>(factory()); }),
+				_unique_service_factory([factory] { return std::make_unique<T>(factory()); })
 			{}
 			explicit ServiceFactoryRegisterer(std::function<T*()> factory)
 				: _shared_service_factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); })
@@ -25,15 +25,13 @@ namespace DI
 				: _shared_service_factory(factory)
 			{}
 			explicit ServiceFactoryRegisterer(std::function<std::unique_ptr<T>()> factory)
-				: _unique_service_factory(factory)
+				: _shared_service_factory([factory] { return std::shared_ptr<T>(std::move(factory())); }),
+				_unique_service_factory(factory)
 			{}
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
-				if (_shared_service_factory)
-					return std::make_shared<SharedServiceFactoryResolver<T>>(_shared_service_factory);
-
-				return std::make_shared<UniqueServiceFactoryResolver<T>>(_unique_service_factory);
+				return std::make_shared<ServiceFactoryResolver<T>>(_shared_service_factory, _unique_service_factory);
 			}
 
 		protected:
