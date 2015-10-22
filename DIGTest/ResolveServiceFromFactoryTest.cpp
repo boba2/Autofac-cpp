@@ -54,12 +54,22 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceA
 	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
-TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceAsRef_AndServiceRegisteredAsPtrFactory)
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service;  return &service; });
+		.registerFactory([] { static DummyService service(20);  return &service; });
 
-	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_EQ(20, container().resolve<DummyService&>()._value);
+}
+
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveSameServiceInstanceAsRef_WhenServiceRegisteredAsPtrFactory)
+{
+	auto service = DummyService();
+
+	builder()
+		.registerFactory([&service] { return &service; });
+
+	ASSERT_EQ(&service, &container().resolve<DummyService&>());
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceAsRef_AndServiceRegisteredAsSharedPtrFactory)
@@ -86,12 +96,22 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceA
 	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
-TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsPtrFactory)
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service;  return &service; });
+		.registerFactory([] { static DummyService service(20);  return &service; });
 
-	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_EQ(20, container().resolve<DummyService*>()->_value);
+}
+
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveSameServiceInstanceAsPtr_WhenServiceRegisteredAsPtrFactory)
+{
+	auto service = DummyService();
+
+	builder()
+		.registerFactory([&service] { return &service; });
+
+	ASSERT_EQ(&service, container().resolve<DummyService*>());
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsSharedPtrFactory)

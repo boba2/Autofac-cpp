@@ -13,13 +13,14 @@ namespace DI
 		class ServiceFactoryRegisterer : public ServiceRegisterer<T>
 		{
 		public:
-			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value>>
+			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value && !std::is_pointer<U>::value>>
 			explicit ServiceFactoryRegisterer(std::function<U()> factory)
 				: _shared_service_factory([factory] { return std::make_shared<T>(factory()); }),
 				_unique_service_factory([factory] { return std::make_unique<T>(factory()); })
 			{}
 			explicit ServiceFactoryRegisterer(std::function<T*()> factory)
-				: _shared_service_factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); })
+				: _shared_service_factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); }),
+				_ptr_service_factory(factory)
 			{}
 			explicit ServiceFactoryRegisterer(std::function<std::shared_ptr<T>()> factory)
 				: _shared_service_factory(factory)
@@ -31,7 +32,7 @@ namespace DI
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
-				return std::make_shared<ServiceFactoryResolver<T>>(_shared_service_factory, _unique_service_factory);
+				return std::make_shared<ServiceFactoryResolver<T>>(_shared_service_factory, _unique_service_factory, _ptr_service_factory);
 			}
 
 		protected:
@@ -48,6 +49,7 @@ namespace DI
 
 			std::function<std::shared_ptr<T>()> _shared_service_factory;
 			std::function<std::unique_ptr<T>()> _unique_service_factory;
+			std::function<T*()> _ptr_service_factory;
 		};
 
 	}
