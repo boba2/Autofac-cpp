@@ -115,7 +115,7 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsUniquePtr_WhenServic
 	builder()
 		.registerFactory([] { return DummyService(11); });
 
-	ASSERT_EQ(11, container().resolve<std::unique_ptr<DummyService>>().get()->_value);
+	ASSERT_EQ(11, container().resolve<std::unique_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceAsUniquePtr_AndServiceRegisteredAsPtrFactory)
@@ -139,39 +139,39 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsUniquePtr_WhenServic
 	builder()
 		.registerFactory([] { return std::make_unique<DummyService>(12); });
 
-	ASSERT_EQ(12, container().resolve<std::unique_ptr<DummyService>>().get()->_value);
+	ASSERT_EQ(12, container().resolve<std::unique_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsInstanceFactory)
 {
 	builder()
-		.registerFactory([] { return DummyService(); });
+		.registerFactory([] { return DummyService(15); });
 
-	ASSERT_TRUE(std::dynamic_pointer_cast<DummyService>(container().resolve<std::shared_ptr<DummyService>>()) != nullptr);
+	ASSERT_EQ(15, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static DummyService service;  return &service; });
+		.registerFactory([] { static DummyService service(16);  return &service; });
 
-	ASSERT_TRUE(std::dynamic_pointer_cast<DummyService>(container().resolve<std::shared_ptr<DummyService>>()) != nullptr);
+	ASSERT_EQ(16, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsSharedPtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(); });
+		.registerFactory([] { return std::make_shared<DummyService>(17); });
 
-	ASSERT_TRUE(std::dynamic_pointer_cast<DummyService>(container().resolve<std::shared_ptr<DummyService>>()) != nullptr);
+	ASSERT_EQ(17, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsUniquePtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(); });
+		.registerFactory([] { return std::make_unique<DummyService>(18); });
 
-	ASSERT_TRUE(std::dynamic_pointer_cast<DummyService>(container().resolve<std::shared_ptr<DummyService>>()) != nullptr);
+	ASSERT_EQ(18, container().resolve<std::shared_ptr<DummyService>>()->_value);
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveService_WhenServiceRegisteredAsInstanceFactoryFunction)
