@@ -10,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceFactoryResolver : public ServiceResolver<T>
+		class SharedServiceFactoryResolver : public ServiceResolver<T>
 		{
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -19,13 +19,13 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit ServiceFactoryResolver(std::function<std::shared_ptr<T>()> factory)
-				: _factory(factory)
+			explicit SharedServiceFactoryResolver(std::function<std::shared_ptr<T>()> factory)
+			: _factory(factory)
 			{}
 
 			virtual ServiceType getService() const override
 			{
-				return *getServiceInstance().get();
+				return *_factory().get();
 			}
 
 			virtual ServiceRefType getServiceAsRef() const override
@@ -40,18 +40,12 @@ namespace DI
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
-				return getServiceInstance();
+				return _factory();
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
 				throw std::logic_error("Not implemented");
-			}
-
-		private:
-			std::shared_ptr<T> getServiceInstance() const
-			{
-				return _factory();
 			}
 
 		private:

@@ -110,6 +110,22 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenResolvingServiceB
 	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceInstanceNotResolvableAs);
 }
 
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceByUniquePtr_WhenServiceRegisteredAsInstanceFactory)
+{
+	builder()
+		.registerFactory([] { return DummyService(); });
+
+	ASSERT_TRUE(container().resolve<std::unique_ptr<DummyService>>().get() != nullptr);
+}
+
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceByUniquePtr_WhenServiceRegisteredAsPtrFactory)
+{
+	builder()
+		.registerFactory([] { static DummyService service;  return &service; });
+
+	ASSERT_TRUE(container().resolve<std::unique_ptr<DummyService>>().get() != nullptr);
+}
+
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceBySharedPtr_WhenServiceRegisteredAsInstanceFactory)
 {
 	builder()

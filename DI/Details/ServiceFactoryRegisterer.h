@@ -2,7 +2,8 @@
 
 #include <functional>
 #include "ServiceRegisterer.h"
-#include "ServiceFactoryResolver.h"
+#include "SharedServiceFactoryResolver.h"
+#include "UniqueServiceFactoryResolver.h"
 
 namespace DI
 {
@@ -15,23 +16,24 @@ namespace DI
 		public:
 			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value>>
 			explicit ServiceFactoryRegisterer(std::function<U()> factory)
-				: _factory([factory] { return std::make_shared<T>(factory()); })
+				: _unique_service_factory([factory] { return std::make_unique<T>(factory()); })
 			{}
 			explicit ServiceFactoryRegisterer(std::function<T*()> factory)
-				: _factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); })
+				: _shared_service_factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); })
 			{}
 			explicit ServiceFactoryRegisterer(std::function<std::shared_ptr<T>()> factory)
-				: _factory(factory)
+				: _shared_service_factory(factory)
 			{}
 			explicit ServiceFactoryRegisterer(std::function<std::unique_ptr<T>()> factory)
-				: _factory([factory] { return std::move(factory());  })
+				: _unique_service_factory(factory)
 			{}
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
-//				static_assert(!std::is_abstract<T>::value, "Cannot register an abstract type");
+				if (_shared_service_factory)
+					return std::make_shared<SharedServiceFactoryResolver<T>>(_shared_service_factory);
 
-				return std::make_shared<ServiceFactoryResolver<T>>(_factory);
+				return std::make_shared<UniqueServiceFactoryResolver<T>>(_unique_service_factory);
 			}
 
 		protected:
@@ -46,7 +48,8 @@ namespace DI
 				void operator()(T *) const {}
 			};
 
-			std::function<std::shared_ptr<T>()> _factory;
+			std::function<std::shared_ptr<T>()> _shared_service_factory;
+			std::function<std::unique_ptr<T>()> _unique_service_factory;
 		};
 
 	}
