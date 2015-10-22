@@ -46,6 +46,9 @@ namespace DI
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
+				if (!_unique_service_factory)
+					throw Error::ServiceInstanceNotResolvableAs();
+
 				return _unique_service_factory();
 			}
 
