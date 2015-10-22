@@ -27,13 +27,13 @@ namespace DI
 			return *resolver_it->second;
 		}
 
+	private:
 		void registerContainer()
 		{
 			auto container_factory = static_cast<std::function<Container()>>([this] { return Container(this->shared_from_this()); });
 			registerResolvers(ServiceFactoryRegisterer<Container>(container_factory).getServiceResolvers());
 		}
 
-	private:
 		void registerResolvers(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
 		{
 			for (auto &resolver : service_resolvers)

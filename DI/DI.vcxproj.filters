@@ -4,6 +4,18 @@
     <Filter Include="Support">
       <UniqueIdentifier>{914d6c54-42ca-46de-aedc-2face0c2f26e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Error">
+      <UniqueIdentifier>{1ef3d03d-db7f-442b-9ae8-6a8b910193f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Details">
+      <UniqueIdentifier>{4091fcde-909d-4bc9-be78-83253e33d7b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Details\Registerers">
+      <UniqueIdentifier>{57b1029b-08cc-4d83-be6e-3f2e3b53523c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Details\Resolvers">
+      <UniqueIdentifier>{0487793c-329b-4236-a27a-3904c2356968}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Support\DIdecl.h">
@@ -12,25 +24,61 @@
     <ClInclude Include="Support\targetver.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="Details\ServiceAliasRegisterer.h" />
-    <ClInclude Include="Details\ServiceAliasResolver.h" />
-    <ClInclude Include="Details\ServiceInstanceRegisterer.h" />
-    <ClInclude Include="Details\ServiceInstanceResolver.h" />
-    <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
-    <ClInclude Include="Details\ServiceRegisterer.h" />
-    <ClInclude Include="Details\ServiceResolver.h" />
-    <ClInclude Include="Details\ServiceTypeRegisterer.h" />
-    <ClInclude Include="Details\ServiceTypeResolver.h" />
-    <ClInclude Include="Details\TypeIndex.h" />
-    <ClInclude Include="Details\UnderlyingType.h" />
-    <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h" />
-    <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="ServiceRegisterer.h" />
-    <ClInclude Include="Details\ServiceFactoryRegisterer.h" />
-    <ClInclude Include="Details\ServiceFactoryResolver.h" />
-    <ClInclude Include="Details\ServiceSingletonResolver.h" />
+    <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h">
+      <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Error\ServiceNotRegistered.h">
+      <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceAliasResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceInstanceResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceSingletonResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceTypeResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\SharedServiceFactoryResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\UniqueServiceFactoryResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceAliasRegisterer.h">
+      <Filter>Details\Registerers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceFactoryRegisterer.h">
+      <Filter>Details\Registerers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceInstanceRegisterer.h">
+      <Filter>Details\Registerers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceTypeRegisterer.h">
+      <Filter>Details\Registerers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceResolver.h">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\UnderlyingType.h">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\TypeIndex.h">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceReferenceTypeConverter.h">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\ServiceRegisterer.h">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceTypeRegisterer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">

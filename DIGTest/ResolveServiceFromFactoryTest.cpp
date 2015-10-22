@@ -118,13 +118,13 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceByUniquePtr_WhenServic
 	ASSERT_TRUE(container().resolve<std::unique_ptr<DummyService>>().get() != nullptr);
 }
 
-TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceByUniquePtr_WhenServiceRegisteredAsPtrFactory)
-{
-	builder()
-		.registerFactory([] { static DummyService service;  return &service; });
-
-	ASSERT_TRUE(container().resolve<std::unique_ptr<DummyService>>().get() != nullptr);
-}
+//TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceByUniquePtr_WhenServiceRegisteredAsPtrFactory)
+//{
+//	builder()
+//		.registerFactory([] { static DummyService service;  return &service; });
+//
+//	ASSERT_TRUE(container().resolve<std::unique_ptr<DummyService>>().get() != nullptr);
+//}
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceBySharedPtr_WhenServiceRegisteredAsInstanceFactory)
 {
