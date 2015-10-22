@@ -1,5 +1,5 @@
 #include "ContainerBaseTest.h"
-#include "../DI/Error/ServiceInstanceNotResolvableAs.h"
+#include "../DI/Error/ServiceNotResolvableAs.h"
 
 namespace
 {
@@ -41,12 +41,12 @@ TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServi
 {
 	builder().registerType<DummyService>();
 
-	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServiceAsReference_AndServiceTypeRegisteredNotAsAutoManageable)
 {
 	builder().registerType<DummyService>();
 
-	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceNotResolvableAs);
 }

@@ -1,5 +1,5 @@
 #include "ContainerBaseTest.h"
-#include "../DI/Error/ServiceInstanceNotResolvableAs.h"
+#include "../DI/Error/ServiceNotResolvableAs.h"
 #include "../DI/Error/ServiceNotRegistered.h"
 
 namespace
@@ -134,7 +134,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenReso
 		.registerInstance(&service)
 		.as<DummyService1>();
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldBreakStaticAssert_WhenRegisteringAliasedAsUnrelatedType)

@@ -2,7 +2,7 @@
 
 #include <functional>
 #include "Details/ServiceResolver.h"
-#include "Error/ServiceInstanceNotResolvableAs.h"
+#include "Error/ServiceNotResolvableAs.h"
 
 namespace DI
 {
@@ -35,7 +35,7 @@ namespace DI
 			virtual ServiceRefType getServiceAsRef() const override
 			{
 				if (!_ptr_service_factory)
-					throw Error::ServiceInstanceNotResolvableAs();
+					throw Error::ServiceNotResolvableAs();
 
 				return *_ptr_service_factory();
 			}
@@ -43,7 +43,7 @@ namespace DI
 			virtual ServicePtrType getServiceAsPtr() const override
 			{
 				if (!_ptr_service_factory)
-					throw Error::ServiceInstanceNotResolvableAs();
+					throw Error::ServiceNotResolvableAs();
 
 				return _ptr_service_factory();
 			}
@@ -56,7 +56,7 @@ namespace DI
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
 				if (!_unique_service_factory)
-					throw Error::ServiceInstanceNotResolvableAs();
+					throw Error::ServiceNotResolvableAs();
 
 				return _unique_service_factory();
 			}

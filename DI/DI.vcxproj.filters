@@ -27,9 +27,6 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
     <ClInclude Include="ServiceRegisterer.h" />
-    <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h">
-      <Filter>Error</Filter>
-    </ClInclude>
     <ClInclude Include="Error\ServiceNotRegistered.h">
       <Filter>Error</Filter>
     </ClInclude>
@@ -75,6 +72,9 @@
     <ClInclude Include="ServiceTypeRegisterer.h" />
     <ClInclude Include="Details\ServiceFactoryResolver.h">
       <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Error\ServiceNotResolvableAs.h">
+      <Filter>Error</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

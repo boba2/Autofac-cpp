@@ -52,7 +52,7 @@ TEST_F(ResolveServiceTypeAsSingleInstance, ShouldThrowException_WhenResolvingSin
 		.registerType<DummyService>()
 		.singleInstance();
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsCopy_WhenServiceTypeRegisteredAsSingleInstance)

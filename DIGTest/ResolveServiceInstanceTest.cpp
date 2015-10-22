@@ -71,7 +71,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 
 	builder().registerInstance(&service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveServiceAsPointer_WhenServiceInstanceRegisteredThroughCopy)
@@ -116,7 +116,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 
 	builder().registerInstance(service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveServiceAsPointer_WhenServiceInstanceRegisteredThroughMove)
@@ -151,7 +151,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 {
 	builder().registerInstance(DummyService());
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveServiceAsPointer_WhenServiceInstanceRegisteredThroughSharedPtr)
@@ -196,7 +196,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 
 	builder().registerInstance(service);
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveServiceAsPointer_WhenServiceInstanceRegisteredThroughUniquePtr)
@@ -231,7 +231,7 @@ TEST_F(ResolveRegisteredServiceInstanceTest, ShouldThrowException_WhenResolvingS
 {
 	builder().registerInstance(std::make_unique<DummyService>(13));
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceInstanceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceTest, ShouldResolveCorrectServiceAsPointer_WhenServicesInstanceOfDifferentTypesRegistered)

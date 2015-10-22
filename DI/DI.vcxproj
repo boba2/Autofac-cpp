@@ -157,7 +157,7 @@
     <ClInclude Include="Details\ServiceTypeResolver.h" />
     <ClInclude Include="Details\TypeIndex.h" />
     <ClInclude Include="Details\UnderlyingType.h" />
-    <ClInclude Include="Error\ServiceInstanceNotResolvableAs.h" />
+    <ClInclude Include="Error\ServiceNotResolvableAs.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Details\ServiceFactoryResolver.h" />
     <ClInclude Include="ServiceRegisterer.h" />
