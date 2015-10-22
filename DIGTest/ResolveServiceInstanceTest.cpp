@@ -1,6 +1,5 @@
 #include "ContainerBaseTest.h"
 #include "../DI/Error/ServiceNotRegistered.h"
-#include "../DI/Error/ServiceInstanceNotResolvableAs.h"
 
 namespace
 {
