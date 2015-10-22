@@ -30,7 +30,7 @@ namespace DI
 
 			virtual ServiceRefType getServiceAsRef() const override
 			{
-				throw std::logic_error("Not implemented");
+				throw Error::ServiceInstanceNotResolvableAs();
 			}
 
 			virtual ServicePtrType getServiceAsPtr() const override
