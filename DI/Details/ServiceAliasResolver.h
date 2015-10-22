@@ -10,32 +10,38 @@ namespace DI
 		template<class T, class S>
 		class ServiceAliasResolver : public ServiceResolver<T>
 		{
+			using ServiceType = typename ServiceResolver<T>::ServiceType;
+			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
+			using ServicePtrType = typename ServiceResolver<T>::ServicePtrType;
+			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
+			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
+
 		public:
-			explicit ServiceAliasResolver(std::shared_ptr<ServiceResolver<>> inner_resolver)
-				: _inner_resolver(std::dynamic_pointer_cast<ServiceResolver<S>>(inner_resolver))
+			explicit ServiceAliasResolver(std::shared_ptr<ServiceResolver<S>> inner_resolver)
+				: _inner_resolver(inner_resolver)
 			{}
 
-			virtual typename ServiceResolver<T>::ServiceType getService() const override
+			virtual ServiceType getService() const override
 			{
 				return _inner_resolver->getService();
 			}
 
-			virtual typename ServiceResolver<T>::ServiceRefType getServiceAsRef() const override
+			virtual ServiceRefType getServiceAsRef() const override
 			{
 				return _inner_resolver->getServiceAsRef();
 			}
 
-			virtual typename ServiceResolver<T>::ServicePtrType getServiceAsPtr() const override
+			virtual ServicePtrType getServiceAsPtr() const override
 			{
 				return _inner_resolver->getServiceAsPtr();
 			}
 
-			virtual typename ServiceResolver<T>::ServiceSharedPtrType getServiceAsSharedPtr() const override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
 			{
 				return _inner_resolver->getServiceAsSharedPtr();
 			}
 
-			virtual typename ServiceResolver<T>::ServiceUniquePtrType getServiceAsUniquePtr() const override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
 			{
 				return std::move(_inner_resolver->getServiceAsUniquePtr());
 			}

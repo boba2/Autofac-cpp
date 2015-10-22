@@ -27,7 +27,7 @@ namespace DI
 			{
 				static_assert(std::is_base_of<T, S>::value, "Alias should be a resolvable base class of the service being registered");
 
-				return std::make_shared<ServiceAliasResolver<T, S>>(main_resolver);
+				return std::make_shared<ServiceAliasResolver<T, S>>(std::dynamic_pointer_cast<ServiceResolver<S>>(main_resolver));
 			}
 		};
 
