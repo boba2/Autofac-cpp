@@ -36,11 +36,11 @@ namespace DI
 				return TypeIndex<T>();
 			}
 
-			virtual ServiceType getService() const = 0;
-			virtual ServiceRefType getServiceAsRef() const = 0;
-			virtual ServicePtrType getServiceAsPtr() const = 0;
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() const = 0;
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() const = 0;
+			virtual ServiceType getService() = 0;
+			virtual ServiceRefType getServiceAsRef() = 0;
+			virtual ServicePtrType getServiceAsPtr() = 0;
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() = 0;
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() = 0;
 		};
 
 	}

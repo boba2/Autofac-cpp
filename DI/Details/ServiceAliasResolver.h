@@ -21,27 +21,27 @@ namespace DI
 				: _inner_resolver(inner_resolver)
 			{}
 
-			virtual ServiceType getService() const override
+			virtual ServiceType getService() override
 			{
 				return _inner_resolver->getService();
 			}
 
-			virtual ServiceRefType getServiceAsRef() const override
+			virtual ServiceRefType getServiceAsRef() override
 			{
 				return _inner_resolver->getServiceAsRef();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() const override
+			virtual ServicePtrType getServiceAsPtr() override
 			{
 				return _inner_resolver->getServiceAsPtr();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
 			{
 				return _inner_resolver->getServiceAsSharedPtr();
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
 			{
 				return std::move(_inner_resolver->getServiceAsUniquePtr());
 			}

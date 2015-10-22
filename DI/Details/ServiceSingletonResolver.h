@@ -22,33 +22,33 @@ namespace DI
 				: _inner_resolver(inner_resolver)
 			{}
 
-			virtual ServiceType getService() const override
+			virtual ServiceType getService() override
 			{
 				return *getServiceInstance().get();
 			}
 
-			virtual ServiceRefType getServiceAsRef() const override
+			virtual ServiceRefType getServiceAsRef() override
 			{
 				return *getServiceInstance().get();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() const override
+			virtual ServicePtrType getServiceAsPtr() override
 			{
 				return getServiceInstance().get();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
 			{
 				return getServiceInstance();
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
 			{
 				throw Error::ServiceNotResolvableAs();
 			}
 
 		private:
-			ServiceSharedPtrType getServiceInstance() const
+			ServiceSharedPtrType getServiceInstance()
 			{
 				if (!_instance)
 					_instance = _inner_resolver->getServiceAsSharedPtr();
@@ -58,7 +58,7 @@ namespace DI
 
 		private:
 			std::shared_ptr<ServiceResolver<T>> const _inner_resolver;
-			mutable ServiceSharedPtrType _instance;
+			ServiceSharedPtrType _instance;
 		};
 
 	}

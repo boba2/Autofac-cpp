@@ -22,27 +22,27 @@ namespace DI
 				: _instance(instance)
 			{}
 
-			virtual ServiceType getService() const override
+			virtual ServiceType getService() override
 			{
 				return *_instance.get();
 			}
 
-			virtual ServiceRefType getServiceAsRef() const override
+			virtual ServiceRefType getServiceAsRef() override
 			{
 				return *_instance.get();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() const override
+			virtual ServicePtrType getServiceAsPtr() override
 			{
 				return _instance.get();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
 			{
 				return _instance;
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() const override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
 			{
 				throw Error::ServiceNotResolvableAs();
 			}
