@@ -25,7 +25,7 @@ namespace DI
 
 			virtual ServiceType getService() const override
 			{
-				throw std::logic_error("Not implemented");
+				return *getServiceInstance().get();
 			}
 
 			virtual ServiceRefType getServiceAsRef() const override
