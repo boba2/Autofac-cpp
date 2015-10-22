@@ -24,7 +24,7 @@ namespace DI
 		class ServiceResolver : public ServiceResolver<>
 		{
 		public:
-			using ServiceType = T;
+			using ServiceType = std::conditional_t<std::is_abstract<T>::value, const T&, T>;
 			using ServiceRefType = T&;
 			using ServicePtrType = T*;
 			using ServiceSharedPtrType = std::shared_ptr<T>;

@@ -13,7 +13,8 @@ namespace DI
 		class ServiceFactoryRegisterer : public ServiceRegisterer<T>
 		{
 		public:
-			explicit ServiceFactoryRegisterer(std::function<T()> factory)
+			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value>>
+			explicit ServiceFactoryRegisterer(std::function<U()> factory)
 				: _factory([factory] { return std::make_shared<T>(factory()); })
 			{}
 			explicit ServiceFactoryRegisterer(std::function<T*()> factory)
@@ -28,7 +29,7 @@ namespace DI
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
-				static_assert(!std::is_abstract<T>::value, "Cannot register an abstract type");
+//				static_assert(!std::is_abstract<T>::value, "Cannot register an abstract type");
 
 				return std::make_shared<ServiceFactoryResolver<T>>(_factory);
 			}
