@@ -13,7 +13,7 @@ namespace DI
 		class ServiceFactoryRegisterer : public ServiceRegisterer<T, DI::ServiceRegisterer<T>>
 		{
 		public:
-			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value && !std::is_pointer<U>::value>>
+			template<class U, class = std::enable_if_t<!std::is_abstract<U>::value>>
 			explicit ServiceFactoryRegisterer(std::function<U()> factory)
 				: _shared_service_factory([factory] { return std::make_shared<T>(factory()); }),
 				_unique_service_factory([factory] { return std::make_unique<T>(factory()); })
