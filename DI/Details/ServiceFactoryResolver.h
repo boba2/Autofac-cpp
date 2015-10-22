@@ -35,7 +35,7 @@ namespace DI
 
 			virtual ServicePtrType getServiceAsPtr() const override
 			{
-				throw std::logic_error("Not implemented");
+				throw Error::ServiceInstanceNotResolvableAs();
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() const override
