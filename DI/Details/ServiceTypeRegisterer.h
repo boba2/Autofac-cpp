@@ -11,7 +11,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceTypeRegisterer : public ServiceRegisterer<T>, public DI::ServiceTypeRegisterer<T>
+		class ServiceTypeRegisterer : public ServiceRegisterer<T, DI::ServiceTypeRegisterer<T>>
 		{
 		public:
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
@@ -29,11 +29,6 @@ namespace DI
 			virtual void setSingleInstance() override
 			{
 				_single_instance = true;
-			}
-
-			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer) override
-			{
-				ServiceRegisterer<T>::registerAlias(alias_registerer);
 			}
 
 		private:

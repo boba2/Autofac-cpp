@@ -10,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceFactoryRegisterer : public ServiceRegisterer<T>
+		class ServiceFactoryRegisterer : public ServiceRegisterer<T, DI::ServiceRegisterer<T>>
 		{
 		public:
 			template<class U, class = std::enable_if_t<std::is_same<T, U>::value && !std::is_abstract<U>::value && !std::is_pointer<U>::value>>
@@ -33,12 +33,6 @@ namespace DI
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
 				return std::make_shared<ServiceFactoryResolver<T>>(_shared_service_factory, _unique_service_factory, _ptr_service_factory);
-			}
-
-		protected:
-			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer) override
-			{
-				ServiceRegisterer<T>::registerAlias(alias_registerer);
 			}
 
 		private:

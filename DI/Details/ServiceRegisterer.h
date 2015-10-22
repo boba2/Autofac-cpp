@@ -9,11 +9,11 @@ namespace DI
 	namespace Details
 	{
 
-		template<class T = void>
+		template<class T = void, class S = void>
 		class ServiceRegisterer;
 
 		template<>
-		class ServiceRegisterer<void>
+		class ServiceRegisterer<void, void>
 		{
 		public:
 			virtual ~ServiceRegisterer() {}
@@ -21,8 +21,8 @@ namespace DI
 			virtual std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const = 0;
 		};
 
-		template<class T>
-		class ServiceRegisterer : public ServiceRegisterer<>, public virtual DI::ServiceRegisterer<T>
+		template<class T, class S>
+		class ServiceRegisterer : public ServiceRegisterer<>, public S
 		{
 		public:
 			virtual std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override

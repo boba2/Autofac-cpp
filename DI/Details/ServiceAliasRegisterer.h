@@ -25,6 +25,8 @@ namespace DI
 		public:
 			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const override
 			{
+				static_assert(std::is_base_of<T, S>::value, "Alias should be a resolvable base class of the service being registered");
+
 				return std::make_shared<ServiceAliasResolver<T, S>>(main_resolver);
 			}
 		};

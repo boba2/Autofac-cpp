@@ -1,12 +1,10 @@
 #pragma once
 
-#include "ServiceRegisterer.h"
-
 namespace DI
 {
 
 	template<class T>
-	class ServiceTypeRegisterer : public virtual ServiceRegisterer<T>
+	class ServiceTypeRegisterer
 	{
 	public:
 		ServiceTypeRegisterer& singleInstance()
@@ -19,20 +17,19 @@ namespace DI
 		template<class U>
 		ServiceTypeRegisterer& as()
 		{
-			static_cast<ServiceRegisterer<T>&>(*this).as<U>(); // this made that complicated due to g++14 reporting error
+			registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
 
 			return *this;
 		}
 
 		ServiceTypeRegisterer& asSelf()
 		{
-			ServiceRegisterer<T>::asSelf();
-
-			return *this;
+			return as<T>();
 		}
 
 	protected:
 		virtual void setSingleInstance() = 0;
+		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
 	};
 
 }

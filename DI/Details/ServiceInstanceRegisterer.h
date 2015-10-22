@@ -9,7 +9,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceInstanceRegisterer : public ServiceRegisterer<T>
+		class ServiceInstanceRegisterer : public ServiceRegisterer<T, DI::ServiceRegisterer<T>>
 		{
 		public:
 			template<class U>
