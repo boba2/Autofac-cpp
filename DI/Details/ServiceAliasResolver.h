@@ -21,6 +21,7 @@ namespace DI
 				: _inner_resolver(inner_resolver)
 			{}
 
+		private:
 			virtual ServiceType getService() override
 			{
 				return _inner_resolver->getService();
@@ -46,7 +47,6 @@ namespace DI
 				return std::move(_inner_resolver->getServiceAsUniquePtr());
 			}
 
-		private:
 			std::shared_ptr<ServiceResolver<S>> const _inner_resolver;
 		};
 	}

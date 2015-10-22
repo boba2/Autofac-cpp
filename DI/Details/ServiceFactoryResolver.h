@@ -27,6 +27,7 @@ namespace DI
 				_ptr_service_factory(ptr_service_factory)
 			{}
 
+		private:
 			virtual ServiceType getService() override
 			{
 				return *_shared_service_factory().get();
@@ -61,7 +62,6 @@ namespace DI
 				return _unique_service_factory();
 			}
 
-		private:
 			std::function<std::shared_ptr<T>()> _shared_service_factory;
 			std::function<std::unique_ptr<T>()> _unique_service_factory;
 			std::function<T*()> _ptr_service_factory;

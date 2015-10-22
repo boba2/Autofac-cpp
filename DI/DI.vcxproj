@@ -152,7 +152,7 @@
     <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
     <ClInclude Include="Details\ServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceResolver.h" />
-    <ClInclude Include="Details\ServiceSingletonResolver.h" />
+    <ClInclude Include="Details\SingletonServiceResolver.h" />
     <ClInclude Include="Details\ServiceTypeRegisterer.h" />
     <ClInclude Include="Details\ServiceTypeResolver.h" />
     <ClInclude Include="Details\TypeIndex.h" />
@@ -161,6 +161,7 @@
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Details\ServiceFactoryResolver.h" />
     <ClInclude Include="ServiceRegisterer.h" />
+    <ClInclude Include="Details\AutoManagedServiceResolver.h" />
     <ClInclude Include="ServiceTypeRegisterer.h" />
     <ClInclude Include="Support\DIdecl.h" />
     <ClInclude Include="Support\targetver.h" />

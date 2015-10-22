@@ -9,7 +9,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceInstanceResolver : public ServiceResolver<T>
+		class SingletonServiceResolver : public ServiceResolver<T>
 		{
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -18,29 +18,29 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit ServiceInstanceResolver(std::shared_ptr<T> instance)
-				: _instance(instance)
+			explicit SingletonServiceResolver(std::shared_ptr<ServiceResolver<T>> inner_resolver)
+				: _inner_resolver(inner_resolver)
 			{}
 
 		private:
 			virtual ServiceType getService() override
 			{
-				return *_instance.get();
+				return *getServiceInstance().get();
 			}
 
 			virtual ServiceRefType getServiceAsRef() override
 			{
-				return *_instance.get();
+				return *getServiceInstance().get();
 			}
 
 			virtual ServicePtrType getServiceAsPtr() override
 			{
-				return _instance.get();
+				return getServiceInstance().get();
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
 			{
-				return _instance;
+				return getServiceInstance();
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
@@ -48,7 +48,16 @@ namespace DI
 				throw Error::ServiceNotResolvableAs();
 			}
 
-			std::shared_ptr<T> const _instance;
+			ServiceSharedPtrType getServiceInstance()
+			{
+				if (!_instance)
+					_instance = _inner_resolver->getServiceAsSharedPtr();
+
+				return _instance;
+			}
+
+			std::shared_ptr<ServiceResolver<T>> const _inner_resolver;
+			ServiceSharedPtrType _instance;
 		};
 
 	}

@@ -36,9 +36,6 @@
     <ClInclude Include="Details\ServiceInstanceResolver.h">
       <Filter>Details\Resolvers</Filter>
     </ClInclude>
-    <ClInclude Include="Details\ServiceSingletonResolver.h">
-      <Filter>Details\Resolvers</Filter>
-    </ClInclude>
     <ClInclude Include="Details\ServiceTypeResolver.h">
       <Filter>Details\Resolvers</Filter>
     </ClInclude>
@@ -75,6 +72,12 @@
     </ClInclude>
     <ClInclude Include="Error\ServiceNotResolvableAs.h">
       <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\SingletonServiceResolver.h">
+      <Filter>Details\Resolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\AutoManagedServiceResolver.h">
+      <Filter>Details\Resolvers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

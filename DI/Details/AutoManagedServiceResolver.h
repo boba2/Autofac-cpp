@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ServiceResolver.h"
+#include <list>
+#include "Details/ServiceResolver.h"
 #include "Error/ServiceNotResolvableAs.h"
 
 namespace DI
@@ -9,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceSingletonResolver : public ServiceResolver<T>
+		class AutoManagedServiceResolver : public ServiceResolver<T>
 		{
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -18,47 +19,44 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit ServiceSingletonResolver(std::shared_ptr<ServiceResolver<T>> inner_resolver)
+			explicit AutoManagedServiceResolver(std::shared_ptr<ServiceResolver<T>> inner_resolver)
 				: _inner_resolver(inner_resolver)
 			{}
 
 			virtual ServiceType getService() override
 			{
-				return *getServiceInstance().get();
+				return _inner_resolver->getService();
 			}
 
 			virtual ServiceRefType getServiceAsRef() override
 			{
-				return *getServiceInstance().get();
+				throw Error::ServiceNotResolvableAs();
 			}
 
 			virtual ServicePtrType getServiceAsPtr() override
 			{
-				return getServiceInstance().get();
+				return getNewManagedInstance().get();
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
 			{
-				return getServiceInstance();
+				return _inner_resolver->getServiceAsSharedPtr();
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
 			{
-				throw Error::ServiceNotResolvableAs();
+				return _inner_resolver->getServiceAsUniquePtr();
 			}
 
-		private:
-			ServiceSharedPtrType getServiceInstance()
+			ServiceSharedPtrType getNewManagedInstance()
 			{
-				if (!_instance)
-					_instance = _inner_resolver->getServiceAsSharedPtr();
+				_managed_instances.push_back(getServiceAsSharedPtr());
 
-				return _instance;
+				return _managed_instances.back();
 			}
 
-		private:
 			std::shared_ptr<ServiceResolver<T>> const _inner_resolver;
-			ServiceSharedPtrType _instance;
+			std::list<std::shared_ptr<T>> _managed_instances;
 		};
 
 	}

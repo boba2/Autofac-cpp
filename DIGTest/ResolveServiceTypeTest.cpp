@@ -50,3 +50,12 @@ TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenResolvingServi
 
 	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceNotResolvableAs);
 }
+
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceAsPointer_WhenServiceTypeRegisteredAsAutoManageable)
+{
+	builder()
+		.registerType<DummyService>()
+		.autoManaged();
+
+	ASSERT_TRUE(container().resolve<DummyService*>() != nullptr);
+}

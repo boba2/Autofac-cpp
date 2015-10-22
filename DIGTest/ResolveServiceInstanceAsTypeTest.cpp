@@ -127,7 +127,7 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTyp
 	ASSERT_EQ(&service, container().resolve<std::shared_ptr<DummyService1>>().get());
 }
 
-TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsBaseTypeAsUniquePtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsBaseTypeAsUniquePtr_AndServiceInstanceRegisteredAliasedAsBaseType)
 {
 	auto service = SpecialDummyService();
 
