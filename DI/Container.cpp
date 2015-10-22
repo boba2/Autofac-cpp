@@ -15,6 +15,7 @@ namespace DI
 		explicit Impl(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
 		{
 			registerResolvers(service_resolvers);
+			registerContainer();
 		}
 
 		ServiceResolver<> &getResolver(const TypeIndex<>& type_index) const
@@ -28,8 +29,7 @@ namespace DI
 
 		void registerContainer()
 		{
-			std::weak_ptr<Container::Impl> this_ptr = shared_from_this();
-			auto container_factory = static_cast<std::function<Container()>>([this_ptr] {	return Container(this_ptr.lock()); });
+			auto container_factory = static_cast<std::function<Container()>>([this] { return Container(this->shared_from_this()); });
 			registerResolvers(ServiceFactoryRegisterer<Container>(container_factory).getServiceResolvers());
 		}
 
@@ -50,8 +50,7 @@ namespace DI
 
 	Container::Container(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		: _impl(std::make_unique<Impl>(service_resolvers))
-	{	
-		_impl->registerContainer();
+	{
 	}
 
 	Container::Container(std::shared_ptr<Impl> impl)
