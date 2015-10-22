@@ -4,8 +4,9 @@
 
 namespace
 {
-	struct DummyService1 { int _value; };
-	struct DummyService2 {};
+	struct BaseDummyService { virtual ~BaseDummyService() {} };
+	struct DummyService1 : virtual BaseDummyService { int _value; };
+	struct DummyService2 : virtual BaseDummyService {};
 	struct SpecialDummyService : DummyService1, DummyService2 {};
 }
 
@@ -146,11 +147,11 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldBreakStaticAssert_WhenR
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
-//	auto service = SpecialDummyService();
-//
-//	builder()
-//		.registerInstance(&service)
-//		.as<BaseDummyService>();
-//
-//	ASSERT_EQ(&service, dynamic_cast<SpecialDummyService *>(container().resolve<BaseDummyService *>()));
+	auto service = SpecialDummyService();
+
+	builder()
+		.registerInstance(&service)
+		.as<BaseDummyService>();
+
+	ASSERT_EQ(&service, dynamic_cast<SpecialDummyService *>(container().resolve<BaseDummyService *>()));
 }
