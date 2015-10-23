@@ -18,7 +18,7 @@ namespace DI
 
 			virtual ServiceType getService() override
 			{
-				return T();
+				return getService<T>();
 			}
 
 			virtual ServiceRefType getServiceAsRef() override
@@ -33,10 +33,46 @@ namespace DI
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
 			{
-				return std::make_shared<T>();
+				return getServiceAsSharedPtr<T>();
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
+			{
+				return getServiceAsUniquePtr<T>();
+			}
+
+			template<class U>
+			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			{
+				throw Error::ServiceNotResolvableAs();
+			}
+
+			template<class U>
+			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			{
+				return U();
+			}
+
+			template<class U>
+			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			{
+				throw Error::ServiceNotResolvableAs();
+			}
+
+			template<class U>
+			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			{
+				return std::make_shared<T>();
+			}
+
+			template<class U>
+			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			{
+				throw Error::ServiceNotResolvableAs();
+			}
+
+			template<class U>
+			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
 			{
 				return std::make_unique<T>();
 			}
