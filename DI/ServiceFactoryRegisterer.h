@@ -7,6 +7,8 @@ namespace DI
 	class ServiceFactoryRegisterer
 	{
 	public:
+		using Type = ServiceFactoryRegisterer;
+
 		ServiceFactoryRegisterer& autoManaged()
 		{
 			setAutoManaged();

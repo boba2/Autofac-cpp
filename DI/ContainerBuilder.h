@@ -12,30 +12,36 @@ namespace DI
 	{
 	public:
 		template<class T>
-		auto registerInstance(T &&instance) -> ServiceRegisterer<typename Details::UnderlyingType<T>::Type>&
+		auto& registerInstance(T &&instance)
 		{
-			auto registerer = std::make_shared<Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>>(std::forward<T>(instance));
+			using Registerer = Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>;
+
+			auto registerer = std::make_shared<Registerer>(std::forward<T>(instance));
 			_service_registerers.insert(registerer);
 
-			return *registerer;
+			return static_cast<typename Registerer::Type&>(*registerer);
 		}
 
 		template<class T>
-		auto registerType() -> ServiceTypeRegisterer<typename Details::UnderlyingType<T>::Type>&
+		auto& registerType()
 		{
-			auto registerer = std::make_shared<Details::ServiceTypeRegisterer<T>>();
+			using Registerer = Details::ServiceTypeRegisterer<T>;
+
+			auto registerer = std::make_shared<Registerer>();
 			_service_registerers.insert(registerer);
 
-			return *registerer;
+			return static_cast<typename Registerer::Type&>(*registerer);
 		}
 
 		template<class T>
-		auto registerFactory(T factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>&
+		auto& registerFactory(T factory)
 		{
-			auto registerer = std::make_shared<Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>>(static_cast<std::function<decltype(factory())()>>(factory));
+			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>;
+
+			auto registerer = std::make_shared<Registerer>(static_cast<std::function<decltype(factory())()>>(factory));
 			_service_registerers.insert(registerer);
 
-			return *registerer;
+			return static_cast<typename Registerer::Type&>(*registerer);
 		}
 
 		Container build() const

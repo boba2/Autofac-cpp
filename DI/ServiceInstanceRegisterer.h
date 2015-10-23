@@ -9,6 +9,8 @@ namespace DI
 	class ServiceRegisterer
 	{
 	public:
+		using Type = ServiceRegisterer;
+
 		virtual ~ServiceRegisterer() {}
 
 		template<class U>

@@ -14,6 +14,11 @@ TEST_F(ResolveRegisteredServiceTypeTest, ShouldBreakStaticAssert_WhenRegistering
 //	builder().registerType<AbstractDummyService>();
 }
 
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldBreakStaticAssert_WhenRegisteringServiceOfDecoratedType)
+{
+//	builder().registerType<DummyService*>();
+}
+
 TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceAsCopy_WhenNonAbstractServiceTypeRegistered)
 {
 	builder()

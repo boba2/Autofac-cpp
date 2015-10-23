@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Details/UnderlyingType.h"
+
 namespace DI
 {
 
@@ -7,7 +9,10 @@ namespace DI
 	class ServiceTypeRegisterer
 	{
 	public:
+		using Type = ServiceTypeRegisterer;
+
 		static_assert(!std::is_abstract<T>::value, "Cannot register service of an abstract type");
+		static_assert(std::is_same<T, typename Details::UnderlyingType<T>::Type>::value, "Cannot register service of a decorated type");
 
 		ServiceTypeRegisterer& singleInstance()
 		{
