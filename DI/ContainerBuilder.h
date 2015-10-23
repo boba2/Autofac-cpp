@@ -31,7 +31,7 @@ namespace DI
 		auto registerFactory(T factory)
 		{
 			using ServiceType = decltype(factory());
-			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<ServiceType>::Type>;
+			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<ServiceType>::Type, ServiceType>;
 
 			return createRegisterer<Registerer>(static_cast<std::function<ServiceType()>>(factory));
 		}

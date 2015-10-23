@@ -4,7 +4,6 @@
 #include "ServiceRegisterer.h"
 #include "ServiceFactoryResolver.h"
 #include "AutoManagedServiceResolver.h"
-#include "Error/BadServiceDefinition.h"
 #include "../ServiceFactoryRegisterer.h"
 
 namespace DI
@@ -12,14 +11,14 @@ namespace DI
 	namespace Details
 	{
 
-		template<class T>
+		template<class T, class U = T>
 		class ServiceFactoryRegisterer : public ServiceRegisterer<T, DI::ServiceFactoryRegistererImpl>
 		{
 		public:
-			using PublicType = DI::ServiceFactoryRegisterer<T>;
+			using PublicType = DI::ServiceFactoryRegisterer<T, std::conditional_t<std::is_same<T*, U>::value, DI::NoAutoManage, void>>;
 
-			template<class U, class = std::enable_if_t<!std::is_abstract<U>::value>>
-			explicit ServiceFactoryRegisterer(std::function<U()> factory)
+			template<class V, class = std::enable_if_t<!std::is_abstract<V>::value>>
+			explicit ServiceFactoryRegisterer(std::function<V()> factory)
 				: _shared_service_factory([factory] { return std::make_shared<T>(factory()); }),
 				_unique_service_factory([factory] { return std::make_unique<T>(factory()); })
 			{}
@@ -48,9 +47,6 @@ namespace DI
 		protected:
 			virtual void setAutoManaged() override
 			{
-				if (_ptr_service_factory)
-					throw Error::BadServiceDefinition();
-
 				_auto_managed = true;
 			}
 

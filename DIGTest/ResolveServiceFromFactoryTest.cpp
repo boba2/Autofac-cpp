@@ -1,5 +1,4 @@
 #include "ContainerBaseTest.h"
-#include "../DI/Error/BadServiceDefinition.h"
 
 using ResolveServiceFromFactoryTest = ContainerBaseTest;
 
@@ -15,9 +14,9 @@ namespace
 	struct ConcreteDummyService : AbstractDummyService { virtual void abstract() override {} };
 }
 
-TEST_F(ResolveServiceFromFactoryTest, ShouldThrowException_WhenRegisteringServiceAsPtrFactory_AndAutoManaged)
+TEST_F(ResolveServiceFromFactoryTest, ShouldNotCompile_WhenRegisteringServiceAsPtrFactory_AndAutoManaged)
 {
-	ASSERT_THROW(builder().registerFactory([] { static auto service = DummyService(); return &service; }).autoManaged(), DI::Error::BadServiceDefinition);
+//	builder().registerFactory([] { static auto service = DummyService(); return &service; }).autoManaged();
 }
 
 TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsInstanceFactory)
