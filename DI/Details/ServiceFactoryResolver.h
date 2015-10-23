@@ -19,9 +19,11 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit ServiceFactoryResolver(std::function<std::shared_ptr<T>()> shared_service_factory, 
+			explicit ServiceFactoryResolver(
+				std::function<std::shared_ptr<T>()> shared_service_factory,
 				std::function<std::unique_ptr<T>()> unique_service_factory,
-				std::function<T*()> ptr_service_factory)
+				std::function<T*()> ptr_service_factory
+			)
 				: _shared_service_factory(shared_service_factory),
 				_unique_service_factory(unique_service_factory),
 				_ptr_service_factory(ptr_service_factory)

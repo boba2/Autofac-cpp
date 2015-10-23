@@ -30,7 +30,7 @@ namespace DI
 
 			virtual ServiceRefType getServiceAsRef() override
 			{
-				throw Error::ServiceNotResolvableAs();
+				return *getNewManagedInstance().get();
 			}
 
 			virtual ServicePtrType getServiceAsPtr() override

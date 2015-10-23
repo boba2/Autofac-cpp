@@ -7,18 +7,16 @@
 
 namespace DI
 {
-	using namespace Details;
-
 	class Container::Impl : public std::enable_shared_from_this<Container::Impl>
 	{
 	public:
-		explicit Impl(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
+		explicit Impl(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		{
 			registerResolvers(service_resolvers);
 			registerContainer();
 		}
 
-		ServiceResolver<> &getResolver(const TypeIndex<>& type_index) const
+		Details::ServiceResolver<> &getResolver(const Details::TypeIndex<>& type_index) const
 		{
 			auto resolver_it = _service_resolvers.find(type_index);
 			if (resolver_it == end(_service_resolvers))
@@ -31,17 +29,17 @@ namespace DI
 		void registerContainer()
 		{
 			auto container_factory = static_cast<std::function<Container()>>([this] { return Container(this->shared_from_this()); });
-			registerResolvers(ServiceFactoryRegisterer<Container>(container_factory).getServiceResolvers());
+			registerResolvers(Details::ServiceFactoryRegisterer<Container>(container_factory).getServiceResolvers());
 		}
 
-		void registerResolvers(const std::set<std::shared_ptr<ServiceResolver<>>>& service_resolvers)
+		void registerResolvers(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		{
 			for (auto &resolver : service_resolvers)
 				_service_resolvers[resolver->getServiceType()] = resolver;
 		}
 
 	private:
-		std::unordered_map<TypeIndex<>, std::shared_ptr<ServiceResolver<>>> _service_resolvers;
+		std::unordered_map<Details::TypeIndex<>, std::shared_ptr<Details::ServiceResolver<>>> _service_resolvers;
 	};
 
 	Container::Container()
@@ -74,7 +72,7 @@ namespace DI
 		return *this;
 	}
 
-	ServiceResolver<> &Container::getResolver(const Details::TypeIndex<>& type_index) const
+	Details::ServiceResolver<> &Container::getResolver(const Details::TypeIndex<>& type_index) const
 	{
 		return _impl->getResolver(type_index);
 	}

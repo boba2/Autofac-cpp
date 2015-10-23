@@ -30,10 +30,12 @@ namespace DI
 		}
 
 		template<class T>
-		void registerFactory(T factory)
+		auto registerFactory(T factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>&
 		{
 			auto registerer = std::make_shared<Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>>(static_cast<std::function<decltype(factory())()>>(factory));
 			_service_registerers.insert(registerer);
+
+			return *registerer;
 		}
 
 		Container build() const
