@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Details/ServiceAliasRegisterer.h"
+#include "ServiceRegisterer.h"
 
 namespace DI
 {
@@ -14,12 +15,10 @@ namespace DI
 	};
 
 	template<class T>
-	class ServiceInstanceRegisterer
+	class ServiceInstanceRegisterer : public ServiceRegisterer<ServiceInstanceRegistererImpl>
 	{
 	public:
-		explicit ServiceInstanceRegisterer(std::shared_ptr<ServiceInstanceRegistererImpl> impl)
-			: _impl(impl)
-		{}
+		using ServiceRegisterer::ServiceRegisterer;
 
 		template<class U>
 		ServiceInstanceRegisterer& as()
@@ -35,9 +34,6 @@ namespace DI
 		{
 			return as<T>();
 		}
-
-	private:
-		std::shared_ptr<ServiceInstanceRegistererImpl> const _impl;
 	};
 
 }

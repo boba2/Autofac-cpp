@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ServiceRegisterer.h"
+
 namespace DI
 {
 
@@ -13,12 +15,10 @@ namespace DI
 	};
 
 	template<class T>
-	class ServiceFactoryRegisterer
+	class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceFactoryRegistererImpl>
 	{
 	public:
-		explicit ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl)
-			: _impl(impl)
-		{}
+		using ServiceRegisterer::ServiceRegisterer;
 
 		ServiceFactoryRegisterer& autoManaged()
 		{
@@ -26,9 +26,6 @@ namespace DI
 
 			return *this;
 		}
-
-	private:
-		std::shared_ptr<ServiceFactoryRegistererImpl> const _impl;
 	};
 
 }

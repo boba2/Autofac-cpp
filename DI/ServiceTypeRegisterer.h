@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Details/UnderlyingType.h"
+#include "ServiceRegisterer.h"
 
 namespace DI
 {
@@ -16,15 +17,13 @@ namespace DI
 	};
 
 	template<class T>
-	class ServiceTypeRegisterer
+	class ServiceTypeRegisterer : public ServiceRegisterer<ServiceTypeRegistererImpl>
 	{
 	public:
 		static_assert(!std::is_abstract<T>::value, "Cannot register service of an abstract type");
 		static_assert(std::is_same<T, typename Details::UnderlyingType<T>::Type>::value, "Cannot register service of a decorated type");
 
-		explicit ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl)
-			: _impl(impl)
-		{}
+		using ServiceRegisterer::ServiceRegisterer;
 
 		ServiceTypeRegisterer& singleInstance()
 		{
@@ -54,9 +53,6 @@ namespace DI
 		{
 			return as<T>();
 		}
-
-	private:
-		std::shared_ptr<ServiceTypeRegistererImpl> const _impl;
 	};
 
 }
