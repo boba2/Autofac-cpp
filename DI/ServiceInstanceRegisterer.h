@@ -5,31 +5,39 @@
 namespace DI
 {
 
-	template<class T>
-	class ServiceRegisterer
+	class ServiceInstanceRegistererImpl
 	{
 	public:
-		using Type = ServiceRegisterer;
+		virtual ~ServiceInstanceRegistererImpl() {}
 
-		virtual ~ServiceRegisterer() {}
+		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
+	};
+
+	template<class T>
+	class ServiceInstanceRegisterer
+	{
+	public:
+		explicit ServiceInstanceRegisterer(std::shared_ptr<ServiceInstanceRegistererImpl> impl)
+			: _impl(impl)
+		{}
 
 		template<class U>
-		ServiceRegisterer& as()
+		ServiceInstanceRegisterer& as()
 		{
 			static_assert(std::is_base_of<U, T>::value, "Alias should be a resolvable base class of the service being registered");
 
-			registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
+			_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
 
 			return *this;
 		}
 
-		ServiceRegisterer& asSelf()
+		ServiceInstanceRegisterer& asSelf()
 		{
 			return as<T>();
 		}
 
-	protected:
-		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
+	private:
+		std::shared_ptr<ServiceInstanceRegistererImpl> const _impl;
 	};
 
 }

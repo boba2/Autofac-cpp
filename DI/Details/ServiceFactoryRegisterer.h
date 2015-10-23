@@ -13,9 +13,11 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceFactoryRegisterer : public ServiceRegisterer<T, DI::ServiceFactoryRegisterer<T>>
+		class ServiceFactoryRegisterer : public ServiceRegisterer<T, DI::ServiceFactoryRegistererImpl>
 		{
 		public:
+			using PublicType = DI::ServiceFactoryRegisterer<T>;
+
 			template<class U, class = std::enable_if_t<!std::is_abstract<U>::value>>
 			explicit ServiceFactoryRegisterer(std::function<U()> factory)
 				: _shared_service_factory([factory] { return std::make_shared<T>(factory()); }),

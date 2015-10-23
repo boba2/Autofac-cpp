@@ -10,9 +10,11 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceInstanceRegisterer : public ServiceRegisterer<T, DI::ServiceRegisterer<T>>
+		class ServiceInstanceRegisterer : public ServiceRegisterer<T, DI::ServiceInstanceRegistererImpl>
 		{
 		public:
+			using PublicType = DI::ServiceInstanceRegisterer<T>;
+
 			template<class U>
 			explicit ServiceInstanceRegisterer(U &&instance)
 				: _instance(std::make_shared<std::remove_reference_t<U>>(std::forward<U>(instance)))

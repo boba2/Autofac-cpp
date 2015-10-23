@@ -12,36 +12,28 @@ namespace DI
 	{
 	public:
 		template<class T>
-		auto& registerInstance(T &&instance)
+		auto registerInstance(T &&instance)
 		{
 			using Registerer = Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>;
 
-			auto registerer = std::make_shared<Registerer>(std::forward<T>(instance));
-			_service_registerers.insert(registerer);
-
-			return static_cast<typename Registerer::Type&>(*registerer);
+			return createRegisterer<Registerer>(std::forward<T>(instance));
 		}
 
 		template<class T>
-		auto& registerType()
+		auto registerType()
 		{
 			using Registerer = Details::ServiceTypeRegisterer<T>;
 
-			auto registerer = std::make_shared<Registerer>();
-			_service_registerers.insert(registerer);
-
-			return static_cast<typename Registerer::Type&>(*registerer);
+			return createRegisterer<Registerer>();
 		}
 
 		template<class T>
-		auto& registerFactory(T factory)
+		auto registerFactory(T factory)
 		{
-			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<decltype(factory())>::Type>;
+			using ServiceType = decltype(factory());
+			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<ServiceType>::Type>;
 
-			auto registerer = std::make_shared<Registerer>(static_cast<std::function<decltype(factory())()>>(factory));
-			_service_registerers.insert(registerer);
-
-			return static_cast<typename Registerer::Type&>(*registerer);
+			return createRegisterer<Registerer>(static_cast<std::function<ServiceType()>>(factory));
 		}
 
 		Container build() const
@@ -50,6 +42,15 @@ namespace DI
 		}
 
 	private:
+		template<class T, class... U>
+		auto createRegisterer(U&&... param)
+		{
+			auto registerer = std::make_shared<T>(std::forward<U>(param)...);
+			_service_registerers.insert(registerer);
+
+			return typename T::PublicType(registerer);
+		}
+
 		std::set<std::shared_ptr<Details::ServiceResolver<>>> getServiceResolvers() const
 		{
 			std::set<std::shared_ptr<Details::ServiceResolver<>>> result;

@@ -5,25 +5,37 @@
 namespace DI
 {
 
+	class ServiceTypeRegistererImpl
+	{
+	public:
+		virtual ~ServiceTypeRegistererImpl() {}
+
+		virtual void setSingleInstance() = 0;
+		virtual void setAutoManaged() = 0;
+		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
+	};
+
 	template<class T>
 	class ServiceTypeRegisterer
 	{
 	public:
-		using Type = ServiceTypeRegisterer;
-
 		static_assert(!std::is_abstract<T>::value, "Cannot register service of an abstract type");
 		static_assert(std::is_same<T, typename Details::UnderlyingType<T>::Type>::value, "Cannot register service of a decorated type");
 
+		explicit ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl)
+			: _impl(impl)
+		{}
+
 		ServiceTypeRegisterer& singleInstance()
 		{
-			setSingleInstance();
+			_impl->setSingleInstance();
 
 			return *this;
 		}
 
 		ServiceTypeRegisterer& autoManaged()
 		{
-			setAutoManaged();
+			_impl->setAutoManaged();
 
 			return *this;
 		}
@@ -33,7 +45,7 @@ namespace DI
 		{
 			static_assert(std::is_base_of<U, T>::value, "Alias should be a resolvable base class of the service class being registered");
 
-			registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
+			_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
 
 			return *this;
 		}
@@ -43,10 +55,8 @@ namespace DI
 			return as<T>();
 		}
 
-	protected:
-		virtual void setSingleInstance() = 0;
-		virtual void setAutoManaged() = 0;
-		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
+	private:
+		std::shared_ptr<ServiceTypeRegistererImpl> const _impl;
 	};
 
 }
