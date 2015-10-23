@@ -50,7 +50,7 @@ namespace DI
 			template<class U>
 			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = 0)
 			{
-				throw std::logic_error("not tested");
+				return _inner_resolver->getServiceAsRef();
 			}
 
 			template<class U>

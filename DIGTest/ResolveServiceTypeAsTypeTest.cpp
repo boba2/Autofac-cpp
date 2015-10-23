@@ -37,14 +37,14 @@ TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsP
 	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<AbstractDummyService*>()) != nullptr);
 }
 
-//TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServiceTypeRegisteredAliasedAsAbstractBaseType)
-//{
-//	builder()
-//		.registerType<ConcreteDummyService>()
-//		.as<AbstractDummyService>()
-//		.autoManaged();
-//
-//	auto& service = container().resolve<AbstractDummyService();
-//
-//	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(&service) != nullptr);
-//}
+TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServiceTypeRegisteredAliasedAsAbstractBaseType)
+{
+	builder()
+		.registerType<ConcreteDummyService>()
+		.as<AbstractDummyService>()
+		.autoManaged();
+
+	auto& service = container().resolve<AbstractDummyService>();
+
+	ASSERT_TRUE(dynamic_cast<const ConcreteDummyService*>(&service) != nullptr);
+}

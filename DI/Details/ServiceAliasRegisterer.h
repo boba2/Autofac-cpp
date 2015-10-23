@@ -6,7 +6,7 @@ namespace DI
 {
 	namespace Details
 	{
-		
+
 		template<class T = void, class S = void>
 		class ServiceAliasRegisterer;
 
