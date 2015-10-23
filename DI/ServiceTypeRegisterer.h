@@ -7,6 +7,8 @@ namespace DI
 	class ServiceTypeRegisterer
 	{
 	public:
+		static_assert(!std::is_abstract<T>::value, "Cannot register service of an abstract type");
+
 		ServiceTypeRegisterer& singleInstance()
 		{
 			setSingleInstance();
@@ -24,6 +26,8 @@ namespace DI
 		template<class U>
 		ServiceTypeRegisterer& as()
 		{
+			static_assert(std::is_base_of<U, T>::value, "Alias should be a resolvable base class of the service class being registered");
+
 			registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
 
 			return *this;

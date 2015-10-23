@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ServiceAliasResolver.h"
-#include "Error/BadServiceDefinition.h"
 
 namespace DI
 {
@@ -24,12 +23,6 @@ namespace DI
 		class ServiceAliasRegisterer : public ServiceAliasRegisterer<>
 		{
 		public:
-			ServiceAliasRegisterer()
-			{
-				if (!std::is_base_of<T, S>::value)
-					throw Error::BadServiceDefinition();
-			}
-
 			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const override
 			{
 				return getServiceAliasResolver<T, S>(main_resolver);

@@ -1,6 +1,5 @@
 #include "ContainerBaseTest.h"
 #include "../DI/Error/ServiceNotResolvableAs.h"
-#include "../DI/Error/BadServiceDefinition.h"
 
 namespace
 {
@@ -10,9 +9,9 @@ namespace
 
 using ResolveRegisteredServiceTypeTest = ContainerBaseTest;
 
-TEST_F(ResolveRegisteredServiceTypeTest, ShouldThrowException_WhenRegisteringAbstractServiceType)
+TEST_F(ResolveRegisteredServiceTypeTest, ShouldBreakStaticAssert_WhenRegisteringAbstractServiceType)
 {
-	ASSERT_THROW(builder().registerType<AbstractDummyService>(), DI::Error::BadServiceDefinition);
+//	builder().registerType<AbstractDummyService>();
 }
 
 TEST_F(ResolveRegisteredServiceTypeTest, ShouldResolveServiceAsCopy_WhenNonAbstractServiceTypeRegistered)

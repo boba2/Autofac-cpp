@@ -4,7 +4,6 @@
 #include "ServiceTypeResolver.h"
 #include "SingletonServiceResolver.h"
 #include "AutoManagedServiceResolver.h"
-#include "Error/BadServiceDefinition.h"
 #include "../ServiceTypeRegisterer.h"
 
 namespace DI
@@ -16,12 +15,6 @@ namespace DI
 		class ServiceTypeRegisterer : public ServiceRegisterer<T, DI::ServiceTypeRegisterer<T>>
 		{
 		public:
-			ServiceTypeRegisterer()
-			{
-				if (std::is_abstract<T>::value)
-					throw Error::BadServiceDefinition();
-			}
-
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
 				auto resolver = std::static_pointer_cast<ServiceResolver<T>>(std::make_shared<ServiceTypeResolver<T>>());

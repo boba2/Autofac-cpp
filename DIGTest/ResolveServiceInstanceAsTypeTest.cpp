@@ -1,5 +1,4 @@
 #include "ContainerBaseTest.h"
-#include "../DI/Error/BadServiceDefinition.h"
 #include "../DI/Error/ServiceNotResolvableAs.h"
 #include "../DI/Error/ServiceNotRegistered.h"
 
@@ -12,6 +11,11 @@ namespace
 }
 
 using ResolveRegisteredServiceInstanceAsTypeTest = ContainerBaseTest;
+
+TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldBreakStaticAssert_WhenRegisteringServiceInstanceAliasedAsUnrelatedType)
+{
+//	builder().registerInstance(DummyService1()).as<DummyService2>();
+}
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
@@ -137,11 +141,6 @@ TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenReso
 		.as<DummyService1>();
 
 	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceNotResolvableAs);
-}
-
-TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldThrowException_WhenRegisteringServiceInstanceAliasedAsUnrelatedType)
-{
-	ASSERT_THROW(builder().registerInstance(DummyService1()).as<DummyService2>(), DI::Error::BadServiceDefinition);
 }
 
 TEST_F(ResolveRegisteredServiceInstanceAsTypeTest, ShouldResolveServiceAsVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
