@@ -13,9 +13,9 @@ set(SOURCE_FILES
     DIGTest/DIGTest.cpp
     DIGTest/ResolveEfficiencyTest.cpp
     DIGTest/ResolveServiceFromFactoryTest.cpp
-    DIGTest/ResolveServiceInstanceByTypeTest.cpp
+    DIGTest/ResolveServiceInstanceAsTypeTest.cpp
     DIGTest/ResolveServiceInstanceTest.cpp
-    DIGTest/ResolveServiceTypeByTypeTest.cpp
+    DIGTest/ResolveServiceTypeAsTypeTest.cpp
     DIGTest/ResolveServiceTypeTest.cpp
     DIGTest/ResolveServiceTypeAsSingleInstance.cpp
     DIGTest/ResolveStandardServiceInstanceTest.cpp
