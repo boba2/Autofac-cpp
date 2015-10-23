@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ServiceAliasResolver.h"
+#include "Error/BadServiceDefinition.h"
 
 namespace DI
 {
@@ -23,11 +24,26 @@ namespace DI
 		class ServiceAliasRegisterer : public ServiceAliasRegisterer<>
 		{
 		public:
+			ServiceAliasRegisterer()
+			{
+				if (!std::is_base_of<T, S>::value)
+					throw Error::BadServiceDefinition();
+			}
+
 			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const override
 			{
-				static_assert(std::is_base_of<T, S>::value, "Alias should be a resolvable base class of the service being registered");
+				return getServiceAliasResolver<T, S>(main_resolver);
+			}
 
+			template<class U, class V>
+			std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver, std::enable_if_t<std::is_base_of<U, V>::value>* = 0) const
+			{
 				return std::make_shared<ServiceAliasResolver<T, S>>(std::dynamic_pointer_cast<ServiceResolver<S>>(main_resolver));
+			}
+
+			template<class U, class V>
+			std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver, std::enable_if_t<!std::is_base_of<U, V>::value>* = 0) const
+			{
 			}
 		};
 

@@ -44,7 +44,6 @@ namespace DI
 			template<class U>
 			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = 0)
 			{
-				throw Error::ServiceNotResolvableAs();
 			}
 
 			template<class U>
@@ -56,7 +55,6 @@ namespace DI
 			template<class U>
 			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<std::is_abstract<U>::value>* = 0)
 			{
-				throw Error::ServiceNotResolvableAs();
 			}
 
 			template<class U>
@@ -68,7 +66,6 @@ namespace DI
 			template<class U>
 			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<std::is_abstract<U>::value>* = 0)
 			{
-				throw Error::ServiceNotResolvableAs();
 			}
 
 			template<class U>

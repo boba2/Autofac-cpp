@@ -12,10 +12,10 @@ namespace
 
 using ResolveRegisteredServiceTypeAsTypeTest = ContainerBaseTest;
 
-//TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldThrowException_WhenRegisteringServiceTypeAliasedAsUnrelatedType)
-//{
-//	ASSERT_THROW(builder().registerType<DummyService1>().as<DummyService2>(), DI::Error::BadServiceDefinition);
-//}
+TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldThrowException_WhenRegisteringServiceTypeAliasedAsUnrelatedType)
+{
+	ASSERT_THROW(builder().registerType<DummyService1>().as<DummyService2>(), DI::Error::BadServiceDefinition);
+}
 
 TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceTypeRegisteredAliasedAsBaseType)
 {
