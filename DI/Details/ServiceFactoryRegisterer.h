@@ -4,6 +4,7 @@
 #include "ServiceRegisterer.h"
 #include "ServiceFactoryResolver.h"
 #include "AutoManagedServiceResolver.h"
+#include "Error/BadServiceDefinition.h"
 #include "../ServiceFactoryRegisterer.h"
 
 namespace DI
@@ -45,6 +46,9 @@ namespace DI
 		protected:
 			virtual void setAutoManaged() override
 			{
+				if (_ptr_service_factory)
+					throw Error::BadServiceDefinition();
+
 				_auto_managed = true;
 			}
 
