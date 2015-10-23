@@ -336,10 +336,19 @@ TEST_F(ResolveServiceFromFactoryTest, ShouldResolveService_WhenServiceRegistered
 	ASSERT_EQ(14, container().resolve<DummyService>()._value);
 }
 
-TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsFactoryReturningAbstractBaseType)
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSPtr_WhenServiceRegisteredAsFactoryReturningSharedPtrOfAbstractBaseType)
 {
 	builder()
-		.registerFactory([] { return std::shared_ptr<AbstractDummyService>(std::make_shared<ConcreteDummyService>()); });
+		.registerFactory([] { return std::shared_ptr<AbstractDummyService>(std::make_shared<ConcreteDummyService>()); })
+		.autoManaged();
 
 	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<std::shared_ptr<AbstractDummyService>>().get()) != nullptr);
+}
+
+TEST_F(ResolveServiceFromFactoryTest, ShouldResolveServiceAsSPtr_WhenServiceRegisteredAsFactoryReturningPtrOfAbstractBaseType)
+{
+	builder()
+		.registerFactory([] { static auto service = ConcreteDummyService(); return static_cast<AbstractDummyService*>(&service); });
+
+	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<AbstractDummyService*>()) != nullptr);
 }
