@@ -2,7 +2,7 @@
 
 #include <set>
 #include "ServiceResolver.h"
-#include "../ServiceRegisterer.h"
+#include "ServiceAliasRegisterer.h"
 
 namespace DI
 {

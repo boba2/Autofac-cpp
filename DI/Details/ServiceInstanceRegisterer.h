@@ -2,6 +2,7 @@
 
 #include "ServiceRegisterer.h"
 #include "ServiceInstanceResolver.h"
+#include "../ServiceInstanceRegisterer.h"
 
 namespace DI
 {
