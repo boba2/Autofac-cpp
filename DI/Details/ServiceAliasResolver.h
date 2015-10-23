@@ -6,7 +6,7 @@ namespace DI
 {
 	namespace Details
 	{
-		
+
 		template<class T, class S>
 		class ServiceAliasResolver : public ServiceResolver<T>
 		{
@@ -24,7 +24,7 @@ namespace DI
 		private:
 			virtual ServiceType getService() override
 			{
-				return _inner_resolver->getService();
+				return getService<T>();
 			}
 
 			virtual ServiceRefType getServiceAsRef() override
@@ -45,6 +45,18 @@ namespace DI
 			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
 			{
 				return std::move(_inner_resolver->getServiceAsUniquePtr());
+			}
+
+			template<class U>
+			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			{
+				throw std::logic_error("not tested");
+			}
+
+			template<class U>
+			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			{
+				return _inner_resolver->getService();
 			}
 
 			std::shared_ptr<ServiceResolver<S>> const _inner_resolver;
