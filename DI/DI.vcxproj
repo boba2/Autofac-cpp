@@ -160,6 +160,8 @@
     <ClInclude Include="Error\ServiceNotResolvableAs.h" />
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Details\ServiceFactoryResolver.h" />
+    <ClInclude Include="ServiceFactoryRegisterer.h" />
+    <ClInclude Include="ServiceInstanceRegisterer.h" />
     <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="Details\AutoManagedServiceResolver.h" />
     <ClInclude Include="ServiceTypeRegisterer.h" />

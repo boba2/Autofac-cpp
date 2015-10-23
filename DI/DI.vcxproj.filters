@@ -79,6 +79,8 @@
     <ClInclude Include="Details\AutoManagedServiceResolver.h">
       <Filter>Details\Resolvers</Filter>
     </ClInclude>
+    <ClInclude Include="ServiceFactoryRegisterer.h" />
+    <ClInclude Include="ServiceInstanceRegisterer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">
