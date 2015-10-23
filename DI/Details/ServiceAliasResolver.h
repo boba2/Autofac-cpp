@@ -48,13 +48,13 @@ namespace DI
 			}
 
 			template<class U>
-			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
 			{
 				return _inner_resolver->getServiceAsRef();
 			}
 
 			template<class U>
-			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
 				return _inner_resolver->getService();
 			}

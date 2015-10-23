@@ -23,7 +23,7 @@ namespace DI
 		using ServiceRegisterer::ServiceRegisterer;
 
 		template<class V = U>
-		ServiceFactoryRegisterer& autoManaged(std::enable_if_t<!std::is_same<V, NoAutoManage>::value>* = 0)
+		ServiceFactoryRegisterer& autoManaged(std::enable_if_t<!std::is_same<V, NoAutoManage>::value>* = nullptr)
 		{
 			_impl->setAutoManaged();
 

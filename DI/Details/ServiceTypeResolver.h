@@ -42,34 +42,34 @@ namespace DI
 			}
 
 			template<class U>
-			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
 			{
 			}
 
 			template<class U>
-			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
 				return U();
 			}
 
 			template<class U>
-			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
 			{
 			}
 
 			template<class U>
-			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
 				return std::make_shared<T>();
 			}
 
 			template<class U>
-			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<std::is_abstract<U>::value>* = 0)
+			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
 			{
 			}
 
 			template<class U>
-			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<!std::is_abstract<U>::value>* = 0)
+			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
 				return std::make_unique<T>();
 			}

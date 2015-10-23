@@ -29,13 +29,13 @@ namespace DI
 			}
 
 			template<class U, class V>
-			std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver, std::enable_if_t<std::is_base_of<U, V>::value>* = 0) const
+			std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver, std::enable_if_t<std::is_base_of<U, V>::value>* = nullptr) const
 			{
 				return std::make_shared<ServiceAliasResolver<T, S>>(std::dynamic_pointer_cast<ServiceResolver<S>>(main_resolver));
 			}
 
 			template<class U, class V>
-			std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver, std::enable_if_t<!std::is_base_of<U, V>::value>* = 0) const
+			std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver, std::enable_if_t<!std::is_base_of<U, V>::value>* = nullptr) const
 			{
 			}
 		};
