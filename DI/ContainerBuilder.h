@@ -14,26 +14,19 @@ namespace DI
 		template<class T>
 		auto registerInstance(T &&instance)
 		{
-			using Registerer = Details::ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>;
-
-			return createRegisterer<Registerer>(std::forward<T>(instance));
+			return createRegisterer<Details::ServiceInstanceRegisterer<T>>(std::forward<T>(instance));
 		}
 
 		template<class T>
 		auto registerType()
 		{
-			using Registerer = Details::ServiceTypeRegisterer<T>;
-
-			return createRegisterer<Registerer>();
+			return createRegisterer<Details::ServiceTypeRegisterer<T>>();
 		}
 
 		template<class T>
 		auto registerFactory(T factory)
 		{
-			using ServiceType = decltype(factory());
-			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<ServiceType>::Type, ServiceType>;
-
-			return createRegisterer<Registerer>(factory);
+			return createRegisterer<Details::ServiceFactoryRegisterer<T>>(factory);
 		}
 
 		Container build() const
@@ -48,7 +41,7 @@ namespace DI
 			auto registerer = std::make_shared<T>(std::forward<U>(param)...);
 			_service_registerers.insert(registerer);
 
-			return typename T::PublicType(registerer);
+			return static_cast<typename T::PublicType>(registerer);
 		}
 
 		std::set<std::shared_ptr<Details::ServiceResolver<>>> getServiceResolvers() const
