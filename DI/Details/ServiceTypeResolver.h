@@ -1,6 +1,7 @@
 #pragma once
 #include "ServiceResolver.h"
 #include "Error/ServiceNotResolvableAs.h"
+#include "ServiceCreator.h"
 
 namespace DI
 {
@@ -16,9 +17,9 @@ namespace DI
 			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
-			virtual ServiceType getService(Container*) override
+			virtual ServiceType getService(Container* container) override
 			{
-				return getService<T>();
+				return getService<T>(container);
 			}
 
 			virtual ServiceRefType getServiceAsRef(Container*) override
@@ -31,47 +32,32 @@ namespace DI
 				throw Error::ServiceNotResolvableAs();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container*) override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) override
 			{
-				return getServiceAsSharedPtr<T>();
+				return getServiceAsSharedPtr<T>(container);
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container*) override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) override
 			{
-				return getServiceAsUniquePtr<T>();
-			}
-
-			template<class U>
-			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
-			{
+				return getServiceAsUniquePtr<T>(container);
 			}
 
 			template<class U>
-			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
+			ServiceType getService(Container* container, std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
-				return U();
+				return ServiceCreator<T>::createService(container);
 			}
 
 			template<class U>
-			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
+			ServiceSharedPtrType getServiceAsSharedPtr(Container* container, std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
+				return ServiceCreator<T>::template createService<ServiceSharedPtrType>(container);
 			}
 
 			template<class U>
-			ServiceSharedPtrType getServiceAsSharedPtr(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
+			ServiceUniquePtrType getServiceAsUniquePtr(Container* container, std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
 			{
-				return std::make_shared<T>();
-			}
-
-			template<class U>
-			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
-			{
-			}
-
-			template<class U>
-			ServiceUniquePtrType getServiceAsUniquePtr(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
-			{
-				return std::make_unique<T>();
+				return ServiceCreator<T>::template createService<ServiceUniquePtrType>(container);
 			}
 		};
 

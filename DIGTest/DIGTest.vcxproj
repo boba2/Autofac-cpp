@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="DIGTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
+    <ClCompile Include="ResolverServiceTypeWithDependencies.cpp" />
     <ClCompile Include="ResolveServiceFromFactoryTest.cpp" />
     <ClCompile Include="ResolveServiceInstanceAsTypeTest.cpp" />
     <ClCompile Include="ResolveServiceInstanceTest.cpp" />

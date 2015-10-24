@@ -144,8 +144,11 @@
   <ItemGroup>
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
+    <ClInclude Include="Details\ConstructorTraits.h" />
+    <ClInclude Include="Details\IndexSequence.h" />
     <ClInclude Include="Details\ServiceAliasRegisterer.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
+    <ClInclude Include="Details\ServiceCreator.h" />
     <ClInclude Include="Details\ServiceFactoryRegisterer.h" />
     <ClInclude Include="Details\ServiceInstanceRegisterer.h" />
     <ClInclude Include="Details\ServiceInstanceResolver.h" />
