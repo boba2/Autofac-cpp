@@ -21,8 +21,6 @@ namespace DI
 		std::false_type IsConstructible(...) {};
 		template<class T, class... As>
 		using IsConstructibleCheck = decltype(IsConstructible<T, As...>(0));
-		template<class T, class... As>
-		using IsConstructibleCheck_t = typename IsConstructibleCheck<T, As...>::type;
 
 		template<class T, int>
 		using WrapType = T;
