@@ -2,20 +2,22 @@
 
 struct ResolveEfficiencyTest : ContainerBaseTest
 {
-	static std::string log;
-	void static logMessage(std::string message) { log += (log.empty() ? "" : ", ") + message; }
-	ResolveEfficiencyTest() { log.clear(); }
+	static std::string _log;
+	static bool _logging_enabled;
+	void static logMessage(std::string message) { _log += (_log.empty() ? "" : ", ") + message; }
+	ResolveEfficiencyTest() { _log.clear(); _logging_enabled = false; }
 };
 
-std::string ResolveEfficiencyTest::log;
+std::string ResolveEfficiencyTest::_log;
+bool ResolveEfficiencyTest::_logging_enabled;
 
 namespace
 {
 	struct DummyService
 	{
-		DummyService() { logMessage("Constructed"); }
-		DummyService(const DummyService&) { logMessage("Copy constructed"); }
-		DummyService(DummyService&&) { logMessage("Move constructed"); }
+		DummyService() : _logging_enabled(ResolveEfficiencyTest::_logging_enabled) { logMessage("Constructed"); }
+		DummyService(const DummyService&) : _logging_enabled(ResolveEfficiencyTest::_logging_enabled) { logMessage("Copy constructed"); }
+		DummyService(DummyService&&) : _logging_enabled(ResolveEfficiencyTest::_logging_enabled) { logMessage("Move constructed"); }
 		virtual ~DummyService() { logMessage("Destructed"); }
 
 		DummyService& operator=(const DummyService&) { logMessage("Copy assigned"); return *this; }
@@ -23,13 +25,18 @@ namespace
 
 		void logMessage(std::string message) const
 		{
+			if (_logging_enabled)
 				ResolveEfficiencyTest::logMessage(message);
 		}
+
+		bool _logging_enabled;
 	};
 }
 
 TEST_F(ResolveEfficiencyTest, ShouldConstructServiceOnlyOnce_WhenResolvingServiceAsCopy_AndServiceRegisteredAsType)
 {
+	_logging_enabled = true;
+
 	{
 		auto container_builder = DI::ContainerBuilder();
 		container_builder.registerType<DummyService>();
@@ -38,17 +45,19 @@ TEST_F(ResolveEfficiencyTest, ShouldConstructServiceOnlyOnce_WhenResolvingServic
 		container.resolve<DummyService>();
 	}
 
-	ASSERT_EQ("Constructed, Destructed", log);
+	ASSERT_EQ("Constructed, Destructed", _log);
 }
 
 TEST_F(ResolveEfficiencyTest, ShouldMoveConstructServiceInstance_WhenRegisteringServiceInstanceAsConcreteObject)
 {
+	_logging_enabled = true;
+
 	{
 		auto container_builder = DI::ContainerBuilder();
 		container_builder.registerInstance(DummyService());
 	}
 
-	ASSERT_EQ("Constructed, Move constructed, Destructed, Destructed", log);
+	ASSERT_EQ("Constructed, Move constructed, Destructed, Destructed", _log);
 }
 
 TEST_F(ResolveEfficiencyTest, ShouldCopyConstructService_WhenResolvingServiceAsCopy_AndServiceRegisteredAsInstance)
@@ -57,9 +66,11 @@ TEST_F(ResolveEfficiencyTest, ShouldCopyConstructService_WhenResolvingServiceAsC
 		auto container_builder = DI::ContainerBuilder();
 		container_builder.registerInstance(DummyService());
 
+		_logging_enabled = true;
+
 		auto container = container_builder.build();
 		container.resolve<DummyService>();
 	}
 
-	ASSERT_EQ("Constructed, Move constructed, Destructed, Copy constructed, Destructed, Destructed", log);
+	ASSERT_EQ("Copy constructed, Destructed", _log);
 }
