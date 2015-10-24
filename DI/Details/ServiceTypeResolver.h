@@ -16,27 +16,27 @@ namespace DI
 			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
-			virtual ServiceType getService() override
+			virtual ServiceType getService(Container*) override
 			{
 				return getService<T>();
 			}
 
-			virtual ServiceRefType getServiceAsRef() override
+			virtual ServiceRefType getServiceAsRef(Container*) override
 			{
 				throw Error::ServiceNotResolvableAs();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() override
+			virtual ServicePtrType getServiceAsPtr(Container*) override
 			{
 				throw Error::ServiceNotResolvableAs();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container*) override
 			{
 				return getServiceAsSharedPtr<T>();
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container*) override
 			{
 				return getServiceAsUniquePtr<T>();
 			}

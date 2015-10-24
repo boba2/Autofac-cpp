@@ -5,6 +5,8 @@
 
 namespace DI
 {
+	class Container;
+
 	namespace Details
 	{
 
@@ -36,11 +38,11 @@ namespace DI
 				return TypeIndex<T>();
 			}
 
-			virtual ServiceType getService() = 0;
-			virtual ServiceRefType getServiceAsRef() = 0;
-			virtual ServicePtrType getServiceAsPtr() = 0;
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() = 0;
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() = 0;
+			virtual ServiceType getService(Container* container) = 0;
+			virtual ServiceRefType getServiceAsRef(Container* container) = 0;
+			virtual ServicePtrType getServiceAsPtr(Container* container) = 0;
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) = 0;
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) = 0;
 		};
 
 	}

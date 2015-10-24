@@ -23,34 +23,34 @@ namespace DI
 				: _inner_resolver(inner_resolver)
 			{}
 
-			virtual ServiceType getService() override
+			virtual ServiceType getService(Container* container) override
 			{
-				return _inner_resolver->getService();
+				return _inner_resolver->getService(container);
 			}
 
-			virtual ServiceRefType getServiceAsRef() override
+			virtual ServiceRefType getServiceAsRef(Container* container) override
 			{
-				return *getNewManagedInstance().get();
+				return *getNewManagedInstance(container).get();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() override
+			virtual ServicePtrType getServiceAsPtr(Container* container) override
 			{
-				return getNewManagedInstance().get();
+				return getNewManagedInstance(container).get();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) override
 			{
-				return _inner_resolver->getServiceAsSharedPtr();
+				return _inner_resolver->getServiceAsSharedPtr(container);
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) override
 			{
-				return _inner_resolver->getServiceAsUniquePtr();
+				return _inner_resolver->getServiceAsUniquePtr(container);
 			}
 
-			ServiceSharedPtrType getNewManagedInstance()
+			ServiceSharedPtrType getNewManagedInstance(Container* container)
 			{
-				_managed_instances.push_back(getServiceAsSharedPtr());
+				_managed_instances.push_back(getServiceAsSharedPtr(container));
 
 				return _managed_instances.back();
 			}

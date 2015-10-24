@@ -30,12 +30,12 @@ namespace DI
 			{}
 
 		private:
-			virtual ServiceType getService() override
+			virtual ServiceType getService(Container*) override
 			{
 				return *_shared_service_factory().get();
 			}
 
-			virtual ServiceRefType getServiceAsRef() override
+			virtual ServiceRefType getServiceAsRef(Container*) override
 			{
 				if (!_ptr_service_factory)
 					throw Error::ServiceNotResolvableAs();
@@ -43,7 +43,7 @@ namespace DI
 				return *_ptr_service_factory();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() override
+			virtual ServicePtrType getServiceAsPtr(Container*) override
 			{
 				if (!_ptr_service_factory)
 					throw Error::ServiceNotResolvableAs();
@@ -51,12 +51,12 @@ namespace DI
 				return _ptr_service_factory();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container*) override
 			{
 				return _shared_service_factory();
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container*) override
 			{
 				if (!_unique_service_factory)
 					throw Error::ServiceNotResolvableAs();

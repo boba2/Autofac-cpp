@@ -12,9 +12,9 @@ namespace DI
 		{
 			using Result = typename ServiceResolver<T>::ServiceType;
 
-			static Result convertFrom(ServiceResolver<T>& resolver)
+			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{	
-				return resolver.getService();
+				return resolver.getService(container);
 			}
 		};
 
@@ -23,9 +23,9 @@ namespace DI
 		{
 			using Result = typename ServiceResolver<T>::ServiceRefType;
 
-			static Result convertFrom(ServiceResolver<T>& resolver)
+			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{
-				return resolver.getServiceAsRef();
+				return resolver.getServiceAsRef(container);
 			}
 		};
 
@@ -34,9 +34,9 @@ namespace DI
 		{
 			using Result = typename ServiceResolver<T>::ServicePtrType;
 
-			static Result convertFrom(ServiceResolver<T>& resolver)
+			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{
-				return resolver.getServiceAsPtr();
+				return resolver.getServiceAsPtr(container);
 			}
 		};
 
@@ -45,9 +45,9 @@ namespace DI
 		{
 			using Result = typename ServiceResolver<T>::ServiceSharedPtrType;
 
-			static Result convertFrom(ServiceResolver<T>& resolver)
+			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{
-				return resolver.getServiceAsSharedPtr();
+				return resolver.getServiceAsSharedPtr(container);
 			}
 		};
 
@@ -56,9 +56,9 @@ namespace DI
 		{
 			using Result = typename ServiceResolver<T>::ServiceUniquePtrType;
 
-			static Result convertFrom(ServiceResolver<T>& resolver)
+			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{
-				return resolver.getServiceAsUniquePtr();
+				return resolver.getServiceAsUniquePtr(container);
 			}
 		};
 

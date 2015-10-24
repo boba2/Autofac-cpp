@@ -23,35 +23,35 @@ namespace DI
 			{}
 
 		private:
-			virtual ServiceType getService() override
+			virtual ServiceType getService(Container* container) override
 			{
-				return *getServiceInstance().get();
+				return *getServiceInstance(container).get();
 			}
 
-			virtual ServiceRefType getServiceAsRef() override
+			virtual ServiceRefType getServiceAsRef(Container* container) override
 			{
-				return *getServiceInstance().get();
+				return *getServiceInstance(container).get();
 			}
 
-			virtual ServicePtrType getServiceAsPtr() override
+			virtual ServicePtrType getServiceAsPtr(Container* container) override
 			{
-				return getServiceInstance().get();
+				return getServiceInstance(container).get();
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) override
 			{
-				return getServiceInstance();
+				return getServiceInstance(container);
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container*) override
 			{
 				throw Error::ServiceNotResolvableAs();
 			}
 
-			ServiceSharedPtrType getServiceInstance()
+			ServiceSharedPtrType getServiceInstance(Container* container)
 			{
 				if (!_instance)
-					_instance = _inner_resolver->getServiceAsSharedPtr();
+					_instance = _inner_resolver->getServiceAsSharedPtr(container);
 
 				return _instance;
 			}

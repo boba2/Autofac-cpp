@@ -22,41 +22,41 @@ namespace DI
 			{}
 
 		private:
-			virtual ServiceType getService() override
+			virtual ServiceType getService(Container* container) override
 			{
-				return getService<T>();
+				return getService<T>(container);
 			}
 
-			virtual ServiceRefType getServiceAsRef() override
+			virtual ServiceRefType getServiceAsRef(Container* container) override
 			{
-				return _inner_resolver->getServiceAsRef();
+				return _inner_resolver->getServiceAsRef(container);
 			}
 
-			virtual ServicePtrType getServiceAsPtr() override
+			virtual ServicePtrType getServiceAsPtr(Container* container) override
 			{
-				return _inner_resolver->getServiceAsPtr();
+				return _inner_resolver->getServiceAsPtr(container);
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr() override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) override
 			{
-				return _inner_resolver->getServiceAsSharedPtr();
+				return _inner_resolver->getServiceAsSharedPtr(container);
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr() override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) override
 			{
-				return std::move(_inner_resolver->getServiceAsUniquePtr());
-			}
-
-			template<class U>
-			ServiceType getService(std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
-			{
-				return _inner_resolver->getServiceAsRef();
+				return _inner_resolver->getServiceAsUniquePtr(container);
 			}
 
 			template<class U>
-			ServiceType getService(std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
+			ServiceType getService(Container* container, std::enable_if_t<std::is_abstract<U>::value>* = nullptr)
 			{
-				return _inner_resolver->getService();
+				return _inner_resolver->getServiceAsRef(container);
+			}
+
+			template<class U>
+			ServiceType getService(Container* container, std::enable_if_t<!std::is_abstract<U>::value>* = nullptr)
+			{
+				return _inner_resolver->getService(container);
 			}
 
 			std::shared_ptr<ServiceResolver<S>> const _inner_resolver;
