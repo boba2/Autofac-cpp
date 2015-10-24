@@ -1,3 +1,5 @@
+#include <stdafx.h>
+
 #include "ContainerBaseTest.h"
 #include "../DI/Error/ServiceNotResolvableAs.h"
 

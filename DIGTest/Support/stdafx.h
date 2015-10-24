@@ -10,6 +10,14 @@
 #include <stdio.h>
 #include <tchar.h>
 
+#include <set>
+#include <system_error>
+#include <memory>
+#include <typeindex>
+#include <functional>
+#include <type_traits>
+#include <list>
+#include <gtest/gtest.h>
 
 
 // TODO: reference additional headers your program requires here
