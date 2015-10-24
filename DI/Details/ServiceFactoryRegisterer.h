@@ -17,22 +17,33 @@ namespace DI
 		public:
 			using PublicType = DI::ServiceFactoryRegisterer<T, std::conditional_t<std::is_same<T*, U>::value, DI::NoAutoManage, void>>;
 
+			template<class S>
+			explicit ServiceFactoryRegisterer(S factory)
+			{
+				setFactories(static_cast<std::function<U()>>(factory));
+			}
+
+		private:
 			template<class V, class = std::enable_if_t<!std::is_abstract<V>::value>>
-			explicit ServiceFactoryRegisterer(std::function<V()> factory)
-				: _shared_service_factory([factory] { return std::make_shared<T>(factory()); }),
-				_unique_service_factory([factory] { return std::make_unique<T>(factory()); })
-			{}
-			explicit ServiceFactoryRegisterer(std::function<T*()> factory)
-				: _shared_service_factory([factory] { return std::shared_ptr<T>(factory(), NullDeleter()); }),
-				_ptr_service_factory(factory)
-			{}
-			explicit ServiceFactoryRegisterer(std::function<std::shared_ptr<T>()> factory)
-				: _shared_service_factory(factory)
-			{}
-			explicit ServiceFactoryRegisterer(std::function<std::unique_ptr<T>()> factory)
-				: _shared_service_factory([factory] { return std::shared_ptr<T>(std::move(factory())); }),
-				_unique_service_factory(factory)
-			{}
+			void setFactories(std::function<V()> factory)
+			{
+				_shared_service_factory = [factory] { return std::make_shared<T>(factory()); };
+				_unique_service_factory = [factory] { return std::make_unique<T>(factory()); };
+			}
+			void setFactories(std::function<T*()> factory)
+			{
+				_shared_service_factory = [factory] { return std::shared_ptr<T>(factory(), NullDeleter()); };
+				_ptr_service_factory = factory;
+			}
+			void setFactories(std::function<std::shared_ptr<T>()> factory)
+			{
+				_shared_service_factory = factory;
+			}
+			void setFactories(std::function<std::unique_ptr<T>()> factory)
+			{
+				_shared_service_factory = [factory] { return std::shared_ptr<T>(std::move(factory())); };
+				_unique_service_factory = factory;
+			}
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{

@@ -33,7 +33,7 @@ namespace DI
 			using ServiceType = decltype(factory());
 			using Registerer = Details::ServiceFactoryRegisterer<typename Details::UnderlyingType<ServiceType>::Type, ServiceType>;
 
-			return createRegisterer<Registerer>(static_cast<std::function<ServiceType()>>(factory));
+			return createRegisterer<Registerer>(factory);
 		}
 
 		Container build() const

@@ -28,7 +28,7 @@ namespace DI
 	private:
 		void registerContainer()
 		{
-			auto container_factory = static_cast<std::function<Container()>>([this] { return Container(this->shared_from_this()); });
+			auto container_factory = [this] { return Container(this->shared_from_this()); };
 			registerResolvers(Details::ServiceFactoryRegisterer<Container>(container_factory).getServiceResolvers());
 		}
 
