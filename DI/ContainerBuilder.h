@@ -12,19 +12,19 @@ namespace DI
 	{
 	public:
 		template<class T>
-		auto registerInstance(T &&instance)
+		auto registerInstance(T &&instance) -> typename Details::ServiceInstanceRegisterer<T>::PublicType
 		{
 			return createRegisterer<Details::ServiceInstanceRegisterer<T>>(std::forward<T>(instance));
 		}
 
 		template<class T>
-		auto registerType()
+		auto registerType() -> typename Details::ServiceTypeRegisterer<T>::PublicType
 		{
 			return createRegisterer<Details::ServiceTypeRegisterer<T>>();
 		}
 
 		template<class T>
-		auto registerFactory(T factory)
+		auto registerFactory(T factory) -> typename Details::ServiceFactoryRegisterer<T>::PublicType
 		{
 			return createRegisterer<Details::ServiceFactoryRegisterer<T>>(factory);
 		}
@@ -41,7 +41,7 @@ namespace DI
 			auto registerer = std::make_shared<T>(std::forward<U>(param)...);
 			_service_registerers.insert(registerer);
 
-			return static_cast<typename T::PublicType>(registerer);
+			return typename T::PublicType(this, registerer);
 		}
 
 		std::set<std::shared_ptr<Details::ServiceResolver<>>> getServiceResolvers() const

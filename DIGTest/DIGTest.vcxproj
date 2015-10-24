@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DIGTest.cpp" />
+    <ClCompile Include="ContainerBuilderUsageTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
     <ClCompile Include="ResolverServiceTypeWithDependencies.cpp" />
     <ClCompile Include="ResolveServiceFromFactoryTest.cpp" />

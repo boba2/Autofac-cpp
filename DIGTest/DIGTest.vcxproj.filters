@@ -65,6 +65,9 @@
     <ClCompile Include="ResolverServiceTypeWithDependencies.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ContainerBuilderUsageTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\GoogleTest\msvc\gtest\Debug\gtestd.lib">
