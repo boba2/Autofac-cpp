@@ -10,11 +10,21 @@ namespace DI
 		namespace ConstructorTraits
 		{
 
+			template<class T, class U>
+			using IsSame = std::is_same<T, std::remove_cv_t<std::remove_reference_t<U>>>;
+
 			template<class T>
 			struct AnyType
 			{
-				template<class U, class = std::enable_if_t<!std::is_same<T, U>::value>>
+				template<class U, class = std::enable_if_t<!IsSame<T, U>::value>>
 				operator U() {};
+			};
+
+			template<class T>
+			struct AnyTypeRef
+			{
+				template<class U, class = std::enable_if_t<!IsSame<T, U>::value>>
+				operator U&() const {};
 			};
 
 			template<class T, int>
@@ -37,8 +47,14 @@ namespace DI
 			};
 
 			template<template<class...> class C, class T, int... I>
-			struct ConstructorArityImpl<C, T, IndexSequence<I...>, std::enable_if_t<(sizeof...(I) > 0) && !C<T, WrapType<AnyType<T>, I>...>::value>>
-				: ConstructorArityImpl<C, T, MakeIndexSequence<sizeof...(I)-1>>
+			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, std::enable_if_t<(sizeof...(I) > 0) && !C<T, WrapType<AnyType<T>, I>...>::value && C<T, WrapType<AnyTypeRef<T>, I>...>::value>>
+			{
+				static constexpr int value = sizeof...(I);
+			};
+
+			template<template<class...> class C, class T, int... I>
+			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, std::enable_if_t<(sizeof...(I) > 0) && !C<T, WrapType<AnyType<T>, I>...>::value && !C<T, WrapType<AnyTypeRef<T>, I>...>::value>>
+				: ConstructorArityImpl<C, T, DI::Details::MakeIndexSequence<sizeof...(I)-1>>
 			{};
 
 			template<template<class...> class C, class T>

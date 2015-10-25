@@ -16,7 +16,8 @@ namespace DI
 			template<class S = T>
 			static S createService(DI::Container* container)
 			{
-				return Factory<S, MakeIndexSequence<ConstructorArity<T>::value>>::createWith(ArgumentResolver(container));
+				auto resolver = ArgumentResolver(container);
+				return Factory<S, MakeIndexSequence<ConstructorArity<T>::value>>::createWith(resolver);
 			}
 
 			struct ArgumentResolver
@@ -25,10 +26,19 @@ namespace DI
 					: _container(container)
 				{}
 
-				template<class U, class = std::enable_if_t<!std::is_same<T, U>::value>>
-				operator U() const
+				template<class U, class S>
+				using IsSame = std::is_same<U, std::remove_cv_t<std::remove_reference_t<S>>>;
+
+				template<class U, class = std::enable_if_t<!IsSame<T, U>::value>>
+				operator U()
 				{
 					return _container->resolve<U>();
+				}
+
+				template<class U, class = std::enable_if_t<!IsSame<T, U>::value>>
+				operator U&() const
+				{
+					return _container->resolve<U&>();
 				}
 
 				DI::Container* _container;
@@ -41,7 +51,7 @@ namespace DI
 			template<class U, int... I>
 			struct Factory<U, IndexSequence<I...>>
 			{
-				static U createWith(const ArgumentResolver& resolver)
+				static U createWith(ArgumentResolver& resolver)
 				{
 					return U(wrapValue<I>(resolver)...);
 				}
@@ -50,7 +60,7 @@ namespace DI
 			template<class U, int... I>
 			struct Factory<std::shared_ptr<U>, IndexSequence<I...>>
 			{
-				static std::shared_ptr<U> createWith(const ArgumentResolver& resolver)
+				static std::shared_ptr<U> createWith(ArgumentResolver& resolver)
 				{
 					return std::make_shared<U>(wrapValue<I>(resolver)...);
 				}
@@ -59,7 +69,7 @@ namespace DI
 			template<class U, int... I>
 			struct Factory<std::unique_ptr<U>, IndexSequence<I...>>
 			{
-				static std::unique_ptr<U> createWith(const ArgumentResolver& resolver)
+				static std::unique_ptr<U> createWith(ArgumentResolver& resolver)
 				{
 					return std::make_unique<U>(wrapValue<I>(resolver)...);
 				}
@@ -67,7 +77,7 @@ namespace DI
 #pragma warning(default:4100)
 
 			template<int>
-			static const ArgumentResolver& wrapValue(const ArgumentResolver& object)
+			static ArgumentResolver& wrapValue(ArgumentResolver& object)
 			{
 				return object;
 			}
