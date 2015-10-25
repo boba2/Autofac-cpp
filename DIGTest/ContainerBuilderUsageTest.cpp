@@ -1,3 +1,5 @@
+#include <stdafx.h>
+
 #include "ContainerBaseTest.h"
 
 using ContainerBuilderUsageTest = ContainerBaseTest;
