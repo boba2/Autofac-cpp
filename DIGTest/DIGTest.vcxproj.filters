@@ -69,6 +69,9 @@
     <ClCompile Include="ServiceFactoryTest.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConstServiceTest.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\GoogleTest\msvc\gtest\Debug\gtestd.lib">

@@ -14,6 +14,12 @@ namespace DI
 		};
 
 		template<class T>
+		struct UnderlyingType<const T>
+		{
+			using Type = T;
+		};
+
+		template<class T>
 		struct UnderlyingType<T *>
 		{
 			using Type = typename UnderlyingType<T>::Type;

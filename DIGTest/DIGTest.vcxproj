@@ -159,6 +159,7 @@
     <ClInclude Include="Support\targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConstServiceTest.cpp" />
     <ClCompile Include="DIGTest.cpp" />
     <ClCompile Include="ContainerBuilderUsageTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
