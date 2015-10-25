@@ -66,6 +66,9 @@
       <Filter>Test Files</Filter>
     </ClCompile>
     <ClCompile Include="DIGTest.cpp" />
+    <ClCompile Include="ServiceFromParameterizedFactoryTest.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\GoogleTest\msvc\gtest\Debug\gtestd.lib">

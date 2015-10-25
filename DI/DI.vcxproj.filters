@@ -90,6 +90,12 @@
     <ClInclude Include="Details\ServiceCreator.h">
       <Filter>Details</Filter>
     </ClInclude>
+    <ClInclude Include="Details\FunctionTraits.h">
+      <Filter>Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Details\FactoryRunner.h">
+      <Filter>Details</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">

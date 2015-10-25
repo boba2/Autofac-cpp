@@ -162,6 +162,7 @@
     <ClCompile Include="DIGTest.cpp" />
     <ClCompile Include="ContainerBuilderUsageTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
+    <ClCompile Include="ServiceFromParameterizedFactoryTest.cpp" />
     <ClCompile Include="ServiceTypeWithDependencies.cpp" />
     <ClCompile Include="ServiceFromFactoryTest.cpp" />
     <ClCompile Include="ServiceInstanceAsTypeTest.cpp" />

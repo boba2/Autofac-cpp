@@ -1,72 +1,54 @@
 #pragma once
 
-#include <functional>
 #include "Details/ServiceResolver.h"
-#include "Error/ServiceNotResolvableAs.h"
+#include "FactoryRunner.h"
 
 namespace DI
 {
 	namespace Details
 	{
 
-		template<class T>
-		class ServiceFactoryResolver : public ServiceResolver<T>
+		template<class T, class FactoryType = T, class FactoryResultType = typename FunctionResultType<FactoryType>::Type, class ResultType = typename UnderlyingType<FactoryResultType>::Type>
+		class ServiceFactoryResolver : public ServiceResolver<ResultType>
 		{
-			using ServiceType = typename ServiceResolver<T>::ServiceType;
-			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
-			using ServicePtrType = typename ServiceResolver<T>::ServicePtrType;
-			using ServiceSharedPtrType = typename ServiceResolver<T>::ServiceSharedPtrType;
-			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
+			using ServiceType = typename ServiceResolver<ResultType>::ServiceType;
+			using ServiceRefType = typename ServiceResolver<ResultType>::ServiceRefType;
+			using ServicePtrType = typename ServiceResolver<ResultType>::ServicePtrType;
+			using ServiceSharedPtrType = typename ServiceResolver<ResultType>::ServiceSharedPtrType;
+			using ServiceUniquePtrType = typename ServiceResolver<ResultType>::ServiceUniquePtrType;
 
 		public:
-			explicit ServiceFactoryResolver(
-				std::function<std::shared_ptr<T>()> shared_service_factory,
-				std::function<std::unique_ptr<T>()> unique_service_factory,
-				std::function<T*()> ptr_service_factory
-			)
-				: _shared_service_factory(shared_service_factory),
-				_unique_service_factory(unique_service_factory),
-				_ptr_service_factory(ptr_service_factory)
+			explicit ServiceFactoryResolver(FactoryType factory)
+				: _factory_runner(FactoryUnifier::unifyFactory(factory))
 			{}
 
 		private:
-			virtual ServiceType getService(Container*) override
+			virtual ServiceType getService(Container* container) override
 			{
-				return *_shared_service_factory().get();
+				return *_factory_runner.createSharedPtr(container).get();
 			}
 
-			virtual ServiceRefType getServiceAsRef(Container*) override
+			virtual ServiceRefType getServiceAsRef(Container* container) override
 			{
-				if (!_ptr_service_factory)
-					throw Error::ServiceNotResolvableAs();
-
-				return *_ptr_service_factory();
+				return *_factory_runner.createPtr(container);
 			}
 
-			virtual ServicePtrType getServiceAsPtr(Container*) override
+			virtual ServicePtrType getServiceAsPtr(Container* container) override
 			{
-				if (!_ptr_service_factory)
-					throw Error::ServiceNotResolvableAs();
-
-				return _ptr_service_factory();
+				return _factory_runner.createPtr(container);
 			}
 
-			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container*) override
+			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) override
 			{
-				return _shared_service_factory();
+				return _factory_runner.createSharedPtr(container);
 			}
 
-			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container*) override
+			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) override
 			{
-				if (!_unique_service_factory)
-					throw Error::ServiceNotResolvableAs();
-
-				return _unique_service_factory();
+				return _factory_runner.createUniquePtr(container);
 			}
 
-			std::function<std::shared_ptr<T>()> _shared_service_factory;
-			std::function<std::unique_ptr<T>()> _unique_service_factory;
-			std::function<T*()> _ptr_service_factory;
+			FactoryRunner<FactoryResultType> _factory_runner;
 		};
 
 	}
