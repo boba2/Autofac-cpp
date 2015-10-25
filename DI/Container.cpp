@@ -30,7 +30,7 @@ namespace DI
 		{
 			auto container_factory = [this] { return std::make_shared<Container>(Container(this->shared_from_this())); };
 			auto registerer = Details::ServiceFactoryRegisterer<decltype(container_factory)>(container_factory);
-			registerer.setAutoManaged();
+			registerer.setSingleInstance();
 			registerResolvers(registerer.getServiceResolvers());
 		}
 

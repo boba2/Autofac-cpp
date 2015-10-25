@@ -43,16 +43,24 @@ TEST_F(StandardServiceInstanceTest, ShouldThrowException_WhenResolvingContainerA
 	ASSERT_THROW(container().resolve<std::unique_ptr<DI::Container>>(), DI::Error::ServiceNotResolvableAs);
 }
 
+TEST_F(StandardServiceInstanceTest, ShouldResolveContainerAsSingleInstance)
+{
+	auto service1 = container().resolve<DI::Container*>();
+	auto service2 = container().resolve<DI::Container*>();
+
+	ASSERT_EQ(service1, service2);
+}
+
 TEST_F(StandardServiceInstanceTest, ShouldResolveSameSingleServiceInstancefromDifferentContainerCopies)
 {
 	builder()
 		.registerType<ServiceA>()
 		.singleInstance();
 
-	auto container_copy = container().resolve<std::shared_ptr<DI::Container>>();
+	auto container_copy = container().resolve<DI::Container>();
 
 	auto service1 = container().resolve<ServiceA *>();
-	auto service2 = container_copy->resolve<ServiceA *>();
+	auto service2 = container_copy.resolve<ServiceA *>();
 
 	ASSERT_EQ(service1, service2);
 }
@@ -60,10 +68,10 @@ TEST_F(StandardServiceInstanceTest, ShouldResolveSameSingleServiceInstancefromDi
 TEST_F(StandardServiceInstanceTest, ShouldResolveSameRegisteredServiceInstanceFromDifferentContainerCopies)
 {
 	builder().registerInstance(ServiceA());
-	auto container_copy = container().resolve<std::shared_ptr<DI::Container>>();
+	auto container_copy = container().resolve<DI::Container>();
 
 	auto service1 = container().resolve<ServiceA *>();
-	auto service2 = container_copy->resolve<ServiceA *>();
+	auto service2 = container_copy.resolve<ServiceA *>();
 
 	ASSERT_EQ(service1, service2);
 }
