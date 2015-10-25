@@ -50,6 +50,18 @@ TEST_F(ServiceTypeTest, ShouldResolveServiceAsReference_WhenServiceTypeRegistere
 	ASSERT_TRUE(dynamic_cast<DummyService*>(&service) != nullptr);
 }
 
+TEST_F(ServiceTypeTest, ShouldResolveServicesAsDistinctReferences_WhenServiceTypeRegisteredAsAutoManaged)
+{
+	builder()
+		.registerType<DummyService>()
+		.autoManaged();
+
+	auto& service1 = container().resolve<DummyService&>();
+	auto& service2 = container().resolve<DummyService&>();
+
+	ASSERT_NE(&service1, &service2);
+}
+
 TEST_F(ServiceTypeTest, ShouldThrowException_WhenResolvingServiceAsPointer_AndServiceTypeRegisteredNotAsAutoManaged)
 {
 	builder()
@@ -65,6 +77,18 @@ TEST_F(ServiceTypeTest, ShouldResolveServiceAsPointer_WhenServiceTypeRegisteredA
 		.autoManaged();
 
 	ASSERT_TRUE(container().resolve<DummyService*>() != nullptr);
+}
+
+TEST_F(ServiceTypeTest, ShouldResolveServicesAsDistinctPointers_WhenServiceTypeRegisteredAsAutoManageable)
+{
+	builder()
+		.registerType<DummyService>()
+		.autoManaged();
+
+	auto service1 = container().resolve<DummyService*>();
+	auto service2 = container().resolve<DummyService*>();
+
+	ASSERT_NE(service1, service2);
 }
 
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsSharedPtr_WhenServiceTypeRegistered)
