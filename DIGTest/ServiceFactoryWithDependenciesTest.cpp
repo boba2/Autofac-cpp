@@ -2,7 +2,7 @@
 
 #include "ContainerBaseTest.h"
 
-using ServiceFromParameterizedFactoryTest = ContainerBaseTest;
+using ServiceFactoryWithDependenciesTest = ContainerBaseTest;
 
 namespace
 {
@@ -10,7 +10,7 @@ namespace
 	struct ServiceB { explicit ServiceB(ServiceA serviceA) : _serviceA(serviceA) {} ServiceA _serviceA; };
 }
 
-TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsObject)
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsObject)
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; });
@@ -22,7 +22,7 @@ TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_When
 	ASSERT_EQ(13, serviceB._serviceA._value);
 }
 
-TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsRef)
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsRef)
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; })
@@ -35,7 +35,7 @@ TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_When
 	ASSERT_EQ(13, serviceB._serviceA._value);
 }
 
-TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsPtr)
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsPtr)
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; })
@@ -48,7 +48,7 @@ TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_When
 	ASSERT_EQ(13, serviceB._serviceA._value);
 }
 
-TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsUniquePtr)
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsUniquePtr)
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; });
@@ -60,7 +60,7 @@ TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_When
 	ASSERT_EQ(13, serviceB._serviceA._value);
 }
 
-TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsSharedPtr)
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactory_WhenFactoryRequiresOneServiceAsSharedPtr)
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; });
