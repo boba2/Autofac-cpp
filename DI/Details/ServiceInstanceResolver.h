@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ServiceResolver.h"
-#include "Error/ServiceNotResolvableAs.h"
 
 namespace DI
 {

@@ -21,7 +21,7 @@ namespace DI
 		{
 			using ServiceReferenceTypeConverter = Details::ServiceReferenceTypeConverter<T>;
 			using ServiceResolverType = Details::ServiceResolver<typename Details::UnderlyingType<T>::Type>;
-			using TypeIndex = Details::TypeIndex<T>;
+			using TypeIndex = Details::TypeIndex<typename Details::UnderlyingType<T>::Type>;
 
 			return ServiceReferenceTypeConverter::convertFrom(dynamic_cast<ServiceResolverType&>(getResolver(TypeIndex())), this);
 		}

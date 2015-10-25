@@ -24,7 +24,7 @@ namespace DI
 		struct TypeIndex : TypeIndex<>
 		{
 			TypeIndex()
-				: TypeIndex<>(typeid(typename UnderlyingType<T>::Type))
+				: TypeIndex<>(typeid(T))
 			{}
 		};
 
