@@ -41,19 +41,36 @@ namespace DI
 			struct ConstructorArityImpl;
 
 			template<template<class...> class C, class T, int... I>
-			struct ConstructorArityImpl<C, T, IndexSequence<I...>, std::enable_if_t<(sizeof...(I) > 0) && C<T, WrapType<AnyType<T>, I>...>::value>>
+			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
+				std::enable_if_t<
+					(sizeof...(I) > 0) 
+					&& C<T, WrapType<AnyType<T>, I>...>::value
+				>
+			>
 			{
 				static constexpr int value = sizeof...(I);
 			};
 
 			template<template<class...> class C, class T, int... I>
-			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, std::enable_if_t<(sizeof...(I) > 0) && !C<T, WrapType<AnyType<T>, I>...>::value && C<T, WrapType<AnyTypeRef<T>, I>...>::value>>
+			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, 
+				std::enable_if_t<
+					(sizeof...(I) > 0) 
+					&& !C<T, WrapType<AnyType<T>, I>...>::value 
+					&& C<T, WrapType<AnyTypeRef<T>, I>...>::value
+				>
+			>
 			{
 				static constexpr int value = sizeof...(I);
 			};
 
 			template<template<class...> class C, class T, int... I>
-			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, std::enable_if_t<(sizeof...(I) > 0) && !C<T, WrapType<AnyType<T>, I>...>::value && !C<T, WrapType<AnyTypeRef<T>, I>...>::value>>
+			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, 
+				std::enable_if_t<
+					(sizeof...(I) > 0) 
+					&& !C<T, WrapType<AnyType<T>, I>...>::value 
+					&& !C<T, WrapType<AnyTypeRef<T>, I>...>::value
+				>
+			>
 				: ConstructorArityImpl<C, T, DI::Details::MakeIndexSequence<sizeof...(I)-1>>
 			{};
 

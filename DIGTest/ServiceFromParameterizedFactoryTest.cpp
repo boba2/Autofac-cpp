@@ -27,8 +27,8 @@ TEST_F(ServiceFromParameterizedFactoryTest, ShouldResolveServiceFromFactory_When
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; })
 		.autoManaged();
-//	builder()
-//		.registerFactory([](ServiceA& serviceA) { return ServiceB(serviceA); });
+	builder()
+		.registerFactory([](ServiceA& serviceA) { return ServiceB(serviceA); });
 
 	auto serviceB = container().resolve<ServiceB>();
 

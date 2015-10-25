@@ -39,16 +39,22 @@ namespace DI
 				{}
 
 				template<class U>
-				operator U() const
+				operator U() 	
 				{
 					return _container->resolve<U>();
+				}
+
+				template<class U>
+				operator U&() const
+				{
+					return _container->resolve<U&>();
 				}
 
 				Container* _container;
 			};
 
 			template<int>
-			static const ArgumentResolver& wrapValue(const ArgumentResolver& object)
+			static ArgumentResolver& wrapValue(ArgumentResolver& object)
 			{
 				return object;
 			}
