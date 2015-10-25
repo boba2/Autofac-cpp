@@ -164,6 +164,7 @@
     <ClCompile Include="ContainerBuilderUsageTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
     <ClCompile Include="ServiceFactoryAsSingleInstanceTest.cpp" />
+    <ClCompile Include="ServiceFactoryAsTypeTest.cpp" />
     <ClCompile Include="ServiceFactoryWithDependenciesTest.cpp" />
     <ClCompile Include="ServiceTypeWithDependencies.cpp" />
     <ClCompile Include="ServiceFactoryTest.cpp" />

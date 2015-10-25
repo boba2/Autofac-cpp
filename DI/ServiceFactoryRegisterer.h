@@ -37,6 +37,21 @@ namespace DI
 
 			return *this;
 		}
+
+		template<class V>
+		ServiceFactoryRegisterer& as()
+		{
+			static_assert(std::is_base_of<V, T>::value, "Alias should be a resolvable base class of the service class being registered");
+
+			_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<V, T>>());
+
+			return *this;
+		}
+
+		ServiceFactoryRegisterer& asSelf()
+		{
+			return as<T>();
+		}
 	};
 
 }
