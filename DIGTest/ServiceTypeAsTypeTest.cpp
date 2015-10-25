@@ -1,6 +1,6 @@
 #include <stdafx.h>
-
 #include "ContainerBaseTest.h"
+#include "../DI/Error/ServiceNotRegistered.h"
 
 namespace
 {
@@ -49,4 +49,25 @@ TEST_F(ServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServi
 	auto& service = container().resolve<AbstractDummyService>();
 
 	ASSERT_TRUE(dynamic_cast<const ConcreteDummyService*>(&service) != nullptr);
+}
+
+TEST_F(ServiceTypeAsTypeTest, ShouldThrowException_WhenResolvingServiceAsItsType_AndServiceTypeRegisteredOnlyWithAlias)
+{
+	builder()
+		.registerType<ConcreteDummyService>()
+		.as<AbstractDummyService>()
+		.autoManaged();
+
+	ASSERT_THROW(container().resolve<ConcreteDummyService*>(), DI::Error::ServiceNotRegistered);
+}
+
+TEST_F(ServiceTypeAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceTypeRegisteredWithAliasAndAsSelf)
+{
+	builder()
+		.registerType<ConcreteDummyService>()
+		.as<AbstractDummyService>()
+		.asSelf()
+		.autoManaged();
+
+	ASSERT_TRUE(container().resolve<ConcreteDummyService*>() != nullptr);
 }
