@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 #include "Details/ServiceResolver.h"
 #include "Error/ServiceNotResolvableAs.h"
 
@@ -56,7 +56,7 @@ namespace DI
 			}
 
 			std::shared_ptr<ServiceResolver<T>> const _inner_resolver;
-			std::list<std::shared_ptr<T>> _managed_instances;
+			std::vector<std::shared_ptr<T>> _managed_instances;
 		};
 
 	}
