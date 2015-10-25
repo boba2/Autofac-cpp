@@ -14,8 +14,7 @@ namespace
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresOneServiceAsObject)
 {
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; });
-	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; })
 		.registerFactory([](ServiceA serviceA) { return ServiceB(serviceA); });
 
 	auto serviceB = container().resolve<ServiceB>();
@@ -27,8 +26,7 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 12; return serviceA; })
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerFactory([](ServiceA& serviceA) { return ServiceB(serviceA); });
 
 	auto serviceB = container().resolve<ServiceB>();
@@ -40,8 +38,7 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 13; return serviceA; })
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerFactory([](ServiceA* serviceA) { return ServiceB(*serviceA); });
 
 	auto serviceB = container().resolve<ServiceB>();
@@ -52,8 +49,7 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresOneServiceAsSharedPtr)
 {
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 14; return serviceA; });
-	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 14; return serviceA; })
 		.registerFactory([](std::shared_ptr<ServiceA> serviceA) { return ServiceB(*serviceA); });
 
 	auto serviceB = container().resolve<ServiceB>();
@@ -64,8 +60,7 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresOneServiceAsUniquePtr)
 {
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 15; return serviceA; });
-	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 15; return serviceA; })
 		.registerFactory([](std::unique_ptr<ServiceA> serviceA) { return ServiceB(*serviceA); });
 
 	auto serviceB = container().resolve<ServiceB>();
@@ -75,11 +70,9 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFunction_WhenFactoryRequiresOneServiceAsObject)
 {
-	std::function<ServiceB(ServiceA)> factory = [](ServiceA serviceA) { return ServiceB(serviceA); };
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 16; return serviceA; });
-	builder()
-		.registerFactory(factory);
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 16; return serviceA; })
+		.registerFactory(static_cast<std::function<ServiceB(ServiceA)>>([](ServiceA serviceA) { return ServiceB(serviceA); }));
 
 	auto serviceB = container().resolve<ServiceB>();
 
@@ -88,12 +81,10 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFuncti
 
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFunction_WhenFactoryRequiresOneServiceAsRef)
 {
-	std::function<ServiceB(ServiceA&)> factory = [](ServiceA& serviceA) { return ServiceB(serviceA); };
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 17; return serviceA; })
-		.autoManaged();
-	builder()
-		.registerFactory(factory);
+			.autoManaged()
+		.registerFactory(static_cast<std::function<ServiceB(ServiceA&)>>([](ServiceA& serviceA) { return ServiceB(serviceA); }));
 
 	auto serviceB = container().resolve<ServiceB>();
 
@@ -102,12 +93,10 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFuncti
 
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFunction_WhenFactoryRequiresOneServiceAsPtr)
 {
-	std::function<ServiceB(ServiceA*)> factory = [](ServiceA* serviceA) { return ServiceB(*serviceA); };
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 18; return serviceA; })
-		.autoManaged();
-	builder()
-		.registerFactory(factory);
+			.autoManaged()
+		.registerFactory(static_cast<std::function<ServiceB(ServiceA*)>>([](ServiceA* serviceA) { return ServiceB(*serviceA); }));
 
 	auto serviceB = container().resolve<ServiceB>();
 
@@ -116,11 +105,9 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFuncti
 
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFunction_WhenFactoryRequiresOneServiceAsSharedPtr)
 {
-	std::function<ServiceB(std::shared_ptr<ServiceA>)> factory = [](std::shared_ptr<ServiceA> serviceA) { return ServiceB(*serviceA); };
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 19; return serviceA; });
-	builder()
-		.registerFactory(factory);
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 19; return serviceA; })
+		.registerFactory(static_cast<std::function<ServiceB(std::shared_ptr<ServiceA>)>>([](std::shared_ptr<ServiceA> serviceA) { return ServiceB(*serviceA); }));
 
 	auto serviceB = container().resolve<ServiceB>();
 
@@ -129,11 +116,9 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFuncti
 
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFunction_WhenFactoryRequiresOneServiceAsUniquePtr)
 {
-	std::function<ServiceB(std::unique_ptr<ServiceA>)> factory = [](std::unique_ptr<ServiceA> serviceA) { return ServiceB(*serviceA); };
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 20; return serviceA; });
-	builder()
-		.registerFactory(factory);
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 20; return serviceA; })
+		.registerFactory(static_cast<std::function<ServiceB(std::unique_ptr<ServiceA>)>>([](std::unique_ptr<ServiceA> serviceA) { return ServiceB(*serviceA); }));
 
 	auto serviceB = container().resolve<ServiceB>();
 
@@ -143,10 +128,8 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFuncti
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresMultipleServicesAsObjects)
 {
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; });
-	builder()
-		.registerType<ServiceB>();
-	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; })
+		.registerType<ServiceB>()
 		.registerFactory([](ServiceA serviceA, ServiceB serviceB) { return ServiceC(serviceA, serviceB); });
 
 	auto serviceC = container().resolve<ServiceC>();
@@ -159,11 +142,9 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 {
 	builder()
 		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; })
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerType<ServiceB>()
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerFactory([](ServiceA* serviceA, ServiceB& serviceB) { return ServiceC(*serviceA, serviceB); });
 
 	auto serviceC = container().resolve<ServiceC>();
@@ -175,10 +156,8 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresMultipleServicesAsDifferentTypes_2)
 {
 	builder()
-		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; });
-	builder()
-		.registerType<ServiceB>();
-	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; })
+		.registerType<ServiceB>()
 		.registerFactory([](std::shared_ptr<ServiceA> serviceA, std::unique_ptr<ServiceB> serviceB) { return ServiceC(*serviceA, *serviceB); });
 
 	auto serviceC = container().resolve<ServiceC>();

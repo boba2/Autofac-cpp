@@ -70,8 +70,9 @@ TEST_F(StandardServiceInstanceTest, ShouldResolveSameRegisteredServiceInstanceFr
 
 TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactory_WhenFactoryRequiresContainer_AndFactoryAsLambda)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory([](DI::Container& container) { return ServiceB(container.resolve<ServiceA>()); });
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory([](DI::Container& container) { return ServiceB(container.resolve<ServiceA>()); });
 
 	auto service = container().resolve<ServiceB>();
 
@@ -80,8 +81,9 @@ TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactory_WhenFactoryRequ
 
 TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactory_WhenFactoryRequiresContainer_AndFactoryAsFunction)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory(static_cast<std::function<ServiceB(DI::Container&)>>([](DI::Container& container) { return ServiceB(container.resolve<ServiceA>()); }));
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory(static_cast<std::function<ServiceB(DI::Container&)>>([](DI::Container& container) { return ServiceB(container.resolve<ServiceA>()); }));
 
 	auto service = container().resolve<ServiceB>();
 
@@ -90,8 +92,9 @@ TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactory_WhenFactoryRequ
 
 TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsObject)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory([](DI::Container container) { return ServiceB(container.resolve<ServiceA>()); });
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory([](DI::Container container) { return ServiceB(container.resolve<ServiceA>()); });
 
 	auto service = container().resolve<ServiceB>();
 
@@ -100,8 +103,9 @@ TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsObject)
 
 TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsRef)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory([](DI::Container& container) { return ServiceB(container.resolve<ServiceA>()); });
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory([](DI::Container& container) { return ServiceB(container.resolve<ServiceA>()); });
 
 	auto service = container().resolve<ServiceB>();
 
@@ -110,8 +114,9 @@ TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsRef)
 
 TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsPtr)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory([](DI::Container* container) { return ServiceB(container->resolve<ServiceA>()); });
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory([](DI::Container* container) { return ServiceB(container->resolve<ServiceA>()); });
 
 	auto service = container().resolve<ServiceB>();
 
@@ -120,8 +125,9 @@ TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsPtr)
 
 TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsSharedPtr)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory([](std::shared_ptr<DI::Container> container) { return ServiceB(container->resolve<ServiceA>()); });
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory([](std::shared_ptr<DI::Container> container) { return ServiceB(container->resolve<ServiceA>()); });
 
 	auto service = container().resolve<ServiceB>();
 
@@ -130,8 +136,9 @@ TEST_F(StandardServiceInstanceTest, ShouldPassContainerToFactoryAsSharedPtr)
 
 TEST_F(StandardServiceInstanceTest, ShouldThrowException_WhenPassingContainerToFactoryAsUniquePtr)
 {
-	builder().registerFactory([] { auto service = ServiceA(); service._value = 13; return service; });
-	builder().registerFactory([](std::unique_ptr<DI::Container> container) { return ServiceB(container->resolve<ServiceA>()); });
+	builder()
+		.registerFactory([] { auto service = ServiceA(); service._value = 13; return service; })
+		.registerFactory([](std::unique_ptr<DI::Container> container) { return ServiceB(container->resolve<ServiceA>()); });
 
 	ASSERT_THROW(container().resolve<ServiceB>(), DI::Error::ServiceNotResolvableAs);
 }

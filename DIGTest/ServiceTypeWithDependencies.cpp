@@ -16,8 +16,9 @@ namespace
 
 TEST_F(ServiceTypeWithDependencies, ShouldResolveServiceWithSingleObjectDependency)
 {
-	builder().registerType<ServiceA>();
-	builder().registerType<ServiceB>();
+	builder()
+		.registerType<ServiceA>()
+		.registerType<ServiceB>();
 
 	auto serviceB = container().resolve<ServiceB>();
 
@@ -28,8 +29,7 @@ TEST_F(ServiceTypeWithDependencies, ShouldResolveServiceWithSingleRefDependency)
 {
 	builder()
 		.registerType<ServiceA>()
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerType<ServiceC>();
 
 	auto serviceC = container().resolve<ServiceC>();
@@ -41,8 +41,7 @@ TEST_F(ServiceTypeWithDependencies, ShouldResolveServiceWithSinglePtrDependency)
 {
 	builder()
 		.registerType<ServiceA>()
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerType<ServiceD>();
 
 	auto serviceD = container().resolve<ServiceD>();
@@ -54,8 +53,7 @@ TEST_F(ServiceTypeWithDependencies, ShouldResolveServiceWithSingleSharedPtrDepen
 {
 	builder()
 		.registerType<ServiceA>()
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerType<ServiceE>();
 
 	auto serviceE = container().resolve<ServiceE>();
@@ -67,8 +65,7 @@ TEST_F(ServiceTypeWithDependencies, ShouldResolveServiceWithSingleUniquePtrDepen
 {
 	builder()
 		.registerType<ServiceA>()
-		.autoManaged();
-	builder()
+			.autoManaged()
 		.registerType<ServiceF>();
 
 	auto serviceF = container().resolve<ServiceF>();

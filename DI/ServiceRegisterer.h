@@ -12,9 +12,21 @@ namespace DI
 		{}
 
 		template<class U>
+		auto registerInstance(U &&instance)
+		{
+			return _container_builder->registerInstance(std::forward<U>(instance));
+		}
+
+		template<class U>
 		auto registerType()
 		{
 			return _container_builder->registerType<U>();
+		}
+
+		template<class U>
+		auto registerFactory(U factory)
+		{
+			return _container_builder->registerFactory(factory);
 		}
 
 		Container build() const
