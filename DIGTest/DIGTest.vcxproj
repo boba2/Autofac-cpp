@@ -162,14 +162,14 @@
     <ClCompile Include="DIGTest.cpp" />
     <ClCompile Include="ContainerBuilderUsageTest.cpp" />
     <ClCompile Include="ResolveEfficiencyTest.cpp" />
-    <ClCompile Include="ResolverServiceTypeWithDependencies.cpp" />
-    <ClCompile Include="ResolveServiceFromFactoryTest.cpp" />
-    <ClCompile Include="ResolveServiceInstanceAsTypeTest.cpp" />
-    <ClCompile Include="ResolveServiceInstanceTest.cpp" />
-    <ClCompile Include="ResolveServiceTypeAsSingleInstance.cpp" />
-    <ClCompile Include="ResolveServiceTypeAsTypeTest.cpp" />
-    <ClCompile Include="ResolveServiceTypeTest.cpp" />
-    <ClCompile Include="ResolveStandardServiceInstanceTest.cpp" />
+    <ClCompile Include="ServiceTypeWithDependencies.cpp" />
+    <ClCompile Include="ServiceFromFactoryTest.cpp" />
+    <ClCompile Include="ServiceInstanceAsTypeTest.cpp" />
+    <ClCompile Include="ServiceInstanceTest.cpp" />
+    <ClCompile Include="ServiceTypeAsSingleInstance.cpp" />
+    <ClCompile Include="ServiceTypeAsTypeTest.cpp" />
+    <ClCompile Include="ServiceTypeTest.cpp" />
+    <ClCompile Include="StandardServiceInstanceTest.cpp" />
     <ClCompile Include="Support\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

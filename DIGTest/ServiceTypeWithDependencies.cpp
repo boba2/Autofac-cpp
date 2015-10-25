@@ -2,7 +2,7 @@
 
 #include "ContainerBaseTest.h"
 
-using ResolveServiceTypeWithDependencies = ContainerBaseTest;
+using ServiceTypeWithDependencies = ContainerBaseTest;
 
 namespace
 {
@@ -10,7 +10,7 @@ namespace
 	struct ServiceB { explicit ServiceB(ServiceA serviceA) : _serviceA(serviceA) {} const ServiceA _serviceA; };
 }
 
-TEST_F(ResolveServiceTypeWithDependencies, ShouldResolveServiceWithSingleSimpleDependency)
+TEST_F(ServiceTypeWithDependencies, ShouldResolveServiceWithSingleSimpleDependency)
 {
 	builder().registerType<ServiceA>();
 	builder().registerType<ServiceB>();

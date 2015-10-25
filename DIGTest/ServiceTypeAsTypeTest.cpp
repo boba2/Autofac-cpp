@@ -12,14 +12,14 @@ namespace
 	struct ConcreteDummyService : AbstractDummyService { virtual void abstract() override {} };
 }
 
-using ResolveRegisteredServiceTypeAsTypeTest = ContainerBaseTest;
+using ServiceTypeAsTypeTest = ContainerBaseTest;
 
-TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldBreakStaticAssert_WhenRegisteringServiceTypeAliasedAsUnrelatedType)
+TEST_F(ServiceTypeAsTypeTest, ShouldBreakStaticAssert_WhenRegisteringServiceTypeAliasedAsUnrelatedType)
 {
 //	builder().registerType<DummyService1>().as<DummyService2>();
 }
 
-TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceTypeRegisteredAliasedAsBaseType)
+TEST_F(ServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceTypeRegisteredAliasedAsBaseType)
 {
 	builder()
 		.registerType<SpecialDummyService>()
@@ -29,7 +29,7 @@ TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsP
 	ASSERT_TRUE(dynamic_cast<SpecialDummyService*>(container().resolve<DummyService1*>()) != nullptr);
 }
 
-TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceTypeRegisteredAliasedAsAbstractBaseType)
+TEST_F(ServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceTypeRegisteredAliasedAsAbstractBaseType)
 {
 	builder()
 		.registerType<ConcreteDummyService>()
@@ -39,7 +39,7 @@ TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsP
 	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<AbstractDummyService*>()) != nullptr);
 }
 
-TEST_F(ResolveRegisteredServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServiceTypeRegisteredAliasedAsAbstractBaseType)
+TEST_F(ServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServiceTypeRegisteredAliasedAsAbstractBaseType)
 {
 	builder()
 		.registerType<ConcreteDummyService>()

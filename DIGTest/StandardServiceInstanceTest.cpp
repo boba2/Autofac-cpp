@@ -7,9 +7,9 @@ namespace
 	struct DummyService {};
 }
 
-using ResolveStandardServiceInstanceTest = ContainerBaseTest;
+using StandardServiceInstanceTest = ContainerBaseTest;
 
-TEST_F(ResolveStandardServiceInstanceTest, ShouldResolveSameSingleServiceInstancefromDifferentContainerCopies)
+TEST_F(StandardServiceInstanceTest, ShouldResolveSameSingleServiceInstancefromDifferentContainerCopies)
 {
 	builder()
 		.registerType<DummyService>()
@@ -23,7 +23,7 @@ TEST_F(ResolveStandardServiceInstanceTest, ShouldResolveSameSingleServiceInstanc
 	ASSERT_EQ(service1, service2);
 }
 
-TEST_F(ResolveStandardServiceInstanceTest, ShouldResolveSameRegisteredServiceInstanceFromDifferentContainerCopies)
+TEST_F(StandardServiceInstanceTest, ShouldResolveSameRegisteredServiceInstanceFromDifferentContainerCopies)
 {
 	builder().registerInstance(DummyService());
 	auto container_copy = container().resolve<std::shared_ptr<DI::Container>>();
