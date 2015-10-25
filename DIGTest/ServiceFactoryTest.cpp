@@ -70,6 +70,18 @@ TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsInst
 	ASSERT_EQ(16, container().resolve<DummyService&>()._value);
 }
 
+TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegisteredAsInstanceFactory_AndAutoManaged)
+{
+	builder()
+		.registerFactory([] { return DummyService(); })
+		.autoManaged();
+
+	auto& service1 = container().resolve<DummyService&>();
+	auto& service2 = container().resolve<DummyService&>();
+
+	ASSERT_NE(&service1, &service2);
+}
+
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
@@ -105,6 +117,18 @@ TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsShar
 	ASSERT_EQ(11, container().resolve<DummyService&>()._value);
 }
 
+TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegisteredAsSharedPtrFactory_AndAutoManaged)
+{
+	builder()
+		.registerFactory([] { return std::make_shared<DummyService>(); })
+		.autoManaged();
+	
+	auto& service1 = container().resolve<DummyService&>();
+	auto& service2 = container().resolve<DummyService&>();
+
+	ASSERT_NE(&service1, &service2);
+}
+
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsRef_AndServiceRegisteredAsUniquePtrFactory_AndNotAutoManaged)
 {
 	builder()
@@ -122,6 +146,18 @@ TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsUniq
 	ASSERT_EQ(14, container().resolve<DummyService&>()._value);
 }
 
+TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegisteredAsUniquePtrFactory_AndAutoManaged)
+{
+	builder()
+		.registerFactory([] { return std::make_unique<DummyService>(); })
+		.autoManaged();
+
+	auto& service1 = container().resolve<DummyService&>();
+	auto& service2 = container().resolve<DummyService&>();
+
+	ASSERT_NE(&service1, &service2);
+}
+
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsInstanceFactory_AndNotAutoManaged)
 {
 	builder()
@@ -137,6 +173,18 @@ TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsInst
 		.autoManaged();
 
 	ASSERT_EQ(11, container().resolve<DummyService*>()->_value);
+}
+
+TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctPtrs_WhenServiceRegisteredAsInstanceFactory_AndAutoManaged)
+{
+	builder()
+		.registerFactory([] { return DummyService(); })
+		.autoManaged();
+
+	auto service1 = container().resolve<DummyService*>();
+	auto service2 = container().resolve<DummyService*>();
+
+	ASSERT_NE(service1, service2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsPtrFactory)
@@ -174,6 +222,18 @@ TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsShar
 	ASSERT_EQ(11, container().resolve<DummyService*>()->_value);
 }
 
+TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctPtrs_WhenServiceRegisteredAsSharedPtrFactory_AndAutoManaged)
+{
+	builder()
+		.registerFactory([] { return std::make_shared<DummyService>(); })
+		.autoManaged();
+
+	auto service1 = container().resolve<DummyService*>();
+	auto service2 = container().resolve<DummyService*>();
+
+	ASSERT_NE(service1, service2);
+}
+
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsUniqePtrFactory_AndNotAutoManaged)
 {
 	builder()
@@ -189,6 +249,18 @@ TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsUniq
 		.autoManaged();
 
 	ASSERT_EQ(12, container().resolve<DummyService*>()->_value);
+}
+
+TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctPtrs_WhenServiceRegisteredAsUniqePtrFactory_AndAutoManaged)
+{
+	builder()
+		.registerFactory([] { return std::make_unique<DummyService>(); })
+		.autoManaged();
+
+	auto service1 = container().resolve<DummyService*>();
+	auto service2 = container().resolve<DummyService*>();
+
+	ASSERT_NE(service1, service2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsUniquePtr_WhenServiceRegisteredAsInstanceFactory)
