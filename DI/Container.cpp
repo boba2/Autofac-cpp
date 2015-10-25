@@ -28,8 +28,10 @@ namespace DI
 	private:
 		void registerContainer()
 		{
-			auto container_factory = [this] { return Container(this->shared_from_this()); };
-			registerResolvers(Details::ServiceFactoryRegisterer<decltype(container_factory)>(container_factory).getServiceResolvers());
+			auto container_factory = [this] { return std::make_shared<Container>(Container(this->shared_from_this())); };
+			auto registerer = Details::ServiceFactoryRegisterer<decltype(container_factory)>(container_factory);
+			registerer.setAutoManaged();
+			registerResolvers(registerer.getServiceResolvers());
 		}
 
 		void registerResolvers(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)

@@ -25,6 +25,11 @@ namespace DI
 				setFactories(static_cast<std::function<FactoryResultType()>>(factory));
 			}
 
+			virtual void setAutoManaged() override
+			{
+				_auto_managed = true;
+			}
+
 		private:
 			template<class V, class = std::enable_if_t<!std::is_abstract<V>::value>>
 			void setFactories(std::function<V()> factory)
@@ -55,12 +60,6 @@ namespace DI
 					resolver = std::make_shared<AutoManagedServiceResolver<ServiceType>>(resolver);
 
 				return resolver;
-			}
-
-		protected:
-			virtual void setAutoManaged() override
-			{
-				_auto_managed = true;
 			}
 
 		private:
