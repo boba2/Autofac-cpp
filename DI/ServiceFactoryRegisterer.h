@@ -10,6 +10,7 @@ namespace DI
 	public:
 		virtual ~ServiceFactoryRegistererImpl() {}
 
+		virtual void setSingleInstance() = 0;
 		virtual void setAutoManaged() = 0;
 		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
 	};
@@ -21,6 +22,13 @@ namespace DI
 	{
 	public:
 		using ServiceRegisterer::ServiceRegisterer;
+
+		ServiceFactoryRegisterer& singleInstance()
+		{
+			_impl->setSingleInstance();
+
+			return *this;
+		}
 
 		template<class V = U>
 		ServiceFactoryRegisterer& autoManaged(std::enable_if_t<!std::is_same<V, NoAutoManage>::value>* = nullptr)

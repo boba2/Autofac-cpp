@@ -77,8 +77,8 @@ TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsBaseType_WhenSer
 		.as<DummyService2>()
 		.singleInstance();
 
-	auto service1 = container().resolve<std::shared_ptr<DummyService1>>();
-	auto service2 = container().resolve<std::shared_ptr<DummyService2>>();
+	auto service1 = container().resolve<DummyService1*>();
+	auto service2 = container().resolve<DummyService2*>();
 
-	ASSERT_EQ(std::dynamic_pointer_cast<SpecialDummyService>(service1), std::dynamic_pointer_cast<SpecialDummyService>(service2));
+	ASSERT_EQ(dynamic_cast<SpecialDummyService*>(service1), dynamic_cast<SpecialDummyService*>(service2));
 }

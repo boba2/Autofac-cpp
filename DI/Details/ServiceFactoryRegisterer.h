@@ -3,6 +3,7 @@
 #include "ServiceRegisterer.h"
 #include "ServiceFactoryResolver.h"
 #include "AutoManagedServiceResolver.h"
+#include "SingletonServiceResolver.h"
 #include "FunctionTraits.h"
 #include "../ServiceFactoryRegisterer.h"
 
@@ -21,6 +22,11 @@ namespace DI
 				: _factory(factory)
 			{}
 
+			virtual void setSingleInstance() override
+			{
+				_single_instance = true;
+			}
+
 			virtual void setAutoManaged() override
 			{
 				_auto_managed = true;
@@ -31,6 +37,8 @@ namespace DI
 			{
 				auto resolver = std::static_pointer_cast<ServiceResolver<ServiceType>>(std::make_shared<ServiceFactoryResolver<FactoryType>>(_factory));
 
+				if (_single_instance)
+					resolver = std::make_shared<SingletonServiceResolver<ServiceType>>(resolver);
 				if (_auto_managed)
 					resolver = std::make_shared<AutoManagedServiceResolver<ServiceType>>(resolver);
 
@@ -38,6 +46,7 @@ namespace DI
 			}
 
 		private:
+			bool _single_instance = false;
 			bool _auto_managed = false;
 			FactoryType _factory;
 		};
