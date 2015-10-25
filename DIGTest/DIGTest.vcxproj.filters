@@ -59,14 +59,14 @@
     <ClCompile Include="ServiceInstanceAsTypeTest.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
-    <ClCompile Include="ServiceFromFactoryTest.cpp">
-      <Filter>Test Files</Filter>
-    </ClCompile>
     <ClCompile Include="ServiceTypeWithDependencies.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
     <ClCompile Include="DIGTest.cpp" />
-    <ClCompile Include="ServiceFromParameterizedFactoryTest.cpp">
+    <ClCompile Include="ServiceFactoryWithDependenciesTest.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceFactoryTest.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
   </ItemGroup>
