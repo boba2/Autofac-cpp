@@ -8,6 +8,7 @@ namespace
 {
 	struct ServiceA { int _value; };
 	struct ServiceB { explicit ServiceB(ServiceA serviceA) : _serviceA(serviceA) {} ServiceA _serviceA; };
+	struct ServiceC { explicit ServiceC(ServiceA serviceA, ServiceB serviceB) : _serviceA(serviceA), _serviceB(serviceB) {} ServiceA _serviceA; ServiceB _serviceB; };
 }
 
 TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresOneServiceAsObject)
@@ -137,4 +138,51 @@ TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryFuncti
 	auto serviceB = container().resolve<ServiceB>();
 
 	ASSERT_EQ(20, serviceB._serviceA._value);
+}
+
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresMultipleServicesAsObjects)
+{
+	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; });
+	builder()
+		.registerType<ServiceB>();
+	builder()
+		.registerFactory([](ServiceA serviceA, ServiceB serviceB) { return ServiceC(serviceA, serviceB); });
+
+	auto serviceC = container().resolve<ServiceC>();
+
+	ASSERT_EQ(11, serviceC._serviceA._value);
+	ASSERT_EQ(11, serviceC._serviceB._serviceA._value);
+}
+
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresMultipleServicesAsDifferentTypes_1)
+{
+	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; })
+		.autoManaged();
+	builder()
+		.registerType<ServiceB>()
+		.autoManaged();
+	builder()
+		.registerFactory([](ServiceA* serviceA, ServiceB& serviceB) { return ServiceC(*serviceA, serviceB); });
+
+	auto serviceC = container().resolve<ServiceC>();
+
+	ASSERT_EQ(11, serviceC._serviceA._value);
+	ASSERT_EQ(11, serviceC._serviceB._serviceA._value);
+}
+
+TEST_F(ServiceFactoryWithDependenciesTest, ShouldResolveServiceFromFactoryLambda_WhenFactoryRequiresMultipleServicesAsDifferentTypes_2)
+{
+	builder()
+		.registerFactory([] { auto serviceA = ServiceA(); serviceA._value = 11; return serviceA; });
+	builder()
+		.registerType<ServiceB>();
+	builder()
+		.registerFactory([](std::shared_ptr<ServiceA> serviceA, std::unique_ptr<ServiceB> serviceB) { return ServiceC(*serviceA, *serviceB); });
+
+	auto serviceC = container().resolve<ServiceC>();
+
+	ASSERT_EQ(11, serviceC._serviceA._value);
+	ASSERT_EQ(11, serviceC._serviceB._serviceA._value);
 }
