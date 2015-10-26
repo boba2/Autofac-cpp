@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Support/DIdecl.h"
-#include <set>
+#include <vector>
 #include "Details/ServiceReferenceTypeConverter.h"
 #include "Details/ServiceResolver.h"
 
@@ -22,7 +22,7 @@ namespace DI
 	private:
 		class Impl;
 
-		explicit Container(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers);
+		explicit Container(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers);
 		explicit Container(std::shared_ptr<Impl> impl);
 
 		template<class T>

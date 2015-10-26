@@ -10,7 +10,7 @@ namespace DI
 	class Container::Impl : public std::enable_shared_from_this<Container::Impl>
 	{
 	public:
-		explicit Impl(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
+		explicit Impl(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		{
 			registerResolvers(service_resolvers);
 			registerContainer();
@@ -34,7 +34,7 @@ namespace DI
 			registerResolvers(registerer.getServiceResolvers());
 		}
 
-		void registerResolvers(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
+		void registerResolvers(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		{
 			for (auto &resolver : service_resolvers)
 				_service_resolvers[resolver->getServiceType()] = resolver;
@@ -48,7 +48,7 @@ namespace DI
 	{
 	}
 
-	Container::Container(const std::set<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
+	Container::Container(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		: _impl(std::make_unique<Impl>(service_resolvers))
 	{
 	}

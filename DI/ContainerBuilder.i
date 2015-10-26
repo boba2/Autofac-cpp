@@ -82,12 +82,12 @@ namespace DI
 
 	inline auto ContainerBuilder::getServiceResolvers() const
 	{
-		std::set<std::shared_ptr<Details::ServiceResolver<>>> result;
+		auto result = std::vector<std::shared_ptr<Details::ServiceResolver<>>>();
 
 		for (const auto& registerer : _impl->getRegisterers())
 		{
 			const auto& resolvers = registerer->getServiceResolvers();
-			result.insert(std::begin(resolvers), std::end(resolvers));
+			result.insert(end(result), begin(resolvers), end(resolvers));
 		}
 
 		return result;

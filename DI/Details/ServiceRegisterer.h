@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <vector>
 #include "ServiceResolver.h"
 #include "ServiceAliasRegisterer.h"
 
@@ -18,49 +18,45 @@ namespace DI
 		public:
 			virtual ~ServiceRegisterer() {}
 
-			virtual std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const = 0;
+			virtual std::vector<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const = 0;
 		};
 
 		template<class T, class S>
 		class ServiceRegisterer : public ServiceRegisterer<>, public S
 		{
 		public:
-			virtual std::set<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override
+			virtual std::vector<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override
 			{
 				auto main_resolver = getServiceResolver();
-
-				std::set<std::shared_ptr<ServiceResolver<>>> result;
-
 				auto alias_resolvers = getServiceAliasResolvers(main_resolver);
-				if (alias_resolvers.empty())
-					result.insert(main_resolver);
-				else
-					result.insert(begin(alias_resolvers), end(alias_resolvers));
 
-				return result;
+				if (alias_resolvers.empty())
+					return std::vector<std::shared_ptr<ServiceResolver<>>>{main_resolver};
+
+				return alias_resolvers;
 			}
 
 		protected:
 			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer) override
 			{
-				_alias_registerers.insert(alias_registerer);
+				_alias_registerers.push_back(alias_registerer);
 			}
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const = 0;
 
 		private:
-			std::set<std::shared_ptr<ServiceResolver<>>> getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
+			auto getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
 			{
-				std::set<std::shared_ptr<ServiceResolver<>>> result;
+				auto result = std::vector<std::shared_ptr<ServiceResolver<>>>();
 
 				for (auto& registerer : _alias_registerers)
-					result.insert(registerer->getServiceAliasResolver(main_resolver));
+					result.push_back(registerer->getServiceAliasResolver(main_resolver));
 
 				return result;
 			}
 
 		private:
-			std::set<std::shared_ptr<ServiceAliasRegisterer<>>> _alias_registerers;
+			std::vector<std::shared_ptr<ServiceAliasRegisterer<>>> _alias_registerers;
 		};
 
 	}
