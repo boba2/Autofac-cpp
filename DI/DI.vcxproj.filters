@@ -103,4 +103,9 @@
     </ClCompile>
     <ClCompile Include="Container.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ServiceRegisterer.i" />
+    <None Include="ContainerBuilder.i" />
+    <None Include="Container.i" />
+  </ItemGroup>
 </Project>
