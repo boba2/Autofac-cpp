@@ -13,6 +13,14 @@ namespace DI
 	class ContainerBuilder
 	{
 	public:
+		ContainerBuilder();
+		ContainerBuilder(const ContainerBuilder&) = delete;
+		ContainerBuilder(ContainerBuilder&& other);
+		~ContainerBuilder();
+
+		ContainerBuilder& operator=(const ContainerBuilder&) = delete;
+		ContainerBuilder& operator=(ContainerBuilder&& other);
+
 		template<class T>
 		auto registerInstance(T &&instance) -> ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>;
 
@@ -31,7 +39,9 @@ namespace DI
 		auto getServiceResolvers() const;
 
 	private:
-		std::set<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
+		class Impl;
+
+		std::unique_ptr<Impl> _impl;
 	};
 
 }

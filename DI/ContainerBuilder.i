@@ -8,6 +8,42 @@
 namespace DI
 {
 
+	class ContainerBuilder::Impl
+	{
+	public:
+		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
+		{
+			_service_registerers.insert(registerer);
+		}
+
+		auto getRegisterers() const
+		{
+			return _service_registerers;
+		}
+
+	private:
+		std::set<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
+	};
+
+	inline ContainerBuilder::ContainerBuilder()
+		: _impl(std::make_unique<Impl>())
+	{}
+
+	inline ContainerBuilder::ContainerBuilder(ContainerBuilder&& other)
+	{
+		*this = std::forward<ContainerBuilder>(other);
+	}
+
+	inline ContainerBuilder::~ContainerBuilder()
+	{}
+
+	inline ContainerBuilder& ContainerBuilder::operator=(ContainerBuilder&& other)
+	{
+		std::swap(_impl, other._impl);
+
+		return *this;
+	}
+
 	template<class T>
 	auto ContainerBuilder::registerInstance(T &&instance) -> ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>
 	{
@@ -39,7 +75,7 @@ namespace DI
 	auto ContainerBuilder::createRegisterer(U&&... param)
 	{
 		auto registerer = std::make_shared<T>(std::forward<U>(param)...);
-		_service_registerers.insert(registerer);
+		_impl->addRegisterer(registerer);
 
 		return S(this, registerer);
 	}
@@ -48,10 +84,10 @@ namespace DI
 	{
 		std::set<std::shared_ptr<Details::ServiceResolver<>>> result;
 
-		for (const auto& registerer : _service_registerers)
+		for (const auto& registerer : _impl->getRegisterers())
 		{
 			const auto& resolvers = registerer->getServiceResolvers();
-			result.insert(begin(resolvers), end(resolvers));
+			result.insert(std::begin(resolvers), std::end(resolvers));
 		}
 
 		return result;
@@ -61,4 +97,5 @@ namespace DI
 	{
 		return Container(getServiceResolvers());
 	}
+
 }
