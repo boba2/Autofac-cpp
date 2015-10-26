@@ -15,8 +15,6 @@ namespace DI
 		class ServiceTypeRegisterer : public ServiceRegisterer<T, DI::ServiceTypeRegistererImpl>
 		{
 		public:
-			using PublicType = DI::ServiceTypeRegisterer<T>;
-
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
 			{
 				auto resolver = std::static_pointer_cast<ServiceResolver<T>>(std::make_shared<ServiceTypeResolver<T>>());

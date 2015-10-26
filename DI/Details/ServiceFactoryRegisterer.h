@@ -16,8 +16,6 @@ namespace DI
 		class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceType, DI::ServiceFactoryRegistererImpl>
 		{
 		public:
-			using PublicType = DI::ServiceFactoryRegisterer<ServiceType, std::conditional_t<std::is_same<ServiceType*, FactoryResultType>::value, DI::NoAutoManage, void>>;
-
 			explicit ServiceFactoryRegisterer(FactoryType factory)
 				: _factory(factory)
 			{}

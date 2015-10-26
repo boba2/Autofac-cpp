@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Details/ServiceAliasRegisterer.h"
 #include "ServiceRegisterer.h"
 
 namespace DI
@@ -15,9 +16,7 @@ namespace DI
 		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
 	};
 
-	struct NoAutoManage {};
-
-	template<class T, class U = void>
+	template<class T>
 	class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceFactoryRegistererImpl>
 	{
 	public:
@@ -30,8 +29,7 @@ namespace DI
 			return *this;
 		}
 
-		template<class V = U>
-		ServiceFactoryRegisterer& autoManaged(std::enable_if_t<!std::is_same<V, NoAutoManage>::value>* = nullptr)
+		ServiceFactoryRegisterer& autoManaged()
 		{
 			_impl->setAutoManaged();
 

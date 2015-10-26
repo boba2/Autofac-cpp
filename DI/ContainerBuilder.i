@@ -9,30 +9,39 @@ namespace DI
 {
 
 	template<class T>
-	auto ContainerBuilder::registerInstance(T &&instance)
+	auto ContainerBuilder::registerInstance(T &&instance) -> ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>
 	{
-		return createRegisterer<Details::ServiceInstanceRegisterer<T>>(std::forward<T>(instance));
+		using Registerer = Details::ServiceInstanceRegisterer<T>;
+		using PublicType = ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>;
+
+		return createRegisterer<Registerer, PublicType>(std::forward<T>(instance));
 	}
 
 	template<class T>
-	auto ContainerBuilder::registerType()
+	auto ContainerBuilder::registerType() -> ServiceTypeRegisterer<T>
 	{
-		return createRegisterer<Details::ServiceTypeRegisterer<T>>();
+		using Registerer = Details::ServiceTypeRegisterer<T>;
+		using PublicType = ServiceTypeRegisterer<T>;
+
+		return createRegisterer<Registerer, PublicType>();
 	}
 
 	template<class T>
-	auto ContainerBuilder::registerFactory(T factory)
+	auto ContainerBuilder::registerFactory(T factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<typename Details::FunctionResultType<T>::Type>::Type>
 	{
-		return createRegisterer<Details::ServiceFactoryRegisterer<T>>(factory);
+		using Registerer = Details::ServiceFactoryRegisterer<T>;
+		using PublicType = ServiceFactoryRegisterer<typename Details::UnderlyingType<typename Details::FunctionResultType<T>::Type>::Type>;
+
+		return createRegisterer<Registerer, PublicType>(factory);
 	}
 
-	template<class T, class... U>
+	template<class T, class S, class... U>
 	auto ContainerBuilder::createRegisterer(U&&... param)
 	{
 		auto registerer = std::make_shared<T>(std::forward<U>(param)...);
 		_service_registerers.insert(registerer);
 
-		return typename T::PublicType(this, registerer);
+		return S(this, registerer);
 	}
 
 }

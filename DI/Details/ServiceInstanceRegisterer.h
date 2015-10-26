@@ -14,7 +14,6 @@ namespace DI
 		{
 		public:
 			using ServiceType = typename UnderlyingType<T>::Type;
-			using PublicType = DI::ServiceInstanceRegisterer<ServiceType>;
 
 			template<class U>
 			explicit ServiceInstanceRegisterer(U &&instance)
