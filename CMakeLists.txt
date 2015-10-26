@@ -11,6 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_DI_API")
 
 set(SOURCE_FILES
     DI/Container.cpp
+    DI/ContainerBuilder.cpp
     DIGTest/DIGTest.cpp
     DIGTest/ConstServiceTest.cpp
     DIGTest/ContainerBuilderUsageTest.cpp

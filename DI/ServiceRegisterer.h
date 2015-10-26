@@ -31,3 +31,5 @@ namespace DI
 	};
 
 }
+
+#include "ServiceRegisterer.i"
