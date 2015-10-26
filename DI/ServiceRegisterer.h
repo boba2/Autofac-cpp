@@ -2,6 +2,7 @@
 
 namespace DI
 {
+	class ContainerBuilder;
 
 	template<class T>
 	class ServiceRegisterer
@@ -12,31 +13,21 @@ namespace DI
 		{}
 
 		template<class U>
-		auto registerInstance(U &&instance)
-		{
-			return _container_builder->registerInstance(std::forward<U>(instance));
-		}
+		auto registerInstance(U &&instance);
 
 		template<class U>
-		auto registerType()
-		{
-			return _container_builder->registerType<U>();
-		}
+		auto registerType();
 
 		template<class U>
-		auto registerFactory(U factory)
-		{
-			return _container_builder->registerFactory(factory);
-		}
+		auto registerFactory(U factory);
 
-		Container build() const
-		{
-			return _container_builder->build();
-		}
+		Container build() const;
 
 	protected:
-		ContainerBuilder* const _container_builder;
 		std::shared_ptr<T> const _impl;
+
+	private:
+		ContainerBuilder* const _container_builder;
 	};
 
 }

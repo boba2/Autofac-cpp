@@ -61,4 +61,31 @@ namespace DI
 		std::set<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
 	};
 
+	template<class T>
+	template<class U>
+	auto ServiceRegisterer<T>::registerInstance(U &&instance)
+	{
+		return _container_builder->registerInstance(std::forward<U>(instance));
+	}
+
+	template<class T>
+	template<class U>
+	auto ServiceRegisterer<T>::registerType()
+	{
+		return _container_builder->registerType<U>();
+	}
+
+	template<class T>
+	template<class U>
+	auto ServiceRegisterer<T>::registerFactory(U factory)
+	{
+		return _container_builder->registerFactory(factory);
+	}
+
+	template<class T>
+	Container ServiceRegisterer<T>::build() const
+	{
+		return _container_builder->build();
+	}
+
 }

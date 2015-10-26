@@ -8,7 +8,9 @@
 #include "targetver.h"
 
 #include <stdio.h>
-#include <tchar.h>
+#if !defined(__GNUC__)
+#  include <tchar.h>
+#endif
 
 #include <set>
 #include <system_error>

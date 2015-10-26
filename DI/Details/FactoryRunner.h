@@ -4,6 +4,7 @@
 #include <memory>
 #include "IndexSequence.h"
 #include "FunctionTraits.h"
+#include "Error/ServiceNotResolvableAs.h"
 
 namespace DI
 {
@@ -11,7 +12,7 @@ namespace DI
 
 	namespace Details
 	{
-		
+
 		struct FactoryUnifier
 		{
 			template<class S>
@@ -39,7 +40,7 @@ namespace DI
 				{}
 
 				template<class U>
-				operator U() 	
+				operator U()
 				{
 					return _container->resolve<U>();
 				}
