@@ -13,7 +13,7 @@ namespace DI
 			using Result = std::conditional_t<std::is_abstract<T>::value, const T&, T>;
 
 			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
-			{	
+			{
 				return resolver.getService(container);
 			}
 		};
@@ -21,7 +21,7 @@ namespace DI
 		template<class T>
 		struct ServiceReferenceTypeConverter<const T>
 		{
-			using Result = std::conditional_t<std::is_abstract<T>::value, const T&, T>;
+			using Result = std::conditional_t<std::is_abstract<T>::value, const T&, const T>;
 
 			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{
