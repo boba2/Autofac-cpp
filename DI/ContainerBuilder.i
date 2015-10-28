@@ -13,7 +13,7 @@ namespace DI
 	public:
 		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
 		{
-			_service_registerers.insert(registerer);
+			_service_registerers.push_back(registerer);
 		}
 
 		auto getRegisterers() const
@@ -22,7 +22,7 @@ namespace DI
 		}
 
 	private:
-		std::set<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
+		std::vector<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
 	};
 
 	inline ContainerBuilder::ContainerBuilder()
