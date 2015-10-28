@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "Details/ServiceResolver.h"
-#include "Error/ServiceNotResolvableAs.h"
+#include "ServiceResolver.h"
+#include "../Error/ServiceNotResolvableAs.h"
 
 namespace DI
 {

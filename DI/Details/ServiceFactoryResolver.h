@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Details/ServiceResolver.h"
+#include "ServiceResolver.h"
 #include "FactoryRunner.h"
 
 namespace DI

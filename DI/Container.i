@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Container.h"
+#include "Details/UnderlyingType.h"
 
 namespace DI
 {

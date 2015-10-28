@@ -4,6 +4,7 @@
 #include "Details/ServiceInstanceRegisterer.h"
 #include "Details/ServiceTypeRegisterer.h"
 #include "Details/ServiceFactoryRegisterer.h"
+#include "Container.h"
 
 namespace DI
 {
@@ -77,7 +78,7 @@ namespace DI
 		auto registerer = std::make_shared<T>(std::forward<U>(param)...);
 		_impl->addRegisterer(registerer);
 
-		return S(this, registerer);
+		return S(registerer, this);
 	}
 
 	inline auto ContainerBuilder::getServiceResolvers() const

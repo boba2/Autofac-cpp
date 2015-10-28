@@ -4,7 +4,7 @@
 #include <memory>
 #include "IndexSequence.h"
 #include "FunctionTraits.h"
-#include "Error/ServiceNotResolvableAs.h"
+#include "../Error/ServiceNotResolvableAs.h"
 
 namespace DI
 {

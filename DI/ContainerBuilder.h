@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Container.h"
 #include "ServiceFactoryRegisterer.h"
 #include "ServiceInstanceRegisterer.h"
 #include "ServiceTypeRegisterer.h"
-#include "Details/ServiceRegisterer.h"
 #include "Details/FunctionTraits.h"
 
 namespace DI
