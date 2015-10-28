@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 #include "ServiceResolver.h"
 #include "ServiceAliasRegisterer.h"
 
@@ -47,10 +48,12 @@ namespace DI
 		private:
 			auto getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
 			{
-				auto result = std::vector<std::shared_ptr<ServiceResolver<>>>();
+				auto result = std::vector<std::shared_ptr<ServiceResolver<>>>(_alias_registerers.size());
 
-				for (auto& registerer : _alias_registerers)
-					result.push_back(registerer->getServiceAliasResolver(main_resolver));
+				std::transform(
+					begin(_alias_registerers), end(_alias_registerers), begin(result),
+					[&main_resolver](auto& registerer) { return registerer->getServiceAliasResolver(main_resolver); }
+				);
 
 				return result;
 			}
