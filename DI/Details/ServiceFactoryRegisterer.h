@@ -27,6 +27,8 @@ namespace DI
 
 			virtual void setAutoManaged() override
 			{
+				if (std::is_pointer<FactoryResultType>::value)
+					throw std::logic_error("Service created through a factory function returning a raw pointer cannot be auto-managed");
 				_auto_managed = true;
 			}
 

@@ -16,9 +16,9 @@ namespace
 	struct ConcreteDummyService : AbstractDummyService { virtual void abstract() override {} };
 }
 
-TEST_F(ServiceFactoryTest, ShouldNotCompile_WhenRegisteringServiceAsPtrFactory_AndAutoManaged)
+TEST_F(ServiceFactoryTest, ShouldThrowException_WhenRegisteringServiceAsPtrFactory_AndAutoManaged)
 {
-//	builder().registerFactory([] { static auto service = DummyService(); return &service; }).autoManaged();
+	ASSERT_THROW(builder().registerFactory([] { static auto service = DummyService(); return &service; }).autoManaged(), std::logic_error);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsInstanceFactory)
@@ -122,7 +122,7 @@ TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegist
 	builder()
 		.registerFactory([] { return std::make_shared<DummyService>(); })
 		.autoManaged();
-	
+
 	auto& service1 = container().resolve<DummyService&>();
 	auto& service2 = container().resolve<DummyService&>();
 
