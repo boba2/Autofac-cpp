@@ -17,13 +17,16 @@ namespace DI
 	};
 
 	template<class T>
-	class ServiceTypeRegisterer : public ServiceRegisterer<ServiceTypeRegistererImpl>
+	class ServiceTypeRegisterer : public ServiceRegisterer
 	{
 	public:
 		static_assert(!std::is_abstract<T>::value, "Cannot register service of an abstract type");
 		static_assert(std::is_same<T, typename Details::UnderlyingType<T>::Type>::value, "Cannot register service of a decorated type");
 
-		using ServiceRegisterer::ServiceRegisterer;
+		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ContainerBuilder* container_builder)
+			: ServiceRegisterer(container_builder),
+			_impl(impl)
+		{}
 
 		ServiceTypeRegisterer& singleInstance()
 		{
@@ -53,6 +56,9 @@ namespace DI
 		{
 			return as<T>();
 		}
+
+	private:
+		std::shared_ptr<ServiceTypeRegistererImpl> const _impl;
 	};
 
 }

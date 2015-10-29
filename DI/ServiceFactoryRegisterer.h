@@ -17,10 +17,13 @@ namespace DI
 	};
 
 	template<class T>
-	class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceFactoryRegistererImpl>
+	class ServiceFactoryRegisterer : public ServiceRegisterer
 	{
 	public:
-		using ServiceRegisterer::ServiceRegisterer;
+		ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ContainerBuilder* container_builder)
+			: ServiceRegisterer(container_builder),
+			  _impl(impl)
+		{}
 
 		ServiceFactoryRegisterer& singleInstance()
 		{
@@ -50,6 +53,9 @@ namespace DI
 		{
 			return as<T>();
 		}
+
+	private:
+		std::shared_ptr<ServiceFactoryRegistererImpl> const _impl;
 	};
 
 }

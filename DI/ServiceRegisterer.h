@@ -15,12 +15,11 @@ namespace DI
 	template<class T>
 	class ServiceFactoryRegisterer;
 
-	template<class T>
 	class ServiceRegisterer
 	{
 	public:
-		explicit ServiceRegisterer(std::shared_ptr<T> impl, ContainerBuilder* container_builder)
-			: _impl(impl), _container_builder(container_builder)
+		explicit ServiceRegisterer(ContainerBuilder* container_builder)
+			: _container_builder(container_builder)
 		{}
 
 		template<class U>
@@ -33,9 +32,6 @@ namespace DI
 		auto registerFactory(U factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<typename Details::FunctionResultType<U>::Type>::Type>;
 
 		Container build() const;
-
-	protected:
-		std::shared_ptr<T> const _impl;
 
 	private:
 		ContainerBuilder* const _container_builder;
