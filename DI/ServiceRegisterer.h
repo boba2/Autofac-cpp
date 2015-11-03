@@ -23,13 +23,13 @@ namespace DI
 		{}
 
 		template<class U>
-		auto registerInstance(U &&instance) -> ServiceInstanceRegisterer<typename Details::UnderlyingType<U>::Type>;
+		auto registerInstance(U &&instance) -> ServiceInstanceRegisterer<U>;
 
 		template<class U>
 		auto registerType() -> ServiceTypeRegisterer<U>;
 
 		template<class U>
-		auto registerFactory(U factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<typename Details::FunctionResultType<U>::Type>::Type>;
+		auto registerFactory(U factory) -> ServiceFactoryRegisterer<U>;
 
 		Container build() const;
 

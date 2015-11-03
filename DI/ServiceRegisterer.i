@@ -7,7 +7,7 @@ namespace DI
 {
 
 	template<class U>
-	inline auto ServiceRegisterer::registerInstance(U &&instance) -> ServiceInstanceRegisterer<typename Details::UnderlyingType<U>::Type>
+	inline auto ServiceRegisterer::registerInstance(U &&instance) -> ServiceInstanceRegisterer<U>
 	{
 		return _container_builder->registerInstance(std::forward<U>(instance));
 	}
@@ -19,7 +19,7 @@ namespace DI
 	}
 
 	template<class U>
-	inline auto ServiceRegisterer::registerFactory(U factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<typename Details::FunctionResultType<U>::Type>::Type>
+	inline auto ServiceRegisterer::registerFactory(U factory) -> ServiceFactoryRegisterer<U>
 	{
 		return _container_builder->registerFactory(factory);
 	}

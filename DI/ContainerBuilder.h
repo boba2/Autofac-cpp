@@ -20,13 +20,13 @@ namespace DI
 		ContainerBuilder& operator=(ContainerBuilder&& other);
 
 		template<class T>
-		auto registerInstance(T &&instance) -> ServiceInstanceRegisterer<typename Details::UnderlyingType<T>::Type>;
+		auto registerInstance(T &&instance) -> ServiceInstanceRegisterer<T>;
 
 		template<class T>
 		auto registerType() -> ServiceTypeRegisterer<T>;
 
 		template<class T>
-		auto registerFactory(T factory) -> ServiceFactoryRegisterer<typename Details::UnderlyingType<typename Details::FunctionResultType<T>::Type>::Type>;
+		auto registerFactory(T factory) -> ServiceFactoryRegisterer<T>;
 
 		Container build() const;
 

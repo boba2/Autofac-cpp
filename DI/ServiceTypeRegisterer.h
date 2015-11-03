@@ -23,6 +23,8 @@ namespace DI
 		static_assert(!std::is_abstract<T>::value, "Cannot register service of an abstract type");
 		static_assert(std::is_same<T, typename Details::UnderlyingType<T>::Type>::value, "Cannot register service of a decorated type");
 
+		using ServiceType = T;
+
 		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ContainerBuilder* container_builder)
 			: ServiceRegisterer(container_builder),
 			_impl(impl)
@@ -45,16 +47,16 @@ namespace DI
 		template<class U>
 		ServiceTypeRegisterer& as()
 		{
-			static_assert(std::is_base_of<U, T>::value, "Alias should be a resolvable base class of the service class being registered");
+			static_assert(std::is_base_of<U, ServiceType>::value, "Alias should be a resolvable base class of the service class being registered");
 
-			_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, T>>());
+			_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, ServiceType>>());
 
 			return *this;
 		}
 
 		ServiceTypeRegisterer& asSelf()
 		{
-			return as<T>();
+			return as<ServiceType>();
 		}
 
 	private:
