@@ -37,8 +37,9 @@ namespace DI
 		void registerResolvers(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
 		{
 			std::transform(
-				begin(service_resolvers), end(service_resolvers), std::inserter(_service_resolvers, end(_service_resolvers)),
-				[](auto& resolver) { return std::make_pair(resolver->getServiceType(), resolver); }
+				begin(service_resolvers), end(service_resolvers),
+				std::inserter(_service_resolvers, end(_service_resolvers)),
+				[](auto resolver) { return std::make_pair(resolver->getServiceType(), resolver); }
 			);
 		}
 

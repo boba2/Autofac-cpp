@@ -51,8 +51,9 @@ namespace DI
 				auto result = std::vector<std::shared_ptr<ServiceResolver<>>>(_alias_registerers.size());
 
 				std::transform(
-					begin(_alias_registerers), end(_alias_registerers), begin(result),
-					[&main_resolver](auto& registerer) { return registerer->getServiceAliasResolver(main_resolver); }
+					begin(_alias_registerers), end(_alias_registerers),
+					begin(result),
+					[main_resolver](auto registerer) { return registerer->getServiceAliasResolver(main_resolver); }
 				);
 
 				return result;
