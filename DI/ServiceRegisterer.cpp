@@ -10,7 +10,7 @@ namespace DI
 	class ServiceRegisterer::Impl
 	{
 	public:	
-		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
+		void addRegisterer(Details::ServiceRegistererPtr<> registerer)
 		{
 			_service_registerers.push_back(registerer);
 		}
@@ -28,7 +28,7 @@ namespace DI
 		}
 
 	private:
-		std::vector<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
+		std::vector<Details::ServiceRegistererPtr<>> _service_registerers;
 	};
 
 	ServiceRegisterer::ServiceRegisterer(ContainerBuilder& container_builder)
@@ -48,7 +48,7 @@ namespace DI
 		return _container_builder.build();
 	}
 
-	void ServiceRegisterer::addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
+	void ServiceRegisterer::addRegisterer(Details::ServiceRegistererPtr<> registerer)
 	{
 		_impl->addRegisterer(registerer);
 	}

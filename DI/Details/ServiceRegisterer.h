@@ -55,5 +55,8 @@ namespace DI
 			ServiceAliasRegisterers _alias_registerers;
 		};
 
+		template<class T = void>
+		using ServiceRegistererPtr = std::shared_ptr<ServiceRegisterer<T>>;
+
 	}
 }
