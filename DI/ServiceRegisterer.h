@@ -1,17 +1,19 @@
 #pragma once
 
 #include "Support/DIdecl.h"
+#include "Details/ServiceRegisterer.h"
 
 namespace DI
 {
+
 	class Container;
 	class ContainerBuilder;
 
 	template<class T>
-	class ServiceTypeRegisterer;
+	class ServiceInstanceRegisterer;
 
 	template<class T>
-	class ServiceInstanceRegisterer;
+	class ServiceTypeRegisterer;
 
 	template<class T>
 	class ServiceFactoryRegisterer;
@@ -19,23 +21,73 @@ namespace DI
 	class DI_API ServiceRegisterer
 	{
 	public:
-		explicit ServiceRegisterer(ContainerBuilder& container_builder)
-			: _container_builder(container_builder)
-		{}
+		template<class U>
+		auto registerInstance(U &&instance)->ServiceInstanceRegisterer<U>;
 
 		template<class U>
-		auto registerInstance(U &&instance) -> ServiceInstanceRegisterer<U>;
+		auto registerType()->ServiceTypeRegisterer<U>;
 
 		template<class U>
-		auto registerType() -> ServiceTypeRegisterer<U>;
-
-		template<class U>
-		auto registerFactory(U factory) -> ServiceFactoryRegisterer<U>;
+		auto registerFactory(U factory)->ServiceFactoryRegisterer<U>;
 
 		Container build() const;
 
+	protected:
+		class Impl;
+
+		explicit ServiceRegisterer(ContainerBuilder& container_builder);
+		ServiceRegisterer(const ServiceRegisterer& other);
+
+		Details::ServiceResolvers getServiceResolvers() const;
+
 	private:
+		template<class T, class S, class... U>
+		auto createRegisterer(U&&... param);
+
+		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer);
+
+#pragma warning(disable:4251)
+		std::shared_ptr<Impl> _impl;
+#pragma warning(default:4251)
 		ContainerBuilder& _container_builder;
 	};
+
+}
+
+#include "ServiceInstanceRegisterer.h"
+#include "ServiceTypeRegisterer.h"
+#include "ServiceFactoryRegisterer.h"
+#include "Details/ServiceInstanceRegisterer.h"
+#include "Details/ServiceTypeRegisterer.h"
+#include "Details/ServiceFactoryRegisterer.h"
+
+namespace DI
+{
+	template<class T>
+	auto ServiceRegisterer::registerInstance(T &&instance) -> ServiceInstanceRegisterer<T>
+	{
+		return createRegisterer<Details::ServiceInstanceRegisterer<T>, ServiceInstanceRegisterer<T>>(std::forward<T>(instance));
+	}
+
+	template<class T>
+	auto ServiceRegisterer::registerType() -> ServiceTypeRegisterer<T>
+	{
+		return createRegisterer<Details::ServiceTypeRegisterer<T>, ServiceTypeRegisterer<T>>();
+	}
+
+	template<class T>
+	auto ServiceRegisterer::registerFactory(T factory) -> ServiceFactoryRegisterer<T>
+	{
+		return createRegisterer<Details::ServiceFactoryRegisterer<T>, ServiceFactoryRegisterer<T>>(factory);
+	}
+
+	template<class T, class S, class... U>
+	auto ServiceRegisterer::createRegisterer(U&&... param)
+	{
+		auto registerer = std::make_shared<T>(std::forward<U>(param)...);
+		addRegisterer(registerer);
+
+		return S(registerer, *this);
+	}
 
 }

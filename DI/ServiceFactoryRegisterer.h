@@ -3,20 +3,10 @@
 #include "Details/ServiceAliasRegisterer.h"
 #include "Details/FunctionTraits.h"
 #include "Details/UnderlyingType.h"
-#include "ServiceRegisterer.h"
+#include "ServiceFactoryRegistererImpl.h"
 
 namespace DI
 {
-
-	class ServiceFactoryRegistererImpl
-	{
-	public:
-		virtual ~ServiceFactoryRegistererImpl() {}
-
-		virtual void setSingleInstance() = 0;
-		virtual void setAutoManaged() = 0;
-		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
-	};
 
 	template<class T>
 	class ServiceFactoryRegisterer : public ServiceRegisterer
@@ -24,8 +14,8 @@ namespace DI
 	public:
 		using ServiceType = typename Details::UnderlyingType<typename Details::FunctionResultType<T>::Type>::Type;
 
-		ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ContainerBuilder& container_builder)
-			: ServiceRegisterer(container_builder),
+		ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ServiceRegisterer& service_registerer)
+			: ServiceRegisterer(service_registerer),
 			  _impl(impl)
 		{}
 

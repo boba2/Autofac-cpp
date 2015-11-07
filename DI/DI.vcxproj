@@ -168,10 +168,13 @@
     <ClInclude Include="Error\ServiceNotRegistered.h" />
     <ClInclude Include="Details\ServiceFactoryResolver.h" />
     <ClInclude Include="ServiceFactoryRegisterer.h" />
+    <ClInclude Include="ServiceFactoryRegistererImpl.h" />
     <ClInclude Include="ServiceInstanceRegisterer.h" />
+    <ClInclude Include="ServiceInstanceRegistererImpl.h" />
     <ClInclude Include="ServiceRegisterer.h" />
     <ClInclude Include="Details\AutoManagedServiceResolver.h" />
     <ClInclude Include="ServiceTypeRegisterer.h" />
+    <ClInclude Include="ServiceTypeRegistererImpl.h" />
     <ClInclude Include="Support\DIdecl.h" />
     <ClInclude Include="Support\targetver.h" />
   </ItemGroup>
@@ -195,10 +198,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ContainerBuilder.i" />
-    <None Include="ServiceRegisterer.i" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

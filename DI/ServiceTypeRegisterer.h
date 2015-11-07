@@ -1,20 +1,10 @@
 #pragma once
 
 #include "Details/UnderlyingType.h"
-#include "ServiceRegisterer.h"
+#include "ServiceTypeRegistererImpl.h"
 
 namespace DI
 {
-
-	class ServiceTypeRegistererImpl
-	{
-	public:
-		virtual ~ServiceTypeRegistererImpl() {}
-
-		virtual void setSingleInstance() = 0;
-		virtual void setAutoManaged() = 0;
-		virtual void registerAlias(std::shared_ptr<Details::ServiceAliasRegisterer<>> alias_registerer) = 0;
-	};
 
 	template<class T>
 	class ServiceTypeRegisterer : public ServiceRegisterer
@@ -25,8 +15,8 @@ namespace DI
 
 		using ServiceType = T;
 
-		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ContainerBuilder& container_builder)
-			: ServiceRegisterer(container_builder),
+		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ServiceRegisterer& service_registerer)
+			: ServiceRegisterer(service_registerer),
 			_impl(impl)
 		{}
 

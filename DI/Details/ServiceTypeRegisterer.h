@@ -4,7 +4,7 @@
 #include "ServiceTypeResolver.h"
 #include "SingletonServiceResolver.h"
 #include "AutoManagedServiceResolver.h"
-#include "../ServiceTypeRegisterer.h"
+#include "../ServiceTypeRegistererImpl.h"
 
 namespace DI
 {

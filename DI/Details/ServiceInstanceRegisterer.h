@@ -2,7 +2,8 @@
 
 #include "ServiceRegisterer.h"
 #include "ServiceInstanceResolver.h"
-#include "../ServiceInstanceRegisterer.h"
+#include "../ServiceInstanceRegistererImpl.h"
+#include "UnderlyingType.h"
 
 namespace DI
 {

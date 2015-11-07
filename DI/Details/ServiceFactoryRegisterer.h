@@ -5,7 +5,7 @@
 #include "AutoManagedServiceResolver.h"
 #include "SingletonServiceResolver.h"
 #include "FunctionTraits.h"
-#include "../ServiceFactoryRegisterer.h"
+#include "../ServiceFactoryRegistererImpl.h"
 
 namespace DI
 {
