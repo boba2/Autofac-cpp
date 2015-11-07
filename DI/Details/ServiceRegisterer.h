@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "ServiceResolver.h"
 #include "ServiceAliasRegisterer.h"
+#include "ServiceResolvers.h"
 
 namespace DI
 {
@@ -19,22 +20,22 @@ namespace DI
 		public:
 			virtual ~ServiceRegisterer() {}
 
-			virtual std::vector<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const = 0;
+			virtual ServiceResolvers getServiceResolvers() const = 0;
 		};
 
 		template<class T, class S>
 		class ServiceRegisterer : public ServiceRegisterer<>, public S
 		{
 		public:
-			virtual std::vector<std::shared_ptr<ServiceResolver<>>> getServiceResolvers() const override
+			virtual ServiceResolvers getServiceResolvers() const override
 			{
 				auto main_resolver = getServiceResolver();
 				auto alias_resolvers = getServiceAliasResolvers(main_resolver);
 
-				if (alias_resolvers.empty())
-					return std::vector<std::shared_ptr<ServiceResolver<>>>{main_resolver};
-
-				return alias_resolvers;
+				if (!alias_resolvers.empty())
+					return alias_resolvers;
+				
+				return ServiceResolvers{ main_resolver };
 			}
 
 		protected:
@@ -48,12 +49,11 @@ namespace DI
 		private:
 			auto getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
 			{
-				auto result = std::vector<std::shared_ptr<ServiceResolver<>>>(_alias_registerers.size());
+				auto result = ServiceResolvers();
 
-				std::transform(
+				std::for_each(
 					begin(_alias_registerers), end(_alias_registerers),
-					begin(result),
-					[main_resolver](auto registerer) { return registerer->getServiceAliasResolver(main_resolver); }
+					[&](auto registerer) { result.add(registerer->getServiceAliasResolver(main_resolver)); }
 				);
 
 				return result;

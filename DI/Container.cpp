@@ -1,28 +1,28 @@
 #include "Container.h"
 
-#include <unordered_map>
-#include <iterator>
 #include "Details/ServiceFactoryRegisterer.h"
 #include "Error/ServiceNotRegistered.h"
+#include "Details/ServiceResolvers.h"
 
 namespace DI
 {
 	class Container::Impl : public std::enable_shared_from_this<Container::Impl>
 	{
 	public:
-		explicit Impl(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
+		explicit Impl(Details::ServiceResolvers service_resolvers)
+			: _service_resolvers(std::move(service_resolvers))
 		{
-			registerResolvers(service_resolvers);
 			registerContainer();
 		}
 
 		Details::ServiceResolver<> &getResolver(const Details::TypeIndex<>& type_index) const
 		{
-			auto resolver_it = _service_resolvers.find(type_index);
-			if (resolver_it == end(_service_resolvers))
+			auto resolver = _service_resolvers.get(type_index);
+
+			if (!resolver)
 				throw Error::ServiceNotRegistered();
 
-			return *resolver_it->second;
+			return *resolver;
 		}
 
 	private:
@@ -31,28 +31,28 @@ namespace DI
 			auto container_factory = [this] { return std::make_shared<Container>(Container(this->shared_from_this())); };
 			auto registerer = Details::ServiceFactoryRegisterer<decltype(container_factory)>(container_factory);
 			registerer.setSingleInstance();
-			registerResolvers(registerer.getServiceResolvers());
-		}
 
-		void registerResolvers(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
-		{
-			std::transform(
-				begin(service_resolvers), end(service_resolvers),
-				std::inserter(_service_resolvers, end(_service_resolvers)),
-				[](auto resolver) { return std::make_pair(resolver->getServiceType(), resolver); }
-			);
+			_service_resolvers.merge(registerer.getServiceResolvers());
 		}
 
 	private:
-		std::unordered_map<Details::TypeIndex<>, std::shared_ptr<Details::ServiceResolver<>>> _service_resolvers;
+		Details::ServiceResolvers _service_resolvers;
 	};
 
 	Container::Container()
 	{
 	}
 
-	Container::Container(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
-		: _impl(std::make_unique<Impl>(service_resolvers))
+	Details::ServiceResolvers convert(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
+	{
+		auto result = Details::ServiceResolvers();
+		std::for_each(begin(service_resolvers), end(service_resolvers), [&result](auto resolver) { result.add(resolver); });
+
+		return result;
+	}
+
+	Container::Container(Details::ServiceResolvers&& service_resolvers)
+		: _impl(std::make_unique<Impl>(std::move(service_resolvers)))
 	{
 	}
 

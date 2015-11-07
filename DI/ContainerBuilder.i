@@ -5,6 +5,7 @@
 #include "Details/ServiceTypeRegisterer.h"
 #include "Details/ServiceFactoryRegisterer.h"
 #include "Container.h"
+#include "Details/ServiceResolvers.h"
 
 namespace DI
 {
@@ -74,13 +75,10 @@ namespace DI
 
 	inline auto ContainerBuilder::getServiceResolvers() const
 	{
-		auto result = std::vector<std::shared_ptr<Details::ServiceResolver<>>>();
+		auto result = Details::ServiceResolvers();
 
 		for (const auto& registerer : _impl->getRegisterers())
-		{
-			const auto& resolvers = registerer->getServiceResolvers();
-			result.insert(end(result), begin(resolvers), end(resolvers));
-		}
+			result.merge(registerer->getServiceResolvers());
 
 		return result;
 	}
