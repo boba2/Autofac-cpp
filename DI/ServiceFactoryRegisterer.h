@@ -3,7 +3,7 @@
 #include "Details/ServiceAliasRegisterer.h"
 #include "Details/FunctionTraits.h"
 #include "Details/UnderlyingType.h"
-#include "ServiceFactoryRegistererImpl.h"
+#include "Details/ServiceFactoryRegisterer.h"
 
 namespace DI
 {
@@ -16,17 +16,17 @@ namespace DI
 
 		auto singleInstance() -> ServiceFactoryRegisterer&;
 		auto autoManaged() -> ServiceFactoryRegisterer&;
-		auto asSelf()->ServiceFactoryRegisterer&;
+		auto asSelf() -> ServiceFactoryRegisterer&;
 
 		template<class V>
 		auto as()->ServiceFactoryRegisterer&;
 
 	private:
-		ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ServiceRegisterer& service_registerer);
+		ServiceFactoryRegisterer(std::shared_ptr<Details::ServiceFactoryRegisterer<T>> impl, ServiceRegisterer& service_registerer);
 
 		friend class ServiceRegisterer;
 
-		std::shared_ptr<ServiceFactoryRegistererImpl> const _impl;
+		std::shared_ptr<Details::ServiceFactoryRegisterer<T>> const _impl;
 	};
 
 	template<class T>
@@ -63,7 +63,7 @@ namespace DI
 	}
 
 	template<class T>
-	ServiceFactoryRegisterer<T>::ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ServiceRegisterer& service_registerer)
+	ServiceFactoryRegisterer<T>::ServiceFactoryRegisterer(std::shared_ptr<Details::ServiceFactoryRegisterer<T>> impl, ServiceRegisterer& service_registerer)
 		: ServiceRegisterer(service_registerer),
 		_impl(impl)
 	{}

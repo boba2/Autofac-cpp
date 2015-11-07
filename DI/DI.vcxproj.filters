@@ -98,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="Details\ServiceResolvers.h" />
     <ClInclude Include="Details\ServiceAliasRegisterers.h" />
-    <ClInclude Include="ServiceFactoryRegistererImpl.h" />
-    <ClInclude Include="ServiceInstanceRegistererImpl.h" />
-    <ClInclude Include="ServiceTypeRegistererImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">

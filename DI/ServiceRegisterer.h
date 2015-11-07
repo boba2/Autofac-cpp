@@ -57,9 +57,6 @@ namespace DI
 #include "ServiceInstanceRegisterer.h"
 #include "ServiceTypeRegisterer.h"
 #include "ServiceFactoryRegisterer.h"
-#include "Details/ServiceInstanceRegisterer.h"
-#include "Details/ServiceTypeRegisterer.h"
-#include "Details/ServiceFactoryRegisterer.h"
 
 namespace DI
 {

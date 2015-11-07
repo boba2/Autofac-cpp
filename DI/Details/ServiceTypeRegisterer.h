@@ -4,7 +4,6 @@
 #include "ServiceTypeResolver.h"
 #include "SingletonServiceResolver.h"
 #include "AutoManagedServiceResolver.h"
-#include "../ServiceTypeRegistererImpl.h"
 
 namespace DI
 {
@@ -12,7 +11,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceTypeRegisterer : public ServiceRegisterer<T, DI::ServiceTypeRegistererImpl>
+		class ServiceTypeRegisterer : public ServiceRegisterer<T>
 		{
 		public:
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
@@ -26,13 +25,12 @@ namespace DI
 				return resolver;
 			}
 
-		protected:
-			virtual void setSingleInstance() override
+			virtual void setSingleInstance()
 			{
 				_single_instance = true;
 			}
 
-			virtual void setAutoManaged() override
+			virtual void setAutoManaged()
 			{
 				_auto_managed = true;
 			}

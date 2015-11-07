@@ -2,7 +2,7 @@
 
 #include "Details/ServiceAliasRegisterer.h"
 #include "Details/UnderlyingType.h"
-#include "ServiceTypeRegistererImpl.h"
+#include "Details/ServiceTypeRegisterer.h"
 
 namespace DI
 {
@@ -25,11 +25,11 @@ namespace DI
 
 
 	private:
-		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ServiceRegisterer& service_registerer);
+		ServiceTypeRegisterer(std::shared_ptr<Details::ServiceTypeRegisterer<T>> impl, ServiceRegisterer& service_registerer);
 
 		friend class ServiceRegisterer;
 
-		std::shared_ptr<ServiceTypeRegistererImpl> const _impl;
+		std::shared_ptr<Details::ServiceTypeRegisterer<T>> const _impl;
 	};
 
 	template<class T>
@@ -66,7 +66,7 @@ namespace DI
 	}
 
 	template<class T>
-	ServiceTypeRegisterer<T>::ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ServiceRegisterer& service_registerer)
+	ServiceTypeRegisterer<T>::ServiceTypeRegisterer(std::shared_ptr<Details::ServiceTypeRegisterer<T>> impl, ServiceRegisterer& service_registerer)
 		: ServiceRegisterer(service_registerer),
 		_impl(impl)
 	{}

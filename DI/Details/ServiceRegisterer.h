@@ -10,11 +10,11 @@ namespace DI
 	namespace Details
 	{
 
-		template<class T = void, class S = void>
+		template<class T = void>
 		class ServiceRegisterer;
 
 		template<>
-		class ServiceRegisterer<void, void>
+		class ServiceRegisterer<void>
 		{
 		public:
 			virtual ~ServiceRegisterer() {}
@@ -22,8 +22,8 @@ namespace DI
 			virtual ServiceResolvers getServiceResolvers() const = 0;
 		};
 
-		template<class T, class S>
-		class ServiceRegisterer : public ServiceRegisterer<>, public S
+		template<class T>
+		class ServiceRegisterer : public ServiceRegisterer<>
 		{
 		public:
 			virtual ServiceResolvers getServiceResolvers() const override
@@ -37,8 +37,7 @@ namespace DI
 				return ServiceResolvers{ main_resolver };
 			}
 
-		protected:
-			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer) override
+			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer)
 			{
 				_alias_registerers.add(alias_registerer);
 			}

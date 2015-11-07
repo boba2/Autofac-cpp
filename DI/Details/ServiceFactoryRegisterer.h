@@ -5,7 +5,6 @@
 #include "AutoManagedServiceResolver.h"
 #include "SingletonServiceResolver.h"
 #include "FunctionTraits.h"
-#include "../ServiceFactoryRegistererImpl.h"
 
 namespace DI
 {
@@ -13,19 +12,19 @@ namespace DI
 	{
 
 		template <class T, class FactoryType = T, class FactoryResultType = typename FunctionResultType<FactoryType>::Type, class ServiceType = typename UnderlyingType<FactoryResultType>::Type>
-		class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceType, DI::ServiceFactoryRegistererImpl>
+		class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceType>
 		{
 		public:
 			explicit ServiceFactoryRegisterer(FactoryType factory)
 				: _factory(factory)
 			{}
 
-			virtual void setSingleInstance() override
+			virtual void setSingleInstance()
 			{
 				_single_instance = true;
 			}
 
-			virtual void setAutoManaged() override
+			virtual void setAutoManaged()
 			{
 #pragma warning(disable:4127)
 				if (std::is_pointer<FactoryResultType>::value)

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Details/ServiceAliasRegisterer.h"
-#include "ServiceInstanceRegistererImpl.h"
 #include "Details/UnderlyingType.h"
+#include "Details/ServiceInstanceRegisterer.h"
 
 namespace DI
 {
@@ -19,11 +19,11 @@ namespace DI
 		auto as() -> ServiceInstanceRegisterer&;
 
 	private:
-		ServiceInstanceRegisterer(std::shared_ptr<ServiceInstanceRegistererImpl> impl, ServiceRegisterer& service_registerer);
+		ServiceInstanceRegisterer(std::shared_ptr<Details::ServiceInstanceRegisterer<T>> impl, ServiceRegisterer& service_registerer);
 
 		friend class ServiceRegisterer;
 
-		std::shared_ptr<ServiceInstanceRegistererImpl> const _impl;
+		std::shared_ptr<Details::ServiceInstanceRegisterer<T>> const _impl;
 	};
 
 	template<class T>
@@ -44,7 +44,7 @@ namespace DI
 	}
 
 	template<class T>
-	ServiceInstanceRegisterer<T>::ServiceInstanceRegisterer(std::shared_ptr<ServiceInstanceRegistererImpl> impl, ServiceRegisterer& service_registerer)
+	ServiceInstanceRegisterer<T>::ServiceInstanceRegisterer(std::shared_ptr<Details::ServiceInstanceRegisterer<T>> impl, ServiceRegisterer& service_registerer)
 		: ServiceRegisterer(service_registerer),
 		_impl(impl)
 	{}

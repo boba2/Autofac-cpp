@@ -2,7 +2,6 @@
 
 #include "ServiceRegisterer.h"
 #include "ServiceInstanceResolver.h"
-#include "../ServiceInstanceRegistererImpl.h"
 #include "UnderlyingType.h"
 
 namespace DI
@@ -11,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceInstanceRegisterer : public ServiceRegisterer<typename UnderlyingType<T>::Type, DI::ServiceInstanceRegistererImpl>
+		class ServiceInstanceRegisterer : public ServiceRegisterer<typename UnderlyingType<T>::Type>
 		{
 		public:
 			using ServiceType = typename UnderlyingType<T>::Type;
