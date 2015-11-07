@@ -19,7 +19,7 @@ namespace DI
 	class DI_API ServiceRegisterer
 	{
 	public:
-		explicit ServiceRegisterer(ContainerBuilder* container_builder)
+		explicit ServiceRegisterer(ContainerBuilder& container_builder)
 			: _container_builder(container_builder)
 		{}
 
@@ -35,7 +35,7 @@ namespace DI
 		Container build() const;
 
 	private:
-		ContainerBuilder* const _container_builder;
+		ContainerBuilder& _container_builder;
 	};
 
 }

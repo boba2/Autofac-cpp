@@ -25,7 +25,7 @@ namespace DI
 
 		using ServiceType = T;
 
-		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ContainerBuilder* container_builder)
+		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ContainerBuilder& container_builder)
 			: ServiceRegisterer(container_builder),
 			_impl(impl)
 		{}

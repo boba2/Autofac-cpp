@@ -31,7 +31,7 @@ namespace DI
 		auto registerer = std::make_shared<T>(std::forward<U>(param)...);
 		addRegisterer(registerer);
 
-		return S(registerer, this);
+		return S(registerer, *this);
 	}
 
 }

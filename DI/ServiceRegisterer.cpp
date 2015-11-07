@@ -8,7 +8,7 @@ namespace DI
 
 	Container ServiceRegisterer::build() const
 	{
-		return _container_builder->build();
+		return _container_builder.build();
 	}
 
 }

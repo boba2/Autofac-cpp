@@ -24,7 +24,7 @@ namespace DI
 	public:
 		using ServiceType = typename Details::UnderlyingType<typename Details::FunctionResultType<T>::Type>::Type;
 
-		ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ContainerBuilder* container_builder)
+		ServiceFactoryRegisterer(std::shared_ptr<ServiceFactoryRegistererImpl> impl, ContainerBuilder& container_builder)
 			: ServiceRegisterer(container_builder),
 			  _impl(impl)
 		{}

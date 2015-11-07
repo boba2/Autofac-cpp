@@ -20,7 +20,7 @@ namespace DI
 	public:
 		using ServiceType = typename Details::UnderlyingType<T>::Type;
 
-		ServiceInstanceRegisterer(std::shared_ptr<ServiceInstanceRegistererImpl> impl, ContainerBuilder* container_builder)
+		ServiceInstanceRegisterer(std::shared_ptr<ServiceInstanceRegistererImpl> impl, ContainerBuilder& container_builder)
 			: ServiceRegisterer(container_builder),
 			  _impl(impl)
 		{}
