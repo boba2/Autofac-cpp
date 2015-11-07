@@ -14,11 +14,9 @@ namespace DI
 	{
 	public:
 		ContainerBuilder();
-		ContainerBuilder(const ContainerBuilder&) = delete;
 		ContainerBuilder(ContainerBuilder&& other);
 		~ContainerBuilder();
 
-		ContainerBuilder& operator=(const ContainerBuilder&) = delete;
 		ContainerBuilder& operator=(ContainerBuilder&& other);
 
 		template<class T>

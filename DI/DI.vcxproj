@@ -157,7 +157,6 @@
     <ClInclude Include="Details\ServiceInstanceResolver.h" />
     <ClInclude Include="Details\ServiceReferenceTypeConverter.h" />
     <ClInclude Include="Details\ServiceRegisterer.h" />
-    <ClInclude Include="Details\ServiceRegisterers.h" />
     <ClInclude Include="Details\ServiceResolver.h" />
     <ClInclude Include="Details\ServiceResolvers.h" />
     <ClInclude Include="Details\SingletonServiceResolver.h" />
@@ -180,7 +179,6 @@
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="ContainerBuilder.cpp" />
     <ClCompile Include="Details\ServiceAliasRegisterers.cpp" />
-    <ClCompile Include="Details\ServiceRegisterers.cpp" />
     <ClCompile Include="Details\ServiceResolvers.cpp" />
     <ClCompile Include="Support\dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>

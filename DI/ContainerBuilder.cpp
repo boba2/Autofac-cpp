@@ -1,6 +1,6 @@
 #include "ContainerBuilder.h"
 
-#include "Details/ServiceRegisterers.h"
+#include <algorithm>
 
 namespace DI
 {
@@ -10,16 +10,23 @@ namespace DI
 	public:
 		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
 		{
-			_service_registerers.add(registerer);
+			_service_registerers.push_back(registerer);
 		}
 
-		void forEach(std::function<void(const Details::ServiceRegisterer<>&)> action) const
+		Container buildContainer() const
 		{
-			_service_registerers.forEach(action);
+			auto service_resolvers = Details::ServiceResolvers();
+
+			std::for_each(
+				begin(_service_registerers), end(_service_registerers),
+				[&service_resolvers](auto& registerer) { service_resolvers.merge(registerer->getServiceResolvers()); }
+			);
+
+			return Container(std::move(service_resolvers));
 		}
 
 	private:
-		Details::ServiceRegisterers _service_registerers;
+		std::vector<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
 	};
 
 	ContainerBuilder::ContainerBuilder()
@@ -48,14 +55,7 @@ namespace DI
 
 	Container ContainerBuilder::build() const
 	{
-		auto service_resolvers = Details::ServiceResolvers();
-
-		_impl->forEach([&service_resolvers](const Details::ServiceRegisterer<>& registerer)
-		{
-			service_resolvers.merge(registerer.getServiceResolvers());
-		});
-
-		return Container(std::move(service_resolvers));
+		return _impl->buildContainer();
 	}
 
 }
