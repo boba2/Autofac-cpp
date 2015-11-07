@@ -1,7 +1,10 @@
 #pragma once
 
+#include "Support/DIdecl.h"
+
 namespace DI
 {
+	class Container;
 	class ContainerBuilder;
 
 	template<class T>
@@ -13,7 +16,7 @@ namespace DI
 	template<class T>
 	class ServiceFactoryRegisterer;
 
-	class ServiceRegisterer
+	class DI_API ServiceRegisterer
 	{
 	public:
 		explicit ServiceRegisterer(ContainerBuilder* container_builder)

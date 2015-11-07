@@ -21,9 +21,4 @@ namespace DI
 		return _container_builder->registerFactory(factory);
 	}
 
-	inline Container ServiceRegisterer::build() const
-	{
-		return _container_builder->build();
-	}
-
 }

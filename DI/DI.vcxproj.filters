@@ -107,6 +107,7 @@
     <ClCompile Include="Details\ServiceResolvers.cpp" />
     <ClCompile Include="Details\ServiceAliasRegisterers.cpp" />
     <ClCompile Include="ContainerBuilder.cpp" />
+    <ClCompile Include="ServiceRegisterer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ServiceRegisterer.i" />

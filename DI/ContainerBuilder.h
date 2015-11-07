@@ -5,10 +5,11 @@
 #include "ServiceInstanceRegisterer.h"
 #include "ServiceTypeRegisterer.h"
 #include "Details/ServiceRegisterer.h"
-#include "Container.h"
 
 namespace DI
 {
+
+	class Container;
 
 	class DI_API ContainerBuilder
 	{

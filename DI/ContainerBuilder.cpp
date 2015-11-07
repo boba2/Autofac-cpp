@@ -1,6 +1,7 @@
 #include "ContainerBuilder.h"
 
 #include <algorithm>
+#include "Container.h"
 
 namespace DI
 {
