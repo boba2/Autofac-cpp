@@ -6,6 +6,7 @@
 #include "Details/ServiceFactoryRegisterer.h"
 #include "Container.h"
 #include "Details/ServiceResolvers.h"
+#include "Details/ServiceRegisterers.h"
 
 namespace DI
 {
@@ -15,16 +16,16 @@ namespace DI
 	public:
 		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
 		{
-			_service_registerers.push_back(registerer);
+			_service_registerers.add(registerer);
 		}
 
-		auto getRegisterers() const
+		void forEach(std::function<void(const Details::ServiceRegisterer<>&)> action) const
 		{
-			return _service_registerers;
+			_service_registerers.forEach(action);
 		}
 
 	private:
-		std::vector<std::shared_ptr<Details::ServiceRegisterer<>>> _service_registerers;
+		Details::ServiceRegisterers _service_registerers;
 	};
 
 	inline ContainerBuilder::ContainerBuilder()
@@ -68,24 +69,26 @@ namespace DI
 	auto ContainerBuilder::createRegisterer(U&&... param)
 	{
 		auto registerer = std::make_shared<T>(std::forward<U>(param)...);
-		_impl->addRegisterer(registerer);
+		addRegisterer(registerer);
 
 		return S(registerer, this);
 	}
 
-	inline auto ContainerBuilder::getServiceResolvers() const
+	inline void ContainerBuilder::addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer)
 	{
-		auto result = Details::ServiceResolvers();
-
-		for (const auto& registerer : _impl->getRegisterers())
-			result.merge(registerer->getServiceResolvers());
-
-		return result;
+		_impl->addRegisterer(registerer);
 	}
 
 	inline Container ContainerBuilder::build() const
 	{
-		return Container(getServiceResolvers());
+		auto service_resolvers = Details::ServiceResolvers();
+
+		_impl->forEach([&service_resolvers](const Details::ServiceRegisterer<>& registerer)
+		{
+			service_resolvers.merge(registerer.getServiceResolvers());
+		});
+
+		return Container(std::move(service_resolvers));
 	}
 
 }

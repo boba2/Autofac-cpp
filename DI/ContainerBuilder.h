@@ -3,7 +3,7 @@
 #include "ServiceFactoryRegisterer.h"
 #include "ServiceInstanceRegisterer.h"
 #include "ServiceTypeRegisterer.h"
-#include "Details/FunctionTraits.h"
+#include "Details/ServiceRegisterer.h"
 
 namespace DI
 {
@@ -34,7 +34,7 @@ namespace DI
 		template<class T, class S, class... U>
 		auto createRegisterer(U&&... param);
 
-		auto getServiceResolvers() const;
+		void addRegisterer(std::shared_ptr<Details::ServiceRegisterer<>> registerer);
 
 	private:
 		class Impl;
