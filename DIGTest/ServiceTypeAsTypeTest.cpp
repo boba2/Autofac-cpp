@@ -14,11 +14,6 @@ namespace
 
 using ServiceTypeAsTypeTest = ContainerBaseTest;
 
-TEST_F(ServiceTypeAsTypeTest, ShouldBreakStaticAssert_WhenRegisteringServiceTypeAliasedAsUnrelatedType)
-{
-//	builder().registerType<DummyService1>().as<DummyService2>();
-}
-
 TEST_F(ServiceTypeAsTypeTest, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceTypeRegisteredAliasedAsBaseType)
 {
 	builder()

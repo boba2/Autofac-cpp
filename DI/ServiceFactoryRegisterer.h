@@ -49,8 +49,6 @@ namespace DI
 	template<class V>
 	auto ServiceFactoryRegisterer<T>::as() -> ServiceFactoryRegisterer&
 	{
-		static_assert(std::is_base_of<V, ServiceType>::value, "Alias should be a resolvable base class of the service class being registered");
-
 		_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<V, ServiceType>>());
 
 		return *this;

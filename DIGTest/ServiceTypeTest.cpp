@@ -11,16 +11,6 @@ namespace
 
 using ServiceTypeTest = ContainerBaseTest;
 
-TEST_F(ServiceTypeTest, ShouldBreakStaticAssert_WhenRegisteringAbstractServiceType)
-{
-//	builder().registerType<AbstractDummyService>();
-}
-
-TEST_F(ServiceTypeTest, ShouldBreakStaticAssert_WhenRegisteringServiceOfDecoratedType)
-{
-//	builder().registerType<DummyService*>();
-}
-
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsCopy_WhenNonAbstractServiceTypeRegistered)
 {
 	builder()

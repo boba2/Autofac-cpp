@@ -14,13 +14,6 @@ namespace
 	struct ConcreteService : AbstractService { virtual void abstract() override {} };
 }
 
-TEST_F(ServiceFactoryAsType, ShouldBreakStaticAssert_WhenRegisteringServiceFactoryAliasedAsUnrelatedType)
-{
-//	builder()
-//		.registerFactory([] { return ServiceA(); })
-//		.as<ServiceB>();
-}
-
 TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceFactoryRegisteredAliasedAsBaseType)
 {
 	builder()

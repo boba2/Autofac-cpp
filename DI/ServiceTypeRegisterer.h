@@ -52,8 +52,6 @@ namespace DI
 	template<class U>
 	auto ServiceTypeRegisterer<T>::as() -> ServiceTypeRegisterer&
 	{
-		static_assert(std::is_base_of<U, ServiceType>::value, "Alias should be a resolvable base class of the service class being registered");
-
 		_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, ServiceType>>());
 
 		return *this;
