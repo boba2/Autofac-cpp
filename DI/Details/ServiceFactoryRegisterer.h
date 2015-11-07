@@ -35,7 +35,7 @@ namespace DI
 			}
 
 		private:
-			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
+			virtual ServiceResolverPtr<> getServiceResolver() const override
 			{
 				auto resolver = std::static_pointer_cast<ServiceResolver<ServiceType>>(std::make_shared<ServiceFactoryResolver<FactoryType>>(_factory));
 

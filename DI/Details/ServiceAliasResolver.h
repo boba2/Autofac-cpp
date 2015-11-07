@@ -17,7 +17,7 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit ServiceAliasResolver(std::shared_ptr<ServiceResolver<S>> inner_resolver)
+			explicit ServiceAliasResolver(ServiceResolverPtr<S> inner_resolver)
 				: _inner_resolver(inner_resolver)
 			{}
 
@@ -59,7 +59,7 @@ namespace DI
 				return _inner_resolver->getService(container);
 			}
 
-			std::shared_ptr<ServiceResolver<S>> const _inner_resolver;
+			ServiceResolverPtr<S> const _inner_resolver;
 		};
 	}
 }

@@ -45,5 +45,8 @@ namespace DI
 			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) = 0;
 		};
 
+		template<class T = void>
+		using ServiceResolverPtr = std::shared_ptr<ServiceResolver<T>>;
+
 	}
 }

@@ -18,7 +18,7 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit AutoManagedServiceResolver(std::shared_ptr<ServiceResolver<T>> inner_resolver)
+			explicit AutoManagedServiceResolver(ServiceResolverPtr<T> inner_resolver)
 				: _inner_resolver(inner_resolver)
 			{}
 
@@ -54,7 +54,7 @@ namespace DI
 				return _managed_instances.back();
 			}
 
-			std::shared_ptr<ServiceResolver<T>> const _inner_resolver;
+			ServiceResolverPtr<T> const _inner_resolver;
 			std::vector<std::shared_ptr<T>> _managed_instances;
 		};
 

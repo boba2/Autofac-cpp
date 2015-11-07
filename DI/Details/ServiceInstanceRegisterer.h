@@ -29,7 +29,7 @@ namespace DI
 				: _instance(std::move(instance))
 			{}
 
-			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const override
+			virtual ServiceResolverPtr<> getServiceResolver() const override
 			{
 				return std::make_shared<ServiceInstanceResolver<ServiceType>>(_instance);
 			}

@@ -44,7 +44,7 @@ namespace DI
 	{
 	}
 
-	Details::ServiceResolvers convert(const std::vector<std::shared_ptr<Details::ServiceResolver<>>>& service_resolvers)
+	Details::ServiceResolvers convert(const std::vector<Details::ServiceResolverPtr<>>& service_resolvers)
 	{
 		auto result = Details::ServiceResolvers();
 		std::for_each(begin(service_resolvers), end(service_resolvers), [&result](auto resolver) { result.add(resolver); });

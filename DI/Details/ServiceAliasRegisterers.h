@@ -18,7 +18,7 @@ namespace DI
 
 			void add(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer);
 
-			auto getServiceResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const -> ServiceResolvers;
+			auto getServiceResolvers(ServiceResolverPtr<> main_resolver) const -> ServiceResolvers;
 
 		private:
 			class Impl;

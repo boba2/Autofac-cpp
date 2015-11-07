@@ -13,14 +13,14 @@ namespace DI
 		public:
 			ServiceResolvers();
 			ServiceResolvers(ServiceResolvers&& other);
-			ServiceResolvers(std::initializer_list<std::shared_ptr<ServiceResolver<>>> resolvers);
+			ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers);
 			~ServiceResolvers();
 
-			void add(std::shared_ptr<ServiceResolver<>> resolver);
+			void add(ServiceResolverPtr<> resolver);
 			void merge(const ServiceResolvers& other);
 
 			auto empty() const -> bool;
-			auto get(TypeIndex<> type_index) const -> std::shared_ptr<ServiceResolver<>>;
+			auto get(TypeIndex<> type_index) const -> ServiceResolverPtr<>;
 
 		private:
 			class Impl;

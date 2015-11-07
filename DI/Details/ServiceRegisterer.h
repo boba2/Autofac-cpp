@@ -43,10 +43,10 @@ namespace DI
 			}
 
 		protected:
-			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const = 0;
+			virtual ServiceResolverPtr<> getServiceResolver() const = 0;
 
 		private:
-			auto getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
+			auto getServiceAliasResolvers(ServiceResolverPtr<> main_resolver) const
 			{
 				return _alias_registerers.getServiceResolvers(main_resolver);
 			}

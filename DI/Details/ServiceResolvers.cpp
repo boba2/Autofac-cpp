@@ -11,7 +11,7 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
-			void add(std::shared_ptr<ServiceResolver<>> resolver)
+			void add(ServiceResolverPtr<> resolver)
 			{
 				_service_resolvers[resolver->getServiceType()] = resolver;
 			}
@@ -29,7 +29,7 @@ namespace DI
 				return _service_resolvers.empty();
 			}
 
-			auto get(TypeIndex<> type_index) const -> std::shared_ptr<ServiceResolver<>>
+			auto get(TypeIndex<> type_index) const -> ServiceResolverPtr<>
 			{
 				auto resolver_it = _service_resolvers.find(type_index);
 				if (resolver_it == end(_service_resolvers))
@@ -39,7 +39,7 @@ namespace DI
 			}
 
 		private:
-			std::unordered_map<Details::TypeIndex<>, std::shared_ptr<Details::ServiceResolver<>>> _service_resolvers;
+			std::unordered_map<TypeIndex<>, ServiceResolverPtr<>> _service_resolvers;
 		};
 
 		ServiceResolvers::ServiceResolvers()
@@ -50,7 +50,7 @@ namespace DI
 			: _impl(std::move(other._impl))
 		{}
 
-		ServiceResolvers::ServiceResolvers(std::initializer_list<std::shared_ptr<ServiceResolver<>>> resolvers)
+		ServiceResolvers::ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers)
 			: ServiceResolvers()
 		{
 			std::for_each(
@@ -62,7 +62,7 @@ namespace DI
 		ServiceResolvers::~ServiceResolvers()
 		{}
 
-		void ServiceResolvers::add(std::shared_ptr<ServiceResolver<>> resolver)
+		void ServiceResolvers::add(ServiceResolverPtr<> resolver)
 		{
 			_impl->add(resolver);
 		}
@@ -77,7 +77,7 @@ namespace DI
 			return _impl->empty();
 		}
 
-		auto ServiceResolvers::get(TypeIndex<> type_index) const -> std::shared_ptr<ServiceResolver<>>
+		auto ServiceResolvers::get(TypeIndex<> type_index) const -> ServiceResolverPtr<>
 		{
 			return _impl->get(type_index);
 		}

@@ -16,7 +16,7 @@ namespace DI
 				_alias_registerers.push_back(alias_registerer);
 			}
 
-			ServiceResolvers getServiceResolvers(std::shared_ptr<ServiceResolver<>> main_resolver)
+			ServiceResolvers getServiceResolvers(ServiceResolverPtr<> main_resolver)
 			{
 				auto result = ServiceResolvers();
 
@@ -48,7 +48,7 @@ namespace DI
 			_impl->add(alias_registerer);
 		}
 
-		auto ServiceAliasRegisterers::getServiceResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const -> ServiceResolvers
+		auto ServiceAliasRegisterers::getServiceResolvers(ServiceResolverPtr<> main_resolver) const -> ServiceResolvers
 		{
 			return _impl->getServiceResolvers(main_resolver);
 		}

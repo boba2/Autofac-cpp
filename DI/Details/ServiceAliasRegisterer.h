@@ -16,7 +16,7 @@ namespace DI
 		public:
 			virtual ~ServiceAliasRegisterer() {}
 
-			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const = 0;
+			virtual ServiceResolverPtr<> getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const = 0;
 		};
 
 		template<class T, class S>
@@ -25,7 +25,7 @@ namespace DI
 		public:
 			static_assert(std::is_base_of<T, S>::value, "Alias should be a resolvable base class of the service class being registered");
 
-			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const override
+			virtual ServiceResolverPtr<> getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const override
 			{
 				return std::make_shared<ServiceAliasResolver<T, S>>(std::dynamic_pointer_cast<ServiceResolver<S>>(main_resolver));
 			}
@@ -35,7 +35,7 @@ namespace DI
 		class ServiceAliasRegisterer<T, T> : public ServiceAliasRegisterer<>
 		{
 		public:
-			virtual std::shared_ptr<ServiceResolver<>> getServiceAliasResolver(std::shared_ptr<ServiceResolver<>> main_resolver) const override
+			virtual ServiceResolverPtr<> getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const override
 			{
 				return main_resolver;
 			}
