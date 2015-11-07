@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Details/ServiceAliasRegisterer.h"
 #include "Details/UnderlyingType.h"
 #include "ServiceTypeRegistererImpl.h"
 
@@ -15,42 +16,58 @@ namespace DI
 
 		using ServiceType = T;
 
-		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ServiceRegisterer& service_registerer)
-			: ServiceRegisterer(service_registerer),
-			_impl(impl)
-		{}
-
-		ServiceTypeRegisterer& singleInstance()
-		{
-			_impl->setSingleInstance();
-
-			return *this;
-		}
-
-		ServiceTypeRegisterer& autoManaged()
-		{
-			_impl->setAutoManaged();
-
-			return *this;
-		}
+		auto singleInstance() -> ServiceTypeRegisterer&;
+		auto autoManaged() -> ServiceTypeRegisterer&;
+		auto asSelf() -> ServiceTypeRegisterer&;
 
 		template<class U>
-		ServiceTypeRegisterer& as()
-		{
-			static_assert(std::is_base_of<U, ServiceType>::value, "Alias should be a resolvable base class of the service class being registered");
+		auto as() -> ServiceTypeRegisterer&;
 
-			_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, ServiceType>>());
-
-			return *this;
-		}
-
-		ServiceTypeRegisterer& asSelf()
-		{
-			return as<ServiceType>();
-		}
 
 	private:
+		ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ServiceRegisterer& service_registerer);
+
+		friend class ServiceRegisterer;
+
 		std::shared_ptr<ServiceTypeRegistererImpl> const _impl;
 	};
 
+	template<class T>
+	auto ServiceTypeRegisterer<T>::singleInstance() -> ServiceTypeRegisterer&
+	{
+		_impl->setSingleInstance();
+
+		return *this;
+	}
+
+	template<class T>
+	auto ServiceTypeRegisterer<T>::autoManaged() -> ServiceTypeRegisterer&
+	{
+		_impl->setAutoManaged();
+
+		return *this;
+	}
+
+	template<class T>
+	template<class U>
+	auto ServiceTypeRegisterer<T>::as() -> ServiceTypeRegisterer&
+	{
+		static_assert(std::is_base_of<U, ServiceType>::value, "Alias should be a resolvable base class of the service class being registered");
+
+		_impl->registerAlias(std::make_shared<Details::ServiceAliasRegisterer<U, ServiceType>>());
+
+		return *this;
+	}
+
+	template<class T>
+	auto ServiceTypeRegisterer<T>::asSelf() -> ServiceTypeRegisterer&
+	{
+		return as<ServiceType>();
+	}
+
+	template<class T>
+	ServiceTypeRegisterer<T>::ServiceTypeRegisterer(std::shared_ptr<ServiceTypeRegistererImpl> impl, ServiceRegisterer& service_registerer)
+		: ServiceRegisterer(service_registerer),
+		_impl(impl)
+	{}
 }
