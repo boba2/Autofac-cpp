@@ -197,7 +197,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Container.i" />
     <None Include="ContainerBuilder.i" />
     <None Include="ServiceRegisterer.i" />
   </ItemGroup>

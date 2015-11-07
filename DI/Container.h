@@ -3,6 +3,7 @@
 #include "Support/DIdecl.h"
 #include "Details/ServiceReferenceTypeConverter.h"
 #include "Details/ServiceResolver.h"
+#include "Details/UnderlyingType.h"
 
 namespace DI
 {
@@ -41,6 +42,22 @@ namespace DI
 #pragma warning(default:4251)
 	};
 
-}
+	template<class T>
+	auto Container::resolve() -> typename Details::ServiceReferenceTypeConverter<T>::Result
+	{
+		using ServiceReferenceTypeConverter = Details::ServiceReferenceTypeConverter<T>;
 
-#include "Container.i"
+		return ServiceReferenceTypeConverter::convertFrom(getResolver<T>(), this);
+	}
+
+	template<class T>
+	auto& Container::getResolver() const
+	{
+		using ServiceType = typename Details::UnderlyingType<T>::Type;
+		using ServiceResolverType = Details::ServiceResolver<ServiceType>;
+		using TypeIndex = Details::TypeIndex<ServiceType>;
+
+		return dynamic_cast<ServiceResolverType&>(getResolver(TypeIndex()));
+	}
+
+}
