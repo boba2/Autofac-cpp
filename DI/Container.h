@@ -22,7 +22,7 @@ namespace DI
 	private:
 		class Impl;
 
-		explicit Container(Details::ServiceResolvers&& service_resolvers);
+		explicit Container(Details::ServiceResolvers service_resolvers);
 		explicit Container(std::shared_ptr<Impl> impl);
 
 		template<class T>

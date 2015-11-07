@@ -11,7 +11,7 @@ namespace DI
 
 	Container ContainerBuilder::build() const
 	{
-		return Container(getServiceResolvers());
+		return Container(std::move(getServiceResolvers()));
 	}
 
 }

@@ -52,7 +52,7 @@ namespace DI
 		return result;
 	}
 
-	Container::Container(Details::ServiceResolvers&& service_resolvers)
+	Container::Container(Details::ServiceResolvers service_resolvers)
 		: _impl(std::make_unique<Impl>(std::move(service_resolvers)))
 	{
 	}
