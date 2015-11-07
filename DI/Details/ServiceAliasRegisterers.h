@@ -2,7 +2,7 @@
 
 #include "../Support/DIdecl.h"
 #include "ServiceAliasRegisterer.h"
-#include <functional>
+#include "ServiceResolvers.h"
 
 namespace DI
 {
@@ -18,7 +18,7 @@ namespace DI
 
 			void add(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer);
 
-			void forEach(std::function<void(const ServiceAliasRegisterer<>&)> action) const;
+			auto getServiceResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const->ServiceResolvers;
 
 		private:
 			class Impl;

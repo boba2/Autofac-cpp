@@ -16,12 +16,16 @@ namespace DI
 				_alias_registerers.push_back(alias_registerer);
 			}
 
-			void forEach(std::function<void(const ServiceAliasRegisterer<>&)> action) const
+			ServiceResolvers getServiceResolvers(std::shared_ptr<ServiceResolver<>> main_resolver)
 			{
+				auto result = ServiceResolvers();
+
 				std::for_each(
-					begin(_alias_registerers), end(_alias_registerers), 
-					[&action](auto& registerer) { action(*registerer); }
+					begin(_alias_registerers), end(_alias_registerers),
+					[&](auto& registerer) { result.add(registerer->getServiceAliasResolver(main_resolver)); }
 				);
+
+				return result;
 			}
 
 		private:
@@ -44,9 +48,9 @@ namespace DI
 			_impl->add(alias_registerer);
 		}
 
-		void ServiceAliasRegisterers::forEach(std::function<void(const ServiceAliasRegisterer<>&)> action) const
+		auto ServiceAliasRegisterers::getServiceResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const -> ServiceResolvers
 		{
-			_impl->forEach(action);
+			return _impl->getServiceResolvers(main_resolver);
 		}
 
 	}

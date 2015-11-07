@@ -26,6 +26,11 @@ namespace DI
 		class ServiceRegisterer : public ServiceRegisterer<>
 		{
 		public:
+			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer)
+			{
+				_alias_registerers.add(alias_registerer);
+			}
+
 			virtual ServiceResolvers getServiceResolvers() const override
 			{
 				auto main_resolver = getServiceResolver();
@@ -37,20 +42,13 @@ namespace DI
 				return ServiceResolvers{ main_resolver };
 			}
 
-			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer)
-			{
-				_alias_registerers.add(alias_registerer);
-			}
-
+		protected:
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const = 0;
 
 		private:
 			auto getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
 			{
-				auto result = ServiceResolvers();
-				_alias_registerers.forEach([&](auto& registerer) { result.add(registerer.getServiceAliasResolver(main_resolver)); });
-
-				return result;
+				return _alias_registerers.getServiceResolvers(main_resolver);
 			}
 
 		private:
