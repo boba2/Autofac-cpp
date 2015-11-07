@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Details/FunctionTraits.h"
-
 namespace DI
 {
 	class ContainerBuilder;
