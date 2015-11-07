@@ -22,13 +22,13 @@ namespace DI
 	{
 	public:
 		template<class U>
-		auto registerInstance(U &&instance)->ServiceInstanceRegisterer<U>;
+		auto registerInstance(U &&instance) -> ServiceInstanceRegisterer<U>;
 
 		template<class U>
-		auto registerType()->ServiceTypeRegisterer<U>;
+		auto registerType() -> ServiceTypeRegisterer<U>;
 
 		template<class U>
-		auto registerFactory(U factory)->ServiceFactoryRegisterer<U>;
+		auto registerFactory(U factory) -> ServiceFactoryRegisterer<U>;
 
 		Container build() const;
 

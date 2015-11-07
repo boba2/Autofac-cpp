@@ -19,7 +19,7 @@ namespace DI
 		auto asSelf() -> ServiceFactoryRegisterer&;
 
 		template<class V>
-		auto as()->ServiceFactoryRegisterer&;
+		auto as() -> ServiceFactoryRegisterer&;
 
 	private:
 		ServiceFactoryRegisterer(std::shared_ptr<Details::ServiceFactoryRegisterer<T>> impl, ServiceRegisterer& service_registerer);
