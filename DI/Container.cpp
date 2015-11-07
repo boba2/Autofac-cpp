@@ -67,10 +67,6 @@ namespace DI
 	{
 	}
 
-	Container::~Container()
-	{
-	}
-
 	Container& Container::operator=(const Container& other)
 	{
 		_impl = other._impl;

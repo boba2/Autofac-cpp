@@ -17,7 +17,6 @@ namespace DI
 	public:
 		Container();
 		Container(const Container& other);
-		~Container();
 		Container& operator=(const Container& other);
 
 		template<class T>
