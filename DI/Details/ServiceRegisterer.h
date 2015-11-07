@@ -1,10 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <algorithm>
 #include "ServiceResolver.h"
 #include "ServiceAliasRegisterer.h"
 #include "ServiceResolvers.h"
+#include "ServiceAliasRegisterers.h"
 
 namespace DI
 {
@@ -41,7 +40,7 @@ namespace DI
 		protected:
 			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer) override
 			{
-				_alias_registerers.push_back(alias_registerer);
+				_alias_registerers.add(alias_registerer);
 			}
 
 			virtual std::shared_ptr<ServiceResolver<>> getServiceResolver() const = 0;
@@ -50,17 +49,13 @@ namespace DI
 			auto getServiceAliasResolvers(std::shared_ptr<ServiceResolver<>> main_resolver) const
 			{
 				auto result = ServiceResolvers();
-
-				std::for_each(
-					begin(_alias_registerers), end(_alias_registerers),
-					[&](auto registerer) { result.add(registerer->getServiceAliasResolver(main_resolver)); }
-				);
+				_alias_registerers.forEach([&](auto& registerer) { result.add(registerer.getServiceAliasResolver(main_resolver)); });
 
 				return result;
 			}
 
 		private:
-			std::vector<std::shared_ptr<ServiceAliasRegisterer<>>> _alias_registerers;
+			ServiceAliasRegisterers _alias_registerers;
 		};
 
 	}

@@ -149,6 +149,7 @@
     <ClInclude Include="Details\FunctionTraits.h" />
     <ClInclude Include="Details\IndexSequence.h" />
     <ClInclude Include="Details\ServiceAliasRegisterer.h" />
+    <ClInclude Include="Details\ServiceAliasRegisterers.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
     <ClInclude Include="Details\ServiceCreator.h" />
     <ClInclude Include="Details\ServiceFactoryRegisterer.h" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Container.cpp" />
+    <ClCompile Include="Details\ServiceAliasRegisterers.cpp" />
     <ClCompile Include="Details\ServiceResolvers.cpp" />
     <ClCompile Include="Support\dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>

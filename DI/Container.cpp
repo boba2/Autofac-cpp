@@ -3,6 +3,7 @@
 #include "Details/ServiceFactoryRegisterer.h"
 #include "Error/ServiceNotRegistered.h"
 #include "Details/ServiceResolvers.h"
+#include <algorithm>
 
 namespace DI
 {

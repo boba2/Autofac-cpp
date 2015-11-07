@@ -97,6 +97,7 @@
       <Filter>Details</Filter>
     </ClInclude>
     <ClInclude Include="Details\ServiceResolvers.h" />
+    <ClInclude Include="Details\ServiceAliasRegisterers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">
@@ -104,6 +105,7 @@
     </ClCompile>
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Details\ServiceResolvers.cpp" />
+    <ClCompile Include="Details\ServiceAliasRegisterers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ServiceRegisterer.i" />
