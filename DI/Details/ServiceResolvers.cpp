@@ -11,6 +11,11 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
+			void add(ServiceResolverPtr<> resolver)
+			{
+				_service_resolvers[resolver->getServiceType()] = resolver;
+			}
+
 			void add(std::vector<ServiceResolverPtr<>> resolvers)
 			{
 				std::for_each(
@@ -19,16 +24,11 @@ namespace DI
 				);
 			}
 
-			void add(ServiceResolverPtr<> resolver)
-			{
-				_service_resolvers[resolver->getServiceType()] = resolver;
-			}
-
 			void merge(const Impl& other)
 			{
 				std::for_each(
 					begin(other._service_resolvers), end(other._service_resolvers),
-					[this](auto& resolver_with_type_index) { _service_resolvers[resolver_with_type_index.first] = resolver_with_type_index.second; }
+					[this](auto& resolver_it) { add(resolver_it.second); }
 				);
 			}
 
