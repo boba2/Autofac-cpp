@@ -14,16 +14,7 @@ namespace DI
 		class ServiceTypeRegisterer : public ServiceRegisterer
 		{
 		public:
-			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
-			{
-				auto resolver = std::static_pointer_cast<ServiceResolver<T>>(std::make_shared<ServiceTypeResolver<T>>());
-				if (_single_instance)
-					resolver = std::make_shared<SingletonServiceResolver<T>>(resolver);
-				if (_auto_managed)
-					resolver = std::make_shared<AutoManagedServiceResolver<T>>(resolver);
-
-				return resolver;
-			}
+			using ServiceType = T;
 
 			virtual void setSingleInstance()
 			{
@@ -33,6 +24,24 @@ namespace DI
 			virtual void setAutoManaged()
 			{
 				_auto_managed = true;
+			}
+
+		protected:
+			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
+			{
+				auto resolver = getMainServiceResolver();
+				if (_single_instance)
+					resolver = std::make_shared<SingletonServiceResolver<ServiceType>>(resolver);
+				if (_auto_managed)
+					resolver = std::make_shared<AutoManagedServiceResolver<ServiceType>>(resolver);
+
+				return resolver;
+			}
+
+		private:
+			auto getMainServiceResolver() const -> ServiceResolverPtr<ServiceType>
+			{
+				return std::make_shared<ServiceTypeResolver<ServiceType>>();
 			}
 
 		private:

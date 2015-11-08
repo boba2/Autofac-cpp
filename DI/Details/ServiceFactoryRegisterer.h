@@ -38,10 +38,10 @@ namespace DI
 				_auto_managed = true;
 			}
 
-		private:
+		protected:
 			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
 			{
-				auto resolver = std::static_pointer_cast<ServiceResolver<ServiceType>>(std::make_shared<ServiceFactoryResolver<FactoryType>>(_factory));
+				auto resolver = getMainServiceResolver();
 
 				if (_single_instance)
 					resolver = std::make_shared<SingletonServiceResolver<ServiceType>>(resolver);
@@ -49,6 +49,12 @@ namespace DI
 					resolver = std::make_shared<AutoManagedServiceResolver<ServiceType>>(resolver);
 
 				return resolver;
+			}
+
+		private:
+			auto getMainServiceResolver() const -> ServiceResolverPtr<ServiceType>
+			{
+				return std::make_shared<ServiceFactoryResolver<FactoryType>>(_factory);
 			}
 
 		private:
