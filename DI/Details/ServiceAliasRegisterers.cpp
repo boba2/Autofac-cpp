@@ -11,7 +11,7 @@ namespace DI
 		class ServiceAliasRegisterers::Impl
 		{
 		public:
-			void add(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer)
+			void add(ServiceAliasRegistererPtr<> alias_registerer)
 			{
 				_alias_registerers.push_back(alias_registerer);
 			}
@@ -29,7 +29,7 @@ namespace DI
 			}
 
 		private:
-			std::vector<std::shared_ptr<ServiceAliasRegisterer<>>> _alias_registerers;
+			std::vector<ServiceAliasRegistererPtr<>> _alias_registerers;
 		};
 
 		ServiceAliasRegisterers::ServiceAliasRegisterers()
@@ -43,7 +43,7 @@ namespace DI
 		ServiceAliasRegisterers::~ServiceAliasRegisterers()
 		{}
 
-		void ServiceAliasRegisterers::add(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer)
+		void ServiceAliasRegisterers::add(ServiceAliasRegistererPtr<> alias_registerer)
 		{
 			_impl->add(alias_registerer);
 		}

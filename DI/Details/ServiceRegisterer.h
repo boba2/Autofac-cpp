@@ -26,7 +26,7 @@ namespace DI
 		class ServiceRegisterer : public ServiceRegisterer<>
 		{
 		public:
-			virtual void registerAlias(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer)
+			virtual void registerAlias(ServiceAliasRegistererPtr<> alias_registerer)
 			{
 				_alias_registerers.add(alias_registerer);
 			}

@@ -16,7 +16,7 @@ namespace DI
 			ServiceAliasRegisterers(ServiceAliasRegisterers&& other);
 			~ServiceAliasRegisterers();
 
-			void add(std::shared_ptr<ServiceAliasRegisterer<>> alias_registerer);
+			void add(ServiceAliasRegistererPtr<> alias_registerer);
 
 			auto getServiceResolvers(ServiceResolverPtr<> main_resolver) const -> ServiceResolvers;
 

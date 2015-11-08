@@ -41,5 +41,8 @@ namespace DI
 			}
 		};
 
+		template<class T = void, class S = void>
+		using ServiceAliasRegistererPtr = std::shared_ptr<ServiceAliasRegisterer<T, S>>;
+
 	}
 }
