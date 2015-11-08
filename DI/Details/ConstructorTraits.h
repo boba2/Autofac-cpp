@@ -40,7 +40,7 @@ namespace DI
 			template<template<class...> class, class, class, class = void>
 			struct ConstructorArityImpl;
 
-			template<template<class...> class C, class T, int... I>
+			template<template<class...> class C, class T, size_t... I>
 			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
@@ -48,11 +48,11 @@ namespace DI
 				>
 			>
 			{
-				static constexpr int value = sizeof...(I);
+				static constexpr size_t value = sizeof...(I);
 			};
 
-			template<template<class...> class C, class T, int... I>
-			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, 
+			template<template<class...> class C, class T, size_t... I>
+			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& !C<T, WrapType<AnyType<T>, I>...>::value 
@@ -60,24 +60,24 @@ namespace DI
 				>
 			>
 			{
-				static constexpr int value = sizeof...(I);
+				static constexpr size_t value = sizeof...(I);
 			};
 
-			template<template<class...> class C, class T, int... I>
-			struct ConstructorArityImpl<C, T, DI::Details::IndexSequence<I...>, 
+			template<template<class...> class C, class T, size_t... I>
+			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& !C<T, WrapType<AnyType<T>, I>...>::value 
 					&& !C<T, WrapType<AnyTypeRef<T>, I>...>::value
 				>
 			>
-				: ConstructorArityImpl<C, T, DI::Details::MakeIndexSequence<sizeof...(I)-1>>
+				: ConstructorArityImpl<C, T, MakeIndexSequence<sizeof...(I)-1>>
 			{};
 
 			template<template<class...> class C, class T>
 			struct ConstructorArityImpl<C, T, IndexSequence<>>
 			{
-				static constexpr int value = 0;
+				static constexpr size_t value = 0;
 			};
 
 		}
@@ -85,7 +85,7 @@ namespace DI
 		template<class T, int Max = 10>
 		struct ConstructorArity
 		{
-			static constexpr int value = ConstructorTraits::ConstructorArityImpl<ConstructorTraits::IsConstructibleCheck, T, MakeIndexSequence<Max>>::value;
+			static constexpr size_t value = ConstructorTraits::ConstructorArityImpl<ConstructorTraits::IsConstructibleCheck, T, MakeIndexSequence<Max>>::value;
 		};
 
 	}

@@ -35,7 +35,7 @@ namespace DI
 			template<template<class...> class, class, class, class = void>
 			struct FunctionArityImpl;
 
-			template<template<class...> class C, class T, int... I>
+			template<template<class...> class C, class T, size_t... I>
 			struct FunctionArityImpl<C, T, IndexSequence<I...>, 
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
@@ -43,10 +43,10 @@ namespace DI
 				>
 			>
 			{
-				static constexpr int value = sizeof...(I);
+				static constexpr size_t value = sizeof...(I);
 			};
 
-			template<template<class...> class C, class T, int... I>
+			template<template<class...> class C, class T, size_t... I>
 			struct FunctionArityImpl<C, T, IndexSequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0)
@@ -55,10 +55,10 @@ namespace DI
 				>
 			>
 			{
-				static constexpr int value = sizeof...(I);
+				static constexpr size_t value = sizeof...(I);
 			};
 
-			template<template<class...> class C, class T, int... I>
+			template<template<class...> class C, class T, size_t... I>
 			struct FunctionArityImpl<C, T, IndexSequence<I...>, 
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
@@ -72,19 +72,19 @@ namespace DI
 			template<template<class...> class C, class T>
 			struct FunctionArityImpl<C, T, IndexSequence<>>
 			{
-				static constexpr int value = 0;
+				static constexpr size_t value = 0;
 			};
 
 			template<template<class...> class, class, class, class = void>
 			struct FunctionResultTypeImpl;
 
-			template<template<class...> class C, class T, int... I>
+			template<template<class...> class C, class T, size_t... I>
 			struct FunctionResultTypeImpl<C, T, IndexSequence<I...>, std::enable_if_t<C<T, WrapType<AnyType, I>...>::value>>
 			{
 				using Type = std::result_of_t<T(WrapType<AnyType, I>...)>;
 			};
 
-			template<template<class...> class C, class T, int... I>
+			template<template<class...> class C, class T, size_t... I>
 			struct FunctionResultTypeImpl<C, T, IndexSequence<I...>, std::enable_if_t<!C<T, WrapType<AnyType, I>...>::value>>
 			{
 				using Type = std::result_of_t<T(WrapType<AnyTypeRef, I>...)>;

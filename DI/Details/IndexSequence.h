@@ -5,20 +5,20 @@ namespace DI
 	namespace Details
 	{
 		
-		template<int...>
+		template<size_t...>
 		struct IndexSequence {};
 
-		template<int N, int... I>
+		template<size_t N, size_t... I>
 		struct MakeIndexSequenceImpl : MakeIndexSequenceImpl<N - 1, N, I...>
 		{};
 
-		template<int... I>
+		template<size_t... I>
 		struct MakeIndexSequenceImpl<0, I...>
 		{
 			using Type = IndexSequence<I...>;
 		};
 
-		template<int N>
+		template<size_t N>
 		using MakeIndexSequence = typename MakeIndexSequenceImpl<N>::Type;
 
 	}

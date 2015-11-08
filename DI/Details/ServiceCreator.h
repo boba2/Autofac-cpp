@@ -48,7 +48,7 @@ namespace DI
 			struct Factory;
 
 #pragma warning(disable:4100)
-			template<class U, int... I>
+			template<class U, size_t... I>
 			struct Factory<U, IndexSequence<I...>>
 			{
 				static U createWith(ArgumentResolver& resolver)
@@ -57,7 +57,7 @@ namespace DI
 				}
 			};
 
-			template<class U, int... I>
+			template<class U, size_t... I>
 			struct Factory<std::shared_ptr<U>, IndexSequence<I...>>
 			{
 				static std::shared_ptr<U> createWith(ArgumentResolver& resolver)
@@ -66,7 +66,7 @@ namespace DI
 				}
 			};
 
-			template<class U, int... I>
+			template<class U, size_t... I>
 			struct Factory<std::unique_ptr<U>, IndexSequence<I...>>
 			{
 				static std::unique_ptr<U> createWith(ArgumentResolver& resolver)

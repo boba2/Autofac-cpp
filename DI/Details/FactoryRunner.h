@@ -24,7 +24,7 @@ namespace DI
 			template<class S, class>
 			struct Impl;
 
-			template<class S, int... I>
+			template<class S, size_t... I>
 			struct Impl<S, IndexSequence<I...>>
 			{
 				static auto unify(S factory)
