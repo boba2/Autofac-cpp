@@ -75,7 +75,7 @@ namespace DI
 			};
 #pragma warning(default:4100)
 
-			template<int>
+			template<size_t>
 			static ArgumentResolver& wrapValue(ArgumentResolver& object)
 			{
 				return object;

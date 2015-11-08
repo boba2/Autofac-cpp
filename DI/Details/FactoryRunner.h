@@ -53,7 +53,7 @@ namespace DI
 				Container* _container;
 			};
 
-			template<int>
+			template<size_t>
 			static ArgumentResolver& wrapValue(ArgumentResolver& object)
 			{
 				return object;

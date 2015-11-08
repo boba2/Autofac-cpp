@@ -26,7 +26,7 @@ namespace DI
 				operator U&() const {};
 			};
 
-			template<class T, int>
+			template<class T, size_t>
 			using WrapType = T;
 
 			template<class T, class... As>
@@ -81,7 +81,7 @@ namespace DI
 
 		}
 
-		template<class T, int Max = 10>
+		template<class T, size_t Max = 10>
 		struct ConstructorArity
 		{
 			static constexpr size_t value = ConstructorTraits::ConstructorArityImpl<ConstructorTraits::IsConstructibleCheck, T, std::make_index_sequence<Max>>::value;
