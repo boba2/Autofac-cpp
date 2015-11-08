@@ -37,7 +37,7 @@ namespace DI
 				return _service_resolvers.empty();
 			}
 
-			auto get(TypeIndex<> type_index) const -> ServiceResolverPtr<>
+			auto get(TypeIndex type_index) const -> ServiceResolverPtr<>
 			{
 				auto resolver_it = _service_resolvers.find(type_index);
 				if (resolver_it == end(_service_resolvers))
@@ -47,7 +47,7 @@ namespace DI
 			}
 
 		private:
-			std::unordered_map<TypeIndex<>, ServiceResolverPtr<>> _service_resolvers;
+			std::unordered_map<TypeIndex, ServiceResolverPtr<>> _service_resolvers;
 		};
 
 		ServiceResolvers::ServiceResolvers()
@@ -82,7 +82,7 @@ namespace DI
 			return _impl->empty();
 		}
 
-		auto ServiceResolvers::get(TypeIndex<> type_index) const -> ServiceResolverPtr<>
+		auto ServiceResolvers::get(TypeIndex type_index) const -> ServiceResolverPtr<>
 		{
 			return _impl->get(type_index);
 		}

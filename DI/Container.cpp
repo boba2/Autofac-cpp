@@ -16,7 +16,7 @@ namespace DI
 			registerContainer();
 		}
 
-		Details::ServiceResolver<> &getResolver(const Details::TypeIndex<>& type_index) const
+		Details::ServiceResolver<> &getResolver(const Details::TypeIndex& type_index) const
 		{
 			auto resolver = _service_resolvers.get(type_index);
 
@@ -74,7 +74,7 @@ namespace DI
 		return *this;
 	}
 
-	Details::ServiceResolver<> &Container::getResolver(const Details::TypeIndex<>& type_index) const
+	Details::ServiceResolver<> &Container::getResolver(const Details::TypeIndex& type_index) const
 	{
 		return _impl->getResolver(type_index);
 	}

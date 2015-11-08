@@ -28,7 +28,7 @@ namespace DI
 		template<class T>
 		auto& getResolver() const;
 
-		auto getResolver(const Details::TypeIndex<>& type_index) const -> Details::ServiceResolver<>&;
+		auto getResolver(const Details::TypeIndex& type_index) const -> Details::ServiceResolver<>&;
 
 		friend class ContainerBuilder;
 
@@ -51,9 +51,8 @@ namespace DI
 	{
 		using ServiceType = typename Details::UnderlyingType<T>::Type;
 		using ServiceResolverType = Details::ServiceResolver<ServiceType>;
-		using TypeIndex = Details::TypeIndex<ServiceType>;
 
-		return dynamic_cast<ServiceResolverType&>(getResolver(TypeIndex()));
+		return dynamic_cast<ServiceResolverType&>(getResolver(Details::TypeIndex::from<ServiceType>()));
 	}
 
 }
