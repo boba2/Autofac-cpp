@@ -8,9 +8,11 @@ namespace DI
 	namespace Details
 	{
 
-		template<class T, class FactoryType = T, class FactoryResultType = typename FunctionResultType<FactoryType>::Type, class ResultType = typename UnderlyingType<FactoryResultType>::Type>
+		template<class ResultType, class FactoryType>
 		class ServiceFactoryResolver : public ServiceResolver<ResultType>
 		{
+			using FactoryResultType = typename FunctionResultType<FactoryType>::Type;
+			
 			using ServiceType = typename ServiceResolver<ResultType>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<ResultType>::ServiceRefType;
 			using ServicePtrType = typename ServiceResolver<ResultType>::ServicePtrType;

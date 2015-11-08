@@ -54,7 +54,7 @@ namespace DI
 		private:
 			auto getMainServiceResolver() const -> ServiceResolverPtr<ServiceType>
 			{
-				return std::make_shared<ServiceFactoryResolver<FactoryType>>(_factory);
+				return std::make_shared<ServiceFactoryResolver<ServiceType, FactoryType>>(_factory);
 			}
 
 		private:
