@@ -11,6 +11,14 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
+			void add(std::vector<ServiceResolverPtr<>> resolvers)
+			{
+				std::for_each(
+					begin(resolvers), end(resolvers),
+					[this](auto& resolver) { add(resolver); }
+				);
+			}
+
 			void add(ServiceResolverPtr<> resolver)
 			{
 				_service_resolvers[resolver->getServiceType()] = resolver;
@@ -53,10 +61,7 @@ namespace DI
 		ServiceResolvers::ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers)
 			: ServiceResolvers()
 		{
-			std::for_each(
-				begin(resolvers), end(resolvers),
-				[this](auto& resolver) { _impl->add(resolver); }
-			);
+			_impl->add(resolvers);
 		}
 
 		ServiceResolvers::~ServiceResolvers()
