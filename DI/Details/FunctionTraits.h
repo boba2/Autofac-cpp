@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include "IndexSequence.h"
 
 namespace DI
 {
@@ -36,7 +35,7 @@ namespace DI
 			struct FunctionArityImpl;
 
 			template<template<class...> class C, class T, size_t... I>
-			struct FunctionArityImpl<C, T, IndexSequence<I...>, 
+			struct FunctionArityImpl<C, T, std::index_sequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& C<T, WrapType<AnyType, I>...>::value
@@ -47,7 +46,7 @@ namespace DI
 			};
 
 			template<template<class...> class C, class T, size_t... I>
-			struct FunctionArityImpl<C, T, IndexSequence<I...>,
+			struct FunctionArityImpl<C, T, std::index_sequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0)
 					&& !C<T, WrapType<AnyType, I>...>::value
@@ -59,18 +58,18 @@ namespace DI
 			};
 
 			template<template<class...> class C, class T, size_t... I>
-			struct FunctionArityImpl<C, T, IndexSequence<I...>, 
+			struct FunctionArityImpl<C, T, std::index_sequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& !C<T, WrapType<AnyType, I>...>::value
 					&& !C<T, WrapType<AnyTypeRef, I>...>::value
 				>
 			>
-				: FunctionArityImpl<C, T, MakeIndexSequence<sizeof...(I) - 1>>
+				: FunctionArityImpl<C, T, std::make_index_sequence<sizeof...(I) - 1>>
 			{};
 
 			template<template<class...> class C, class T>
-			struct FunctionArityImpl<C, T, IndexSequence<>>
+			struct FunctionArityImpl<C, T, std::index_sequence<>>
 			{
 				static constexpr size_t value = 0;
 			};
@@ -79,13 +78,13 @@ namespace DI
 			struct FunctionResultTypeImpl;
 
 			template<template<class...> class C, class T, size_t... I>
-			struct FunctionResultTypeImpl<C, T, IndexSequence<I...>, std::enable_if_t<C<T, WrapType<AnyType, I>...>::value>>
+			struct FunctionResultTypeImpl<C, T, std::index_sequence<I...>, std::enable_if_t<C<T, WrapType<AnyType, I>...>::value>>
 			{
 				using Type = std::result_of_t<T(WrapType<AnyType, I>...)>;
 			};
 
 			template<template<class...> class C, class T, size_t... I>
-			struct FunctionResultTypeImpl<C, T, IndexSequence<I...>, std::enable_if_t<!C<T, WrapType<AnyType, I>...>::value>>
+			struct FunctionResultTypeImpl<C, T, std::index_sequence<I...>, std::enable_if_t<!C<T, WrapType<AnyType, I>...>::value>>
 			{
 				using Type = std::result_of_t<T(WrapType<AnyTypeRef, I>...)>;
 			};
@@ -95,13 +94,13 @@ namespace DI
 		template<class T, int Max = 10>
 		struct FunctionArity
 		{
-			static constexpr int value = FunctionTraits::FunctionArityImpl<FunctionTraits::IsCallableCheck, T, MakeIndexSequence<Max>>::value;
+			static constexpr int value = FunctionTraits::FunctionArityImpl<FunctionTraits::IsCallableCheck, T, std::make_index_sequence<Max>>::value;
 		};
 
 		template<class T>
 		struct FunctionResultType
 		{
-			using Type = typename FunctionTraits::FunctionResultTypeImpl<FunctionTraits::IsCallableCheck, T, MakeIndexSequence<FunctionArity<T>::value>>::Type;
+			using Type = typename FunctionTraits::FunctionResultTypeImpl<FunctionTraits::IsCallableCheck, T, std::make_index_sequence<FunctionArity<T>::value>>::Type;
 		};
 
 	}

@@ -2,7 +2,6 @@
 
 #include <functional>
 #include <memory>
-#include "IndexSequence.h"
 #include "FunctionTraits.h"
 #include "../Error/ServiceNotResolvableAs.h"
 
@@ -18,14 +17,14 @@ namespace DI
 			template<class S>
 			static auto unifyFactory(S factory)
 			{
-				return Impl<S, MakeIndexSequence<FunctionArity<S>::value>>::unify(factory);
+				return Impl<S, std::make_index_sequence<FunctionArity<S>::value>>::unify(factory);
 			}
 
 			template<class S, class>
 			struct Impl;
 
 			template<class S, size_t... I>
-			struct Impl<S, IndexSequence<I...>>
+			struct Impl<S, std::index_sequence<I...>>
 			{
 				static auto unify(S factory)
 				{

@@ -84,9 +84,6 @@
     <ClInclude Include="Details\ConstructorTraits.h">
       <Filter>Details</Filter>
     </ClInclude>
-    <ClInclude Include="Details\IndexSequence.h">
-      <Filter>Details</Filter>
-    </ClInclude>
     <ClInclude Include="Details\ServiceCreator.h">
       <Filter>Details</Filter>
     </ClInclude>

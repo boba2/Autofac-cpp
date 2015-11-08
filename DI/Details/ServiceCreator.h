@@ -1,6 +1,5 @@
 #pragma once
 
-#include "IndexSequence.h"
 #include "ConstructorTraits.h"
 
 namespace DI
@@ -17,7 +16,7 @@ namespace DI
 			static S createService(DI::Container* container)
 			{
 				auto resolver = ArgumentResolver(container);
-				return Factory<S, MakeIndexSequence<ConstructorArity<T>::value>>::createWith(resolver);
+				return Factory<S, std::make_index_sequence<ConstructorArity<T>::value>>::createWith(resolver);
 			}
 
 			struct ArgumentResolver
@@ -49,7 +48,7 @@ namespace DI
 
 #pragma warning(disable:4100)
 			template<class U, size_t... I>
-			struct Factory<U, IndexSequence<I...>>
+			struct Factory<U, std::index_sequence<I...>>
 			{
 				static U createWith(ArgumentResolver& resolver)
 				{
@@ -58,7 +57,7 @@ namespace DI
 			};
 
 			template<class U, size_t... I>
-			struct Factory<std::shared_ptr<U>, IndexSequence<I...>>
+			struct Factory<std::shared_ptr<U>, std::index_sequence<I...>>
 			{
 				static std::shared_ptr<U> createWith(ArgumentResolver& resolver)
 				{
@@ -67,7 +66,7 @@ namespace DI
 			};
 
 			template<class U, size_t... I>
-			struct Factory<std::unique_ptr<U>, IndexSequence<I...>>
+			struct Factory<std::unique_ptr<U>, std::index_sequence<I...>>
 			{
 				static std::unique_ptr<U> createWith(ArgumentResolver& resolver)
 				{

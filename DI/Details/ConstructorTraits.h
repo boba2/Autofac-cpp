@@ -1,7 +1,6 @@
 #pragma once
 
 #include <type_traits>
-#include "IndexSequence.h"
 
 namespace DI
 {
@@ -41,7 +40,7 @@ namespace DI
 			struct ConstructorArityImpl;
 
 			template<template<class...> class C, class T, size_t... I>
-			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
+			struct ConstructorArityImpl<C, T, std::index_sequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& C<T, WrapType<AnyType<T>, I>...>::value
@@ -52,7 +51,7 @@ namespace DI
 			};
 
 			template<template<class...> class C, class T, size_t... I>
-			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
+			struct ConstructorArityImpl<C, T, std::index_sequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& !C<T, WrapType<AnyType<T>, I>...>::value 
@@ -64,18 +63,18 @@ namespace DI
 			};
 
 			template<template<class...> class C, class T, size_t... I>
-			struct ConstructorArityImpl<C, T, IndexSequence<I...>, 
+			struct ConstructorArityImpl<C, T, std::index_sequence<I...>,
 				std::enable_if_t<
 					(sizeof...(I) > 0) 
 					&& !C<T, WrapType<AnyType<T>, I>...>::value 
 					&& !C<T, WrapType<AnyTypeRef<T>, I>...>::value
 				>
 			>
-				: ConstructorArityImpl<C, T, MakeIndexSequence<sizeof...(I)-1>>
+				: ConstructorArityImpl<C, T, std::make_index_sequence<sizeof...(I)-1>>
 			{};
 
 			template<template<class...> class C, class T>
-			struct ConstructorArityImpl<C, T, IndexSequence<>>
+			struct ConstructorArityImpl<C, T, std::index_sequence<>>
 			{
 				static constexpr size_t value = 0;
 			};
@@ -85,7 +84,7 @@ namespace DI
 		template<class T, int Max = 10>
 		struct ConstructorArity
 		{
-			static constexpr size_t value = ConstructorTraits::ConstructorArityImpl<ConstructorTraits::IsConstructibleCheck, T, MakeIndexSequence<Max>>::value;
+			static constexpr size_t value = ConstructorTraits::ConstructorArityImpl<ConstructorTraits::IsConstructibleCheck, T, std::make_index_sequence<Max>>::value;
 		};
 
 	}
