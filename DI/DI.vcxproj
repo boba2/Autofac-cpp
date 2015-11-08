@@ -147,6 +147,7 @@
     <ClInclude Include="Details\ConstructorTraits.h" />
     <ClInclude Include="Details\FactoryRunner.h" />
     <ClInclude Include="Details\FunctionTraits.h" />
+    <ClInclude Include="Details\ManageableServiceRegisterer.h" />
     <ClInclude Include="Details\ServiceAliasRegisterer.h" />
     <ClInclude Include="Details\ServiceAliasResolver.h" />
     <ClInclude Include="Details\ServiceCreator.h" />
