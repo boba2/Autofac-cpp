@@ -11,10 +11,14 @@ namespace DI
 	namespace Details
 	{
 
-		template <class T, class FactoryType = T, class FactoryResultType = typename FunctionResultType<FactoryType>::Type, class ServiceType = typename UnderlyingType<FactoryResultType>::Type>
-		class ServiceFactoryRegisterer : public ServiceRegisterer<ServiceType>
+		template <class T>
+		class ServiceFactoryRegisterer : public ServiceRegisterer
 		{
 		public:
+			using FactoryType = T;
+			using FactoryResultType = typename FunctionResultType<FactoryType>::Type;
+			using ServiceType = typename UnderlyingType<FactoryResultType>::Type;
+
 			explicit ServiceFactoryRegisterer(FactoryType factory)
 				: _factory(factory)
 			{}
@@ -35,7 +39,7 @@ namespace DI
 			}
 
 		private:
-			virtual ServiceResolverPtr<> getServiceResolver() const override
+			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
 			{
 				auto resolver = std::static_pointer_cast<ServiceResolver<ServiceType>>(std::make_shared<ServiceFactoryResolver<FactoryType>>(_factory));
 

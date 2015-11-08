@@ -11,10 +11,10 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceTypeRegisterer : public ServiceRegisterer<T>
+		class ServiceTypeRegisterer : public ServiceRegisterer
 		{
 		public:
-			virtual ServiceResolverPtr<> getServiceResolver() const override
+			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
 			{
 				auto resolver = std::static_pointer_cast<ServiceResolver<T>>(std::make_shared<ServiceTypeResolver<T>>());
 				if (_single_instance)

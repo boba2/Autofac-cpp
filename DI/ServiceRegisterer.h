@@ -44,7 +44,7 @@ namespace DI
 		template<class T, class S, class... U>
 		auto createRegisterer(U&&... param);
 
-		void addRegisterer(Details::ServiceRegistererPtr<> registerer);
+		void addRegisterer(Details::ServiceRegistererPtr registerer);
 
 #pragma warning(disable:4251)
 		std::shared_ptr<Impl> _impl;

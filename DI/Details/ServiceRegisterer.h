@@ -1,62 +1,37 @@
 #pragma once
 
+#include "../Support/DIdecl.h"
 #include "ServiceResolver.h"
 #include "ServiceAliasRegisterer.h"
 #include "ServiceResolvers.h"
-#include "ServiceAliasRegisterers.h"
 
 namespace DI
 {
 	namespace Details
 	{
 
-		template<class T = void>
-		class ServiceRegisterer;
-
-		template<>
-		class ServiceRegisterer<void>
+		class DI_API ServiceRegisterer
 		{
 		public:
-			virtual ~ServiceRegisterer() {}
-
-			virtual ServiceResolvers getServiceResolvers() const = 0;
-		};
-
-		template<class T>
-		class ServiceRegisterer : public ServiceRegisterer<>
-		{
-		public:
-			virtual void registerAlias(ServiceAliasRegistererPtr<> alias_registerer)
-			{
-				_alias_registerers.add(alias_registerer);
-			}
-
-			virtual ServiceResolvers getServiceResolvers() const override
-			{
-				auto main_resolver = getServiceResolver();
-				auto alias_resolvers = getServiceAliasResolvers(main_resolver);
-
-				if (!alias_resolvers.empty())
-					return alias_resolvers;
-				
-				return ServiceResolvers{ main_resolver };
-			}
+			ServiceRegisterer();
+			ServiceRegisterer(ServiceRegisterer&&);
+			virtual ~ServiceRegisterer();
+			
+			void registerAlias(ServiceAliasRegistererPtr<> alias_registerer);
+			auto getServiceResolvers() const -> ServiceResolvers;
 
 		protected:
-			virtual ServiceResolverPtr<> getServiceResolver() const = 0;
+			virtual auto getServiceResolver() const -> ServiceResolverPtr<> = 0;
 
 		private:
-			auto getServiceAliasResolvers(ServiceResolverPtr<> main_resolver) const
-			{
-				return _alias_registerers.getServiceResolvers(main_resolver);
-			}
+			class Impl;
 
-		private:
-			ServiceAliasRegisterers _alias_registerers;
+#pragma warning(disable:4251)
+			std::unique_ptr<Impl> _impl;
+#pragma warning(default:4251)
 		};
 
-		template<class T = void>
-		using ServiceRegistererPtr = std::shared_ptr<ServiceRegisterer<T>>;
+		typedef std::shared_ptr<ServiceRegisterer> ServiceRegistererPtr;
 
 	}
 }

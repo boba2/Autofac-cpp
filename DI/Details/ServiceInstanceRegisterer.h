@@ -10,7 +10,7 @@ namespace DI
 	{
 
 		template<class T>
-		class ServiceInstanceRegisterer : public ServiceRegisterer<typename UnderlyingType<T>::Type>
+		class ServiceInstanceRegisterer : public ServiceRegisterer
 		{
 		public:
 			using ServiceType = typename UnderlyingType<T>::Type;
@@ -29,7 +29,7 @@ namespace DI
 				: _instance(std::move(instance))
 			{}
 
-			virtual ServiceResolverPtr<> getServiceResolver() const override
+			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
 			{
 				return std::make_shared<ServiceInstanceResolver<ServiceType>>(_instance);
 			}
