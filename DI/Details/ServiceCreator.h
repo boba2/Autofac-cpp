@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ConstructorTraits.h"
+#include "../Container.h"
 
 namespace DI
 {
@@ -8,7 +9,7 @@ namespace DI
 
 	namespace Details
 	{
-		
+
 		template<class T>
 		struct ServiceCreator
 		{

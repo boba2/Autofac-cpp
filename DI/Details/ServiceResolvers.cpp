@@ -7,7 +7,7 @@ namespace DI
 {
 	namespace Details
 	{
-		
+
 		class ServiceResolvers::Impl
 		{
 		public:
@@ -20,7 +20,7 @@ namespace DI
 			{
 				std::for_each(
 					begin(resolvers), end(resolvers),
-					[this](auto& resolver) { add(resolver); }
+					[=](auto& resolver) { this->add(resolver); }
 				);
 			}
 
@@ -28,7 +28,7 @@ namespace DI
 			{
 				std::for_each(
 					begin(other._service_resolvers), end(other._service_resolvers),
-					[this](auto& resolver_it) { add(resolver_it.second); }
+					[=](auto& resolver_it) { this->add(resolver_it.second); }
 				);
 			}
 
