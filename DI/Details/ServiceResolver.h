@@ -19,7 +19,7 @@ namespace DI
 		public:
 			virtual ~ServiceResolver() {}
 
-			virtual TypeIndex getServiceType() const = 0;
+			virtual const TypeIndex& getServiceType() const = 0;
 		};
 
 		template<class T>
@@ -33,9 +33,11 @@ namespace DI
 			using ServiceUniquePtrType = std::unique_ptr<T>;
 
 		public:
-			virtual TypeIndex getServiceType() const override
+			virtual const TypeIndex& getServiceType() const override
 			{
-				return TypeIndex::from<T>();
+				static const auto type_index = TypeIndex::from<T>();
+
+				return type_index;
 			}
 
 			virtual ServiceType getService(Container* container) = 0;

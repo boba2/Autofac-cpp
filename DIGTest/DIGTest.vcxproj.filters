@@ -84,6 +84,9 @@
     <ClCompile Include="ServiceOverwriteTest.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
+    <ClCompile Include="ServiceCollectionTest.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\GoogleTest\msvc\gtest\Debug\gtestd.lib">

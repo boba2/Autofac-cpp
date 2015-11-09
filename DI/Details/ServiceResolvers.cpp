@@ -82,7 +82,7 @@ namespace DI
 			return _impl->empty();
 		}
 
-		auto ServiceResolvers::get(TypeIndex type_index) const -> ServiceResolverPtr<>
+		auto ServiceResolvers::get(const TypeIndex& type_index) const -> ServiceResolverPtr<>
 		{
 			return _impl->get(type_index);
 		}

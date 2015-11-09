@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "ServiceResolver.h"
 
 namespace DI
@@ -114,6 +115,17 @@ namespace DI
 			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
 			{
 				return resolver.getServiceAsUniquePtr(container);
+			}
+		};
+
+		template<class T>
+		struct ServiceReferenceTypeConverter<std::vector<T>>
+		{
+			using Result = std::vector<T>;
+
+			static Result convertFrom(ServiceResolver<T>& resolver, Container* container)
+			{
+				return std::vector<T>{ServiceReferenceTypeConverter<T>::convertFrom(resolver, container)};
 			}
 		};
 

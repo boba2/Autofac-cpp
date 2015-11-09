@@ -3,11 +3,15 @@
 #include "Support/DIdecl.h"
 #include "Details/ServiceReferenceTypeConverter.h"
 #include "Details/ServiceResolver.h"
-#include "Details/ServiceResolvers.h"
 #include "Details/UnderlyingType.h"
 
 namespace DI
 {
+
+	namespace Details
+	{
+		class ServiceResolvers;
+	}
 
 	class DI_API Container
 	{
