@@ -2,8 +2,8 @@
 
 #include "Support/DIdecl.h"
 #include "Details/ServiceReferenceTypeConverter.h"
-#include "Details/ServiceResolver.h"
 #include "Details/UnderlyingType.h"
+#include "Details/CompositeServiceResolver.h"
 #include "Details/TypeIndex.h"
 
 namespace DI
@@ -33,7 +33,7 @@ namespace DI
 		template<class T>
 		auto& getResolver() const;
 
-		auto getResolver(const Details::TypeIndex& type_index) const -> Details::ServiceResolver<>&;
+		auto getResolver(const Details::TypeIndex& type_index) const -> Details::CompositeServiceResolver<>&;
 
 		friend class ContainerBuilder;
 
@@ -55,7 +55,7 @@ namespace DI
 	auto& Container::getResolver() const
 	{
 		using ServiceType = typename Details::UnderlyingType<T>::Type;
-		using ServiceResolverType = Details::ServiceResolver<ServiceType>;
+		using ServiceResolverType = Details::CompositeServiceResolver<ServiceType>;
 
 		return dynamic_cast<ServiceResolverType&>(getResolver(Details::TypeIndex::from<ServiceType>()));
 	}

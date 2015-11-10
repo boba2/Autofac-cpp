@@ -19,7 +19,7 @@ namespace DI
 			void merge(const ServiceResolvers& other);
 
 			auto empty() const -> bool;
-			auto get(const TypeIndex& type_index) const -> ServiceResolverPtr<>;
+			auto get(const TypeIndex& type_index) const -> CompositeServiceResolverPtr<>;
 
 		private:
 			class Impl;

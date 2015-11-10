@@ -41,13 +41,13 @@ namespace DI
 				return _service_resolvers.empty();
 			}
 
-			auto get(TypeIndex type_index) const -> ServiceResolverPtr<>
+			auto get(TypeIndex type_index) const -> CompositeServiceResolverPtr<>
 			{
 				auto resolver_it = _service_resolvers.find(type_index);
 				if (resolver_it == end(_service_resolvers))
 					return nullptr;
 
-				return std::dynamic_pointer_cast<ServiceResolver<>>(resolver_it->second);
+				return resolver_it->second;
 			}
 
 		private:
@@ -80,7 +80,7 @@ namespace DI
 			return _impl->empty();
 		}
 
-		auto ServiceResolvers::get(const TypeIndex& type_index) const -> ServiceResolverPtr<>
+		auto ServiceResolvers::get(const TypeIndex& type_index) const -> CompositeServiceResolverPtr<>
 		{
 			return _impl->get(type_index);
 		}
