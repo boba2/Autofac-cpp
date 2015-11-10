@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ServiceResolver.h"
+#include <vector>
+#include <algorithm>
 
 namespace DI
 {
@@ -17,20 +19,35 @@ namespace DI
 
 			void addResolver(ServiceResolverPtr<> resolver)
 			{
-				_inner_resolver = resolver;
+				_inner_resolvers.push_back(resolver);
 			}
 
 			void merge(const CompositeServiceResolver<>& other)
 			{
-				_inner_resolver = other._inner_resolver;
+				_inner_resolvers.insert(end(_inner_resolvers), begin(other._inner_resolvers), end(other._inner_resolvers));
 			}
 
-			ServiceResolverPtr<> _inner_resolver;
+			std::vector<ServiceResolverPtr<>> _inner_resolvers;
 		};
 
 		template<class T>
 		class CompositeServiceResolver : public ServiceResolver<T>, public CompositeServiceResolver<>
 		{
+		public:
+			using AllResolvers = std::vector<ServiceResolverPtr<T>>;
+
+			auto getAllResolvers() const -> AllResolvers
+			{
+				auto result = AllResolvers(_inner_resolvers.size());
+				std::transform(
+					begin(_inner_resolvers), end(_inner_resolvers), 
+					begin(result), 
+					[](auto& resolver) { return std::dynamic_pointer_cast<ServiceResolver<T>>(resolver); }
+				);
+
+				return result;
+			}
+
 		private:
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -65,7 +82,7 @@ namespace DI
 
 			auto getSingleResolver() const -> ServiceResolverPtr<T>
 			{
-				return std::dynamic_pointer_cast<ServiceResolver<T>>(_inner_resolver);
+				return std::dynamic_pointer_cast<ServiceResolver<T>>(_inner_resolvers.back());
 			}
 		};
 

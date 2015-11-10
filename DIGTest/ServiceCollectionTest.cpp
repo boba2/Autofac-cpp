@@ -14,9 +14,9 @@ TEST_F(ServiceCollectionTest, Should)
 		.registerInstance(Service(13))
 		.registerInstance(Service(14));
 
-	auto services = container().resolve<std::vector<Service>>();
+	auto services = container().resolve<std::vector<std::shared_ptr<Service>>>();
 
-//	ASSERT_TRUE(services.size() == 2);
-//	ASSERT_EQ(13, services[0]._value);
-//	ASSERT_EQ(14, services[1]._value);
+	ASSERT_TRUE(services.size() == 2);
+	ASSERT_EQ(13, services[0]->_value);
+	ASSERT_EQ(14, services[1]->_value);
 }
