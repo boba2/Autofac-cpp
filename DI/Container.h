@@ -4,6 +4,7 @@
 #include "Details/ServiceReferenceTypeConverter.h"
 #include "Details/ServiceResolver.h"
 #include "Details/UnderlyingType.h"
+#include "Details/TypeIndex.h"
 
 namespace DI
 {

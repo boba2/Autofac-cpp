@@ -11,24 +11,16 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
-			void add(ServiceResolverPtr<> resolver)
+			void add(const ServiceResolverData& resolver)
 			{
-				_service_resolvers[resolver->getServiceType()] = resolver;
-			}
-
-			void add(std::vector<ServiceResolverPtr<>> resolvers)
-			{
-				std::for_each(
-					begin(resolvers), end(resolvers),
-					[=](auto& resolver) { this->add(resolver); }
-				);
+				add(std::get<0>(resolver), std::get<1>(resolver));
 			}
 
 			void merge(const Impl& other)
 			{
 				std::for_each(
 					begin(other._service_resolvers), end(other._service_resolvers),
-					[=](auto& resolver_it) { this->add(resolver_it.second); }
+					[=](auto& resolver_it) { this->add(resolver_it.first, resolver_it.second); }
 				);
 			}
 
@@ -47,6 +39,12 @@ namespace DI
 			}
 
 		private:
+			void add(const TypeIndex& type_index, ServiceResolverPtr<> resolver)
+			{
+				_service_resolvers[type_index] = resolver;
+			}
+
+		private:
 			std::unordered_map<TypeIndex, ServiceResolverPtr<>> _service_resolvers;
 		};
 
@@ -58,16 +56,10 @@ namespace DI
 			: _impl(std::move(other._impl))
 		{}
 
-		ServiceResolvers::ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers)
-			: ServiceResolvers()
-		{
-			_impl->add(resolvers);
-		}
-
 		ServiceResolvers::~ServiceResolvers()
 		{}
 
-		void ServiceResolvers::add(ServiceResolverPtr<> resolver)
+		void ServiceResolvers::add(const ServiceResolverData& resolver)
 		{
 			_impl->add(resolver);
 		}

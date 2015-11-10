@@ -22,6 +22,7 @@ namespace DI
 				: _inner_resolver(inner_resolver)
 			{}
 
+		private:
 			virtual ServiceType getService(Container* container) override
 			{
 				return _inner_resolver->getService(container);

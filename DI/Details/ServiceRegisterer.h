@@ -21,7 +21,7 @@ namespace DI
 			auto getServiceResolvers() const -> ServiceResolvers;
 
 		protected:
-			virtual auto getServiceResolver() const -> ServiceResolverPtr<> = 0;
+			virtual auto getServiceResolver() const -> ServiceResolverData = 0;
 
 		private:
 			class Impl;

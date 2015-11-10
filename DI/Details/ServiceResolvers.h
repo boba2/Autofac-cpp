@@ -2,21 +2,24 @@
 
 #include "../Support/DIdecl.h"
 #include "ServiceResolver.h"
+#include <tuple>
+#include "TypeIndex.h"
 
 namespace DI
 {
 	namespace Details
 	{
+
+		using ServiceResolverData = std::tuple<TypeIndex, ServiceResolverPtr<>>;
 		
 		class DI_API ServiceResolvers
 		{
 		public:
 			ServiceResolvers();
 			ServiceResolvers(ServiceResolvers&& other);
-			ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers);
 			~ServiceResolvers();
 
-			void add(ServiceResolverPtr<> resolver);
+			void add(const ServiceResolverData& resolver);
 			void merge(const ServiceResolvers& other);
 
 			auto empty() const -> bool;

@@ -26,7 +26,7 @@ namespace DI
 			}
 
 		protected:
-			virtual auto getServiceResolver() const -> ServiceResolverPtr<> override
+			virtual auto getServiceResolver() const -> ServiceResolverData override
 			{
 				auto resolver = getMainServiceResolver();
 
@@ -35,7 +35,7 @@ namespace DI
 				if (_auto_managed)
 					resolver = std::make_shared<AutoManagedServiceResolver<ServiceType>>(resolver);
 
-				return resolver;
+				return ServiceResolverData{TypeIndex::from<ServiceType>(), resolver};
 			}
 
 			virtual auto getMainServiceResolver() const -> ServiceResolverPtr<ServiceType> = 0;

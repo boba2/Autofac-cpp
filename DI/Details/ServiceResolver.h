@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "TypeIndex.h"
 
 namespace DI
 {
@@ -18,8 +17,6 @@ namespace DI
 		{
 		public:
 			virtual ~ServiceResolver() {}
-
-			virtual const TypeIndex& getServiceType() const = 0;
 		};
 
 		template<class T>
@@ -31,14 +28,6 @@ namespace DI
 			using ServicePtrType = T*;
 			using ServiceSharedPtrType = std::shared_ptr<T>;
 			using ServiceUniquePtrType = std::unique_ptr<T>;
-
-		public:
-			virtual const TypeIndex& getServiceType() const override
-			{
-				static const auto type_index = TypeIndex::from<T>();
-
-				return type_index;
-			}
 
 			virtual ServiceType getService(Container* container) = 0;
 			virtual ServiceRefType getServiceAsRef(Container* container) = 0;

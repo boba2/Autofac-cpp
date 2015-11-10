@@ -44,14 +44,6 @@ namespace DI
 	{
 	}
 
-	Details::ServiceResolvers convert(const std::vector<Details::ServiceResolverPtr<>>& service_resolvers)
-	{
-		auto result = Details::ServiceResolvers();
-		std::for_each(begin(service_resolvers), end(service_resolvers), [&result](auto resolver) { result.add(resolver); });
-
-		return result;
-	}
-
 	Container::Container(Details::ServiceResolvers service_resolvers)
 		: _impl(std::make_unique<Impl>(std::move(service_resolvers)))
 	{
