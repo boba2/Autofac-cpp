@@ -11,16 +11,28 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
-			void add(ServiceResolverCreatorPtr resolver)
+			void add(ServiceResolverCreatorPtr resolver_creator)
 			{
-				add(resolver->getServiceType(), resolver->getServiceResolver());
+				const auto& type_index = resolver_creator->getServiceType();
+				auto resolver = resolver_creator->getServiceResolver();
+
+				if (_service_resolvers.find(type_index) == end(_service_resolvers))
+					_service_resolvers[type_index] = resolver_creator->createCompositeServiceResolver();
+
+				_service_resolvers[type_index]->addResolver(resolver);
 			}
 
 			void merge(const Impl& other)
 			{
 				std::for_each(
 					begin(other._service_resolvers), end(other._service_resolvers),
-					[=](auto& resolver_it) { this->add(resolver_it.first, resolver_it.second); }
+					[=](auto& resolver_it)
+					{
+						if (_service_resolvers.find(resolver_it.first) == end(_service_resolvers))
+							_service_resolvers[resolver_it.first] = resolver_it.second;
+						else
+							_service_resolvers[resolver_it.first]->merge(*resolver_it.second);
+					}
 				);
 			}
 
@@ -35,17 +47,11 @@ namespace DI
 				if (resolver_it == end(_service_resolvers))
 					return nullptr;
 
-				return resolver_it->second;
+				return std::dynamic_pointer_cast<ServiceResolver<>>(resolver_it->second);
 			}
 
 		private:
-			void add(const TypeIndex& type_index, ServiceResolverPtr<> resolver)
-			{
-				_service_resolvers[type_index] = resolver;
-			}
-
-		private:
-			std::unordered_map<TypeIndex, ServiceResolverPtr<>> _service_resolvers;
+			std::unordered_map<TypeIndex, CompositeServiceResolverPtr<>> _service_resolvers;
 		};
 
 		ServiceResolvers::ServiceResolvers()

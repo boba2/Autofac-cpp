@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Container.h" />
     <ClInclude Include="ContainerBuilder.h" />
+    <ClInclude Include="Details\CompositeServiceResolver.h" />
     <ClInclude Include="Details\ConstructorTraits.h" />
     <ClInclude Include="Details\FactoryRunner.h" />
     <ClInclude Include="Details\FunctionTraits.h" />
