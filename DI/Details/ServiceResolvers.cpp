@@ -11,9 +11,9 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
-			void add(const ServiceResolverData& resolver)
+			void add(ServiceResolverCreatorPtr resolver)
 			{
-				add(std::get<0>(resolver), std::get<1>(resolver));
+				add(resolver->getServiceType(), resolver->getServiceResolver());
 			}
 
 			void merge(const Impl& other)
@@ -59,7 +59,7 @@ namespace DI
 		ServiceResolvers::~ServiceResolvers()
 		{}
 
-		void ServiceResolvers::add(const ServiceResolverData& resolver)
+		void ServiceResolvers::add(ServiceResolverCreatorPtr resolver)
 		{
 			_impl->add(resolver);
 		}

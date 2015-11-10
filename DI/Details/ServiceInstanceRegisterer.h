@@ -30,9 +30,9 @@ namespace DI
 			{}
 
 		protected:
-			virtual auto getServiceResolver() const -> ServiceResolverData override
+			virtual auto getServiceResolver() const -> ServiceResolverCreatorPtr override
 			{
-				return ServiceResolverData{TypeIndex::from<ServiceType>(), std::make_shared<ServiceInstanceResolver<ServiceType>>(_instance)};
+				return ConcreteServiceResolverCreator<ServiceType>::from(std::make_shared<ServiceInstanceResolver<ServiceType>>(_instance));
 			}
 
 		private:

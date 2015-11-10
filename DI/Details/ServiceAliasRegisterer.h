@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ServiceAliasResolver.h"
-#include "ServiceResolvers.h"
+#include "ServiceResolverCreator.h"
 
 namespace DI
 {
@@ -17,7 +17,7 @@ namespace DI
 		public:
 			virtual ~ServiceAliasRegisterer() {}
 
-			virtual ServiceResolverData getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const = 0;
+			virtual ServiceResolverCreatorPtr getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const = 0;
 		};
 
 		template<class T, class S>
@@ -26,9 +26,9 @@ namespace DI
 		public:
 			static_assert(std::is_base_of<T, S>::value, "Alias should be a resolvable base class of the service class being registered");
 
-			virtual ServiceResolverData getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const override
+			virtual ServiceResolverCreatorPtr getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const override
 			{
-				return ServiceResolverData{TypeIndex::from<T>(), std::make_shared<ServiceAliasResolver<T, S>>(std::dynamic_pointer_cast<ServiceResolver<S>>(main_resolver))};
+				return ConcreteServiceResolverCreator<T>::from(std::make_shared<ServiceAliasResolver<T, S>>(std::dynamic_pointer_cast<ServiceResolver<S>>(main_resolver)));
 			}
 		};
 
@@ -36,9 +36,9 @@ namespace DI
 		class ServiceAliasRegisterer<T, T> : public ServiceAliasRegisterer<>
 		{
 		public:
-			virtual ServiceResolverData getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const override
+			virtual ServiceResolverCreatorPtr getServiceAliasResolver(ServiceResolverPtr<> main_resolver) const override
 			{
-				return ServiceResolverData{TypeIndex::from<T>(), main_resolver};
+				return ConcreteServiceResolverCreator<T>::from(main_resolver);
 			}
 		};
 

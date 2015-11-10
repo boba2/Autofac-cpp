@@ -15,7 +15,7 @@ namespace DI
 				_alias_registerers.push_back(alias_registerer);
 			}
 
-			ServiceResolvers getServiceResolvers(const ServiceResolverData& main_resolver) const
+			ServiceResolvers getServiceResolvers(ServiceResolverCreatorPtr main_resolver) const
 			{
 				if (_alias_registerers.empty())
 				{
@@ -25,7 +25,7 @@ namespace DI
 					return result;
 				}
 
-				return getServiceAliasResolvers(std::get<1>(main_resolver));
+				return getServiceAliasResolvers(main_resolver->getServiceResolver());
 			}
 
 		private:

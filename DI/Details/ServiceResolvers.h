@@ -1,17 +1,13 @@
 #pragma once
 
 #include "../Support/DIdecl.h"
-#include "ServiceResolver.h"
-#include <tuple>
-#include "TypeIndex.h"
+#include "ServiceResolverCreator.h"
 
 namespace DI
 {
 	namespace Details
 	{
 
-		using ServiceResolverData = std::tuple<TypeIndex, ServiceResolverPtr<>>;
-		
 		class DI_API ServiceResolvers
 		{
 		public:
@@ -19,7 +15,7 @@ namespace DI
 			ServiceResolvers(ServiceResolvers&& other);
 			~ServiceResolvers();
 
-			void add(const ServiceResolverData& resolver);
+			void add(ServiceResolverCreatorPtr resolver);
 			void merge(const ServiceResolvers& other);
 
 			auto empty() const -> bool;
