@@ -6,420 +6,480 @@ using ServiceFactoryTest = ContainerBaseTest;
 
 namespace
 {
-	struct DummyService
+	struct Service
 	{
 		int _value;
-		explicit DummyService(int value = 0) : _value(value) {}
+		explicit Service(int value = 0) : _value(value) {}
 	};
 
-	struct AbstractDummyService { virtual ~AbstractDummyService() {}; virtual void abstract() = 0; };
-	struct ConcreteDummyService : AbstractDummyService { virtual void abstract() override {} };
+	struct AbstractService { virtual ~AbstractService() {}; virtual void abstract() = 0; };
+	struct ConcreteService : AbstractService { virtual void abstract() override {} };
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenRegisteringServiceAsPtrFactory_AndAutoManaged)
 {
-	ASSERT_THROW(builder().registerFactory([] { static auto service = DummyService(); return &service; }).autoManaged(), std::logic_error);
+	ASSERT_THROW(builder().registerFactory([] { static auto service = Service(); return &service; }).autoManaged(), std::logic_error);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsInstanceFactory)
 {
 	builder()
-		.registerFactory([] { return DummyService(13); });
+		.registerFactory([] { return Service(13); });
 
-	ASSERT_EQ(13, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(13, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static auto service = DummyService(13);  return &service; });
+		.registerFactory([] { static auto service = Service(13);  return &service; });
 
-	ASSERT_EQ(13, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(13, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsSharedPtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(13); });
+		.registerFactory([] { return std::make_shared<Service>(13); });
 
-	ASSERT_EQ(13, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(13, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsCopy_WhenServiceRegisteredAsUniquePtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(13); });
+		.registerFactory([] { return std::make_unique<Service>(13); });
 
-	ASSERT_EQ(13, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(13, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsRef_AndServiceRegisteredAsInstanceFactory_AndNotAutoManaged)
 {
 	builder()
-		.registerFactory([] { return DummyService(); });
+		.registerFactory([] { return Service(); });
 
-	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service&>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsInstanceFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return DummyService(16); })
+		.registerFactory([] { return Service(16); })
 		.autoManaged();
 
-	ASSERT_EQ(16, container().resolve<DummyService&>()._value);
+	auto& resolved = container().resolve<Service&>();
+
+	ASSERT_EQ(16, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegisteredAsInstanceFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return DummyService(); })
+		.registerFactory([] { return Service(); })
 		.autoManaged();
 
-	auto& service1 = container().resolve<DummyService&>();
-	auto& service2 = container().resolve<DummyService&>();
+	auto& resolved1 = container().resolve<Service&>();
+	auto& resolved2 = container().resolve<Service&>();
 
-	ASSERT_NE(&service1, &service2);
+	ASSERT_NE(&resolved1, &resolved2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static auto service = DummyService(20);  return &service; });
+		.registerFactory([] { static auto service = Service(20);  return &service; });
 
-	ASSERT_EQ(20, container().resolve<DummyService&>()._value);
+	auto& resolved = container().resolve<Service&>();
+
+	ASSERT_EQ(20, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveSameServiceInstanceAsRef_WhenServiceRegisteredAsPtrFactory)
 {
-	auto service = DummyService();
+	auto service = Service();
 
 	builder()
 		.registerFactory([&service] { return &service; });
 
-	ASSERT_EQ(&service, &container().resolve<DummyService&>());
+	auto& resolved = container().resolve<Service&>();
+
+	ASSERT_EQ(&service, &resolved);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsRef_AndServiceRegisteredAsSharedPtrFactory_AndNotAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(); });
+		.registerFactory([] { return std::make_shared<Service>(); });
 
-	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service&>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsSharedPtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(11); })
+		.registerFactory([] { return std::make_shared<Service>(11); })
 		.autoManaged();
 
-	ASSERT_EQ(11, container().resolve<DummyService&>()._value);
+	auto& resolved = container().resolve<Service&>();
+
+	ASSERT_EQ(11, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegisteredAsSharedPtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(); })
+		.registerFactory([] { return std::make_shared<Service>(); })
 		.autoManaged();
 
-	auto& service1 = container().resolve<DummyService&>();
-	auto& service2 = container().resolve<DummyService&>();
+	auto& resolved1 = container().resolve<Service&>();
+	auto& resolved2 = container().resolve<Service&>();
 
-	ASSERT_NE(&service1, &service2);
+	ASSERT_NE(&resolved1, &resolved2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsRef_AndServiceRegisteredAsUniquePtrFactory_AndNotAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(); });
+		.registerFactory([] { return std::make_unique<Service>(); });
 
-	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service&>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsRef_WhenServiceRegisteredAsUniquePtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(14); })
+		.registerFactory([] { return std::make_unique<Service>(14); })
 		.autoManaged();
 
-	ASSERT_EQ(14, container().resolve<DummyService&>()._value);
+	auto& resolved = container().resolve<Service&>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctRefs_WhenServiceRegisteredAsUniquePtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(); })
+		.registerFactory([] { return std::make_unique<Service>(); })
 		.autoManaged();
 
-	auto& service1 = container().resolve<DummyService&>();
-	auto& service2 = container().resolve<DummyService&>();
+	auto& resolved1 = container().resolve<Service&>();
+	auto& resolved2 = container().resolve<Service&>();
 
-	ASSERT_NE(&service1, &service2);
+	ASSERT_NE(&resolved1, &resolved2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsInstanceFactory_AndNotAutoManaged)
 {
 	builder()
-		.registerFactory([] { return DummyService(); });
+		.registerFactory([] { return Service(); });
 
-	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service*>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsInstanceFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return DummyService(11); })
+		.registerFactory([] { return Service(11); })
 		.autoManaged();
 
-	ASSERT_EQ(11, container().resolve<DummyService*>()->_value);
+	auto resolved = container().resolve<Service*>();
+
+	ASSERT_EQ(11, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctPtrs_WhenServiceRegisteredAsInstanceFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return DummyService(); })
+		.registerFactory([] { return Service(); })
 		.autoManaged();
 
-	auto service1 = container().resolve<DummyService*>();
-	auto service2 = container().resolve<DummyService*>();
+	auto resolved1 = container().resolve<Service*>();
+	auto resolved2 = container().resolve<Service*>();
 
-	ASSERT_NE(service1, service2);
+	ASSERT_NE(resolved1, resolved2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static auto service = DummyService(20);  return &service; });
+		.registerFactory([] { static auto service = Service(20);  return &service; });
 
-	ASSERT_EQ(20, container().resolve<DummyService*>()->_value);
+	auto resolved = container().resolve<Service*>();
+
+	ASSERT_EQ(20, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveSameServiceInstanceAsPtr_WhenServiceRegisteredAsPtrFactory)
 {
-	auto service = DummyService();
+	auto service = Service();
 
 	builder()
 		.registerFactory([&service] { return &service; });
 
-	ASSERT_EQ(&service, container().resolve<DummyService*>());
+	auto resolved = container().resolve<Service*>();
+
+	ASSERT_EQ(&service, resolved);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsSharedPtrFactory_AndNotAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(); });
+		.registerFactory([] { return std::make_shared<Service>(); });
 
-	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service*>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsSharedPtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(11); })
+		.registerFactory([] { return std::make_shared<Service>(11); })
 		.autoManaged();
 
-	ASSERT_EQ(11, container().resolve<DummyService*>()->_value);
+	auto resolved = container().resolve<Service*>();
+
+	ASSERT_EQ(11, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctPtrs_WhenServiceRegisteredAsSharedPtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(); })
+		.registerFactory([] { return std::make_shared<Service>(); })
 		.autoManaged();
 
-	auto service1 = container().resolve<DummyService*>();
-	auto service2 = container().resolve<DummyService*>();
+	auto resolved1 = container().resolve<Service*>();
+	auto resolved2 = container().resolve<Service*>();
 
-	ASSERT_NE(service1, service2);
+	ASSERT_NE(resolved1, resolved2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsPtr_AndServiceRegisteredAsUniqePtrFactory_AndNotAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(); });
+		.registerFactory([] { return std::make_unique<Service>(); });
 
-	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service*>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsPtr_WhenServiceRegisteredAsUniqePtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(12); })
+		.registerFactory([] { return std::make_unique<Service>(12); })
 		.autoManaged();
 
-	ASSERT_EQ(12, container().resolve<DummyService*>()->_value);
+	auto resolved = container().resolve<Service*>();
+
+	ASSERT_EQ(12, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServicesAsDistinctPtrs_WhenServiceRegisteredAsUniqePtrFactory_AndAutoManaged)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(); })
+		.registerFactory([] { return std::make_unique<Service>(); })
 		.autoManaged();
 
-	auto service1 = container().resolve<DummyService*>();
-	auto service2 = container().resolve<DummyService*>();
+	auto resolved1 = container().resolve<Service*>();
+	auto resolved2 = container().resolve<Service*>();
 
-	ASSERT_NE(service1, service2);
+	ASSERT_NE(resolved1, resolved2);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsUniquePtr_WhenServiceRegisteredAsInstanceFactory)
 {
 	builder()
-		.registerFactory([] { return DummyService(11); });
+		.registerFactory([] { return Service(11); });
 
-	ASSERT_EQ(11, container().resolve<std::unique_ptr<DummyService>>()->_value);
+	auto resolved = container().resolve<std::unique_ptr<Service>>();
+
+	ASSERT_EQ(11, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsUniquePtr_AndServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static auto service = DummyService();  return &service; });
+		.registerFactory([] { static auto service = Service();  return &service; });
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<Service>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldThrowException_WhenResolvingServiceAsUniquePtr_AndServiceRegisteredAsSharedPtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(); });
+		.registerFactory([] { return std::make_shared<Service>(); });
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<Service>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsUniquePtr_WhenServiceRegisteredAsUniquePtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(12); });
+		.registerFactory([] { return std::make_unique<Service>(12); });
 
-	ASSERT_EQ(12, container().resolve<std::unique_ptr<DummyService>>()->_value);
+	auto resolved = container().resolve<std::unique_ptr<Service>>();
+
+	ASSERT_EQ(12, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsInstanceFactory)
 {
 	builder()
-		.registerFactory([] { return DummyService(15); });
+		.registerFactory([] { return Service(15); });
 
-	ASSERT_EQ(15, container().resolve<std::shared_ptr<DummyService>>()->_value);
+	auto resolved = container().resolve<std::shared_ptr<Service>>();
+
+	ASSERT_EQ(15, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsPtrFactory)
 {
 	builder()
-		.registerFactory([] { static auto service = DummyService(16);  return &service; });
+		.registerFactory([] { static auto service = Service(16);  return &service; });
 
-	ASSERT_EQ(16, container().resolve<std::shared_ptr<DummyService>>()->_value);
+	auto resolved = container().resolve<std::shared_ptr<Service>>();
+
+	ASSERT_EQ(16, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsSharedPtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_shared<DummyService>(17); });
+		.registerFactory([] { return std::make_shared<Service>(17); });
 
-	ASSERT_EQ(17, container().resolve<std::shared_ptr<DummyService>>()->_value);
+	auto resolved = container().resolve<std::shared_ptr<Service>>();
+
+	ASSERT_EQ(17, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsSharedPtr_WhenServiceRegisteredAsUniquePtrFactory)
 {
 	builder()
-		.registerFactory([] { return std::make_unique<DummyService>(18); });
+		.registerFactory([] { return std::make_unique<Service>(18); });
 
-	ASSERT_EQ(18, container().resolve<std::shared_ptr<DummyService>>()->_value);
+	auto resolved = container().resolve<std::shared_ptr<Service>>();
+
+	ASSERT_EQ(18, resolved->_value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsInstanceFactoryFunction)
 {
-	std::function<DummyService()> factory = [] { return DummyService(14); };
+	std::function<Service()> factory = [] { return Service(14); };
 
 	builder()
 		.registerFactory(factory);
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsPtrFactoryFunction)
 {
-	std::function<DummyService*()> factory = [] { static auto service = DummyService(14); return &service; };
+	std::function<Service*()> factory = [] { static auto service = Service(14); return &service; };
 
 	builder()
 		.registerFactory(factory);
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsSharedPtrFactoryFunction)
 {
-	std::function<std::shared_ptr<DummyService>()> factory = [] { return std::make_shared<DummyService>(14); };
+	std::function<std::shared_ptr<Service>()> factory = [] { return std::make_shared<Service>(14); };
 
 	builder()
 		.registerFactory(factory);
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsUniquePtrFactoryFunction)
 {
-	std::function<std::unique_ptr<DummyService>()> factory = [] { return std::make_unique<DummyService>(14); };
+	std::function<std::unique_ptr<Service>()> factory = [] { return std::make_unique<Service>(14); };
 
 	builder()
 		.registerFactory(factory);
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsInstanceFactoryLambdaWithCapture)
 {
-	auto service = DummyService(14);
+	auto service = Service(14);
 
 	builder()
 		.registerFactory([service] { return service; });
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsPtrFactoryLambdaWithCapture)
 {
-	auto service = DummyService(14);
+	auto service = Service(14);
 
 	builder()
 		.registerFactory([&service] { return &service; });
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsSharedPtrFactoryLambdaWithCapture)
 {
-	auto service = std::make_shared<DummyService>(14);
+	auto service = std::make_shared<Service>(14);
 
 	builder()
 		.registerFactory([service] { return service; });
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveService_WhenServiceRegisteredAsUniquePtrFactoryLambdaWithCapture)
 {
-	auto service = std::make_unique<DummyService>(14);
+	auto service = std::make_unique<Service>(14);
 
 	builder()
 		.registerFactory([&service] { return std::move(service); });
 
-	ASSERT_EQ(14, container().resolve<DummyService>()._value);
+	auto resolved = container().resolve<Service>();
+
+	ASSERT_EQ(14, resolved._value);
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsSPtr_WhenServiceRegisteredAsFactoryReturningSharedPtrOfAbstractBaseType)
 {
 	builder()
-		.registerFactory([] { return std::shared_ptr<AbstractDummyService>(std::make_shared<ConcreteDummyService>()); })
+		.registerFactory([] { return std::shared_ptr<AbstractService>(std::make_shared<ConcreteService>()); })
 		.autoManaged();
 
-	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<std::shared_ptr<AbstractDummyService>>().get()) != nullptr);
+	auto resolved = container().resolve<std::shared_ptr<AbstractService>>();
+
+	ASSERT_TRUE(isOfType<ConcreteService>(resolved.get()));
 }
 
 TEST_F(ServiceFactoryTest, ShouldResolveServiceAsSPtr_WhenServiceRegisteredAsFactoryReturningPtrOfAbstractBaseType)
 {
 	builder()
-		.registerFactory([] { static auto service = ConcreteDummyService(); return static_cast<AbstractDummyService*>(&service); });
+		.registerFactory([] { static auto service = ConcreteService(); return static_cast<AbstractService*>(&service); });
 
-	ASSERT_TRUE(dynamic_cast<ConcreteDummyService*>(container().resolve<AbstractDummyService*>()) != nullptr);
+	auto resolved = container().resolve<AbstractService*>();
+
+	ASSERT_TRUE(isOfType<ConcreteService>(resolved));
 }

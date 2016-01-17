@@ -14,28 +14,28 @@ TEST_F(StandardServiceInstanceTest, ShouldResolveContainerAsObject)
 {
 	auto service = container().resolve<DI::Container>();
 
-	ASSERT_TRUE(dynamic_cast<DI::Container*>(&service) != nullptr);
+	ASSERT_TRUE(isOfType<DI::Container>(service));
 }
 
 TEST_F(StandardServiceInstanceTest, ShouldResolveContainerAsPtr)
 {
 	auto service = container().resolve<DI::Container*>();
 
-	ASSERT_TRUE(dynamic_cast<DI::Container*>(service) != nullptr);
+	ASSERT_TRUE(isOfType<DI::Container>(service));
 }
 
 TEST_F(StandardServiceInstanceTest, ShouldResolveContainerAsRef)
 {
 	auto service = container().resolve<DI::Container&>();
 
-	ASSERT_TRUE(dynamic_cast<DI::Container*>(&service) != nullptr);
+	ASSERT_TRUE(isOfType<DI::Container>(service));
 }
 
 TEST_F(StandardServiceInstanceTest, ShouldResolveContainerAsSharedPtr)
 {
 	auto service = container().resolve<std::shared_ptr<DI::Container>>();
 
-	ASSERT_TRUE(dynamic_cast<DI::Container*>(service.get()) != nullptr);
+	ASSERT_TRUE(isOfType<DI::Container>(service.get()));
 }
 
 TEST_F(StandardServiceInstanceTest, ShouldThrowException_WhenResolvingContainerAsUniquePtr)

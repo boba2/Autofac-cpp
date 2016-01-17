@@ -55,19 +55,18 @@ TEST_F(ServiceFactoryAsSingleInstance, ShouldThrowException_WhenResolvingSingleS
 
 TEST_F(ServiceFactoryAsSingleInstance, ShouldResolveSingleServiceAsBaseType_WhenServiceFactoryRegisteredAliasedAsBaseType_AndAsSingleInstance)
 {
-//	struct BaseService1 { virtual ~BaseService1() {} };
-//	struct BaseService2 { virtual ~BaseService2() {} };
-//	struct SpecialService : BaseService1, BaseService2 {};
-//
-//	struct SpecialServiceA : ServiceA {};
-//	builder()
-//		.registerFactory([] { return SpecialService(); })
-//		.as<BaseService1>()
-//		.as<BaseService2>()
-//		.singleInstance();
-//
-//	auto service1 = container().resolve<BaseService1*>();
-//	auto service2 = container().resolve<BaseService2*>();
-//
-//	ASSERT_EQ(dynamic_cast<SpecialService*>(service1), dynamic_cast<SpecialService*>(service2));
+	struct BaseServiceA { virtual ~BaseServiceA() {} };
+	struct BaseServiceB { virtual ~BaseServiceB() {} };
+	struct SpecialService : BaseServiceA, BaseServiceB {};
+
+	builder()
+		.registerFactory([] { return SpecialService(); })
+		.as<BaseServiceA>()
+		.as<BaseServiceB>()
+		.singleInstance();
+
+	auto serviceA = container().resolve<BaseServiceA*>();
+	auto serviceB = container().resolve<BaseServiceB*>();
+
+	ASSERT_EQ(dynamic_cast<SpecialService*>(serviceA), dynamic_cast<SpecialService*>(serviceB));
 }

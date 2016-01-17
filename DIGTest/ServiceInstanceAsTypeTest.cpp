@@ -6,147 +6,168 @@
 
 namespace
 {
-	struct BaseDummyService { virtual ~BaseDummyService() {} };
-	struct DummyService1 : virtual BaseDummyService { int _value; };
-	struct DummyService2 : virtual BaseDummyService {};
-	struct SpecialDummyService : DummyService1, DummyService2 {};
+	struct BaseService { virtual ~BaseService() {} };
+	struct ServiceA : virtual BaseService { int _value; };
+	struct ServiceB : virtual BaseService {};
+	struct SpecialService : ServiceA, ServiceB {};
 }
 
 using ServiceInstanceAsTypeTest = ContainerBaseTest;
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>();
+		.as<ServiceA>();
 
-	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
+	auto resolved = container().resolve<ServiceA *>();
+
+	ASSERT_EQ(&service, resolved);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsAnyBaseType_WhenServiceInstanceRegisteredAliasedAsManyBaseTypes)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>()
-		.as<DummyService2>();
+		.as<ServiceA>()
+		.as<ServiceB>();
 
-	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
-	ASSERT_EQ(&service, container().resolve<DummyService2 *>());
+	auto resolvedA = container().resolve<ServiceA *>();
+	auto resolvedB = container().resolve<ServiceB *>();
+
+	ASSERT_EQ(&service, resolvedA);
+	ASSERT_EQ(&service, resolvedB);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsItsType_AndServiceInstanceRegisteredOnlyWithAlias)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>();
+		.as<ServiceA>();
 
-	ASSERT_THROW(container().resolve<SpecialDummyService *>(), DI::Error::ServiceNotRegistered);
+	ASSERT_THROW(container().resolve<SpecialService *>(), DI::Error::ServiceNotRegistered);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredOnlyAliasedAsItsOwnType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<SpecialDummyService>();
+		.as<SpecialService>();
 
-	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
+	auto resolved = container().resolve<SpecialService *>();
+
+	ASSERT_EQ(&service, resolved);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredWithAliasAndAsSelf)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>()
+		.as<ServiceA>()
 		.asSelf();
 
-	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
+	auto resolved = container().resolve<SpecialService *>();
+
+	ASSERT_EQ(&service, resolved);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseType_WhenServiceInstanceRegisteredAliasedAsBaseTypeAndAsSelf)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>()
+		.as<ServiceA>()
 		.asSelf();
 
-	ASSERT_EQ(&service, container().resolve<DummyService1 *>());
+	auto resolved = container().resolve<ServiceA *>();
+
+	ASSERT_EQ(&service, resolved);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsItsType_WhenServiceInstanceRegisteredOnlyAsSelf)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
 		.asSelf();
 
-	ASSERT_EQ(&service, container().resolve<SpecialDummyService *>());
+	auto resolved = container().resolve<SpecialService *>();
+
+	ASSERT_EQ(&service, resolved);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsCopy_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 	service._value = 13;
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>();
+		.as<ServiceA>();
 
-	ASSERT_EQ(13, container().resolve<DummyService1>()._value);
+	auto resolved = container().resolve<ServiceA>();
+
+	ASSERT_EQ(13, resolved._value);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsReference_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>();
+		.as<ServiceA>();
 
-	ASSERT_EQ(&service, &container().resolve<DummyService1 &>());
+	auto& resolved = container().resolve<ServiceA &>();
+
+	ASSERT_EQ(&service, &resolved);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsBaseTypeAsSharedPtr_WhenServiceInstanceRegisteredAliasedAsBaseType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>();
+		.as<ServiceA>();
 
-	ASSERT_EQ(&service, container().resolve<std::shared_ptr<DummyService1>>().get());
+	auto resolved = container().resolve<std::shared_ptr<ServiceA>>();
+
+	ASSERT_EQ(&service, resolved.get());
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldThrowException_WhenResolvingServiceAsBaseTypeAsUniquePtr_AndServiceInstanceRegisteredAliasedAsBaseType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<DummyService1>();
+		.as<ServiceA>();
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService1>>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<ServiceA>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceInstanceAsTypeTest, ShouldResolveServiceAsVirtualBaseType_WhenServiceInstanceRegisteredWithAliasedAsVirtualBaseType)
 {
-	auto service = SpecialDummyService();
+	auto service = SpecialService();
 
 	builder()
 		.registerInstance(&service)
-		.as<BaseDummyService>();
+		.as<BaseService>();
 
-	ASSERT_EQ(&service, dynamic_cast<SpecialDummyService *>(container().resolve<BaseDummyService *>()));
+	auto resolved = container().resolve<BaseService *>();
+
+	ASSERT_EQ(&service, dynamic_cast<SpecialService *>(resolved));
 }

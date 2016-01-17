@@ -4,10 +4,10 @@
 
 namespace
 {
-	struct DummyService { int _value; };
-	struct DummyService1 { virtual ~DummyService1() {} };
-	struct DummyService2 { virtual ~DummyService2() {} };
-	struct SpecialDummyService : DummyService1, DummyService2 {};
+	struct ServiceA { int _value; };
+	struct ServiceB { virtual ~ServiceB() {} };
+	struct ServiceC { virtual ~ServiceC() {} };
+	struct SpecialService : ServiceB, ServiceC {};
 }
 
 using ServiceTypeAsSingleInstance = ContainerBaseTest;
@@ -15,11 +15,11 @@ using ServiceTypeAsSingleInstance = ContainerBaseTest;
 TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsPtr_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<ServiceA>()
 		.singleInstance();
 
-	auto service1 = container().resolve<DummyService*>();
-	auto service2 = container().resolve<DummyService*>();
+	auto service1 = container().resolve<ServiceA*>();
+	auto service2 = container().resolve<ServiceA*>();
 
 	ASSERT_EQ(service1, service2);
 }
@@ -27,11 +27,11 @@ TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsPtr_WhenServiceT
 TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsRef_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<ServiceA>()
 		.singleInstance();
 
-	auto& service1 = container().resolve<DummyService&>();
-	auto& service2 = container().resolve<DummyService&>();
+	auto& service1 = container().resolve<ServiceA&>();
+	auto& service2 = container().resolve<ServiceA&>();
 
 	ASSERT_EQ(&service1, &service2);
 }
@@ -39,11 +39,11 @@ TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsRef_WhenServiceT
 TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsSharedPtr_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<ServiceA>()
 		.singleInstance();
 
-	auto service1 = container().resolve<std::shared_ptr<DummyService>>();
-	auto service2 = container().resolve<std::shared_ptr<DummyService>>();
+	auto service1 = container().resolve<std::shared_ptr<ServiceA>>();
+	auto service2 = container().resolve<std::shared_ptr<ServiceA>>();
 
 	ASSERT_EQ(service1, service2);
 }
@@ -51,20 +51,20 @@ TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsSharedPtr_WhenSe
 TEST_F(ServiceTypeAsSingleInstance, ShouldThrowException_WhenResolvingSingleServiceAsUniquePtr)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<ServiceA>()
 		.singleInstance();
 
-	ASSERT_THROW(container().resolve<std::unique_ptr<DummyService>>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<std::unique_ptr<ServiceA>>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsCopy_WhenServiceTypeRegisteredAsSingleInstance)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<ServiceA>()
 		.singleInstance();
 
-	container().resolve<DummyService*>()->_value = 13;
-	auto service = container().resolve<DummyService>();
+	container().resolve<ServiceA*>()->_value = 13;
+	auto service = container().resolve<ServiceA>();
 
 	ASSERT_EQ(13, service._value);
 }
@@ -72,13 +72,13 @@ TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsCopy_WhenService
 TEST_F(ServiceTypeAsSingleInstance, ShouldResolveSingleServiceAsBaseType_WhenServiceTypeRegisteredAliasedAsBaseType_AndAsSingleInstance)
 {
 	builder()
-		.registerType<SpecialDummyService>()
-		.as<DummyService1>()
-		.as<DummyService2>()
+		.registerType<SpecialService>()
+		.as<ServiceB>()
+		.as<ServiceC>()
 		.singleInstance();
 
-	auto service1 = container().resolve<DummyService1*>();
-	auto service2 = container().resolve<DummyService2*>();
+	auto service1 = container().resolve<ServiceB*>();
+	auto service2 = container().resolve<ServiceC*>();
 
-	ASSERT_EQ(dynamic_cast<SpecialDummyService*>(service1), dynamic_cast<SpecialDummyService*>(service2));
+	ASSERT_EQ(dynamic_cast<SpecialService*>(service1), dynamic_cast<SpecialService*>(service2));
 }
