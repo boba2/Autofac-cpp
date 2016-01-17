@@ -11,24 +11,28 @@ namespace DI
 		class ServiceResolvers::Impl
 		{
 		public:
-			void add(ServiceResolverPtr<> resolver)
+			void add(ServiceResolverCreatorPtr resolver_creator)
 			{
-				_service_resolvers[resolver->getServiceType()] = resolver;
-			}
+				const auto& type_index = resolver_creator->getServiceType();
+				auto resolver = resolver_creator->getServiceResolver();
 
-			void add(std::vector<ServiceResolverPtr<>> resolvers)
-			{
-				std::for_each(
-					begin(resolvers), end(resolvers),
-					[=](auto& resolver) { this->add(resolver); }
-				);
+				if (_service_resolvers.find(type_index) == end(_service_resolvers))
+					_service_resolvers[type_index] = resolver_creator->createCompositeServiceResolver();
+
+				_service_resolvers[type_index]->addResolver(resolver);
 			}
 
 			void merge(const Impl& other)
 			{
 				std::for_each(
 					begin(other._service_resolvers), end(other._service_resolvers),
-					[=](auto& resolver_it) { this->add(resolver_it.second); }
+					[=](auto& resolver_it)
+					{
+						if (_service_resolvers.find(resolver_it.first) == end(_service_resolvers))
+							_service_resolvers[resolver_it.first] = resolver_it.second;
+						else
+							_service_resolvers[resolver_it.first]->merge(*resolver_it.second);
+					}
 				);
 			}
 
@@ -37,7 +41,7 @@ namespace DI
 				return _service_resolvers.empty();
 			}
 
-			auto get(TypeIndex type_index) const -> ServiceResolverPtr<>
+			auto get(TypeIndex type_index) const -> CompositeServiceResolverPtr<>
 			{
 				auto resolver_it = _service_resolvers.find(type_index);
 				if (resolver_it == end(_service_resolvers))
@@ -47,7 +51,7 @@ namespace DI
 			}
 
 		private:
-			std::unordered_map<TypeIndex, ServiceResolverPtr<>> _service_resolvers;
+			std::unordered_map<TypeIndex, CompositeServiceResolverPtr<>> _service_resolvers;
 		};
 
 		ServiceResolvers::ServiceResolvers()
@@ -58,16 +62,10 @@ namespace DI
 			: _impl(std::move(other._impl))
 		{}
 
-		ServiceResolvers::ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers)
-			: ServiceResolvers()
-		{
-			_impl->add(resolvers);
-		}
-
 		ServiceResolvers::~ServiceResolvers()
 		{}
 
-		void ServiceResolvers::add(ServiceResolverPtr<> resolver)
+		void ServiceResolvers::add(ServiceResolverCreatorPtr resolver)
 		{
 			_impl->add(resolver);
 		}
@@ -82,7 +80,7 @@ namespace DI
 			return _impl->empty();
 		}
 
-		auto ServiceResolvers::get(TypeIndex type_index) const -> ServiceResolverPtr<>
+		auto ServiceResolvers::get(const TypeIndex& type_index) const -> CompositeServiceResolverPtr<>
 		{
 			return _impl->get(type_index);
 		}

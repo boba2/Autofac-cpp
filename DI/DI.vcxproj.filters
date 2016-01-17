@@ -95,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="Details\ServiceResolvers.h" />
     <ClInclude Include="Details\ManageableServiceRegisterer.h" />
+    <ClInclude Include="Details\ServiceResolverGroup.h" />
+    <ClInclude Include="Details\ServiceResolverCreator.h" />
+    <ClInclude Include="Details\CompositeServiceResolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Support\dllmain.cpp">

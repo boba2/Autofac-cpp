@@ -16,7 +16,7 @@ namespace DI
 			registerContainer();
 		}
 
-		Details::ServiceResolver<> &getResolver(const Details::TypeIndex& type_index) const
+		Details::CompositeServiceResolver<> &getResolver(const Details::TypeIndex& type_index) const
 		{
 			auto resolver = _service_resolvers.get(type_index);
 
@@ -44,14 +44,6 @@ namespace DI
 	{
 	}
 
-	Details::ServiceResolvers convert(const std::vector<Details::ServiceResolverPtr<>>& service_resolvers)
-	{
-		auto result = Details::ServiceResolvers();
-		std::for_each(begin(service_resolvers), end(service_resolvers), [&result](auto resolver) { result.add(resolver); });
-
-		return result;
-	}
-
 	Container::Container(Details::ServiceResolvers service_resolvers)
 		: _impl(std::make_unique<Impl>(std::move(service_resolvers)))
 	{
@@ -74,7 +66,7 @@ namespace DI
 		return *this;
 	}
 
-	Details::ServiceResolver<> &Container::getResolver(const Details::TypeIndex& type_index) const
+	Details::CompositeServiceResolver<> &Container::getResolver(const Details::TypeIndex& type_index) const
 	{
 		return _impl->getResolver(type_index);
 	}

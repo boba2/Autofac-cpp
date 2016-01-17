@@ -4,6 +4,7 @@
 #include "ServiceResolver.h"
 #include "ServiceAliasRegisterer.h"
 #include "ServiceResolvers.h"
+#include "ServiceResolverCreator.h"
 
 namespace DI
 {
@@ -21,7 +22,7 @@ namespace DI
 			auto getServiceResolvers() const -> ServiceResolvers;
 
 		protected:
-			virtual auto getServiceResolver() const -> ServiceResolverPtr<> = 0;
+			virtual auto getServiceResolver() const -> ServiceResolverCreatorPtr = 0;
 
 		private:
 			class Impl;

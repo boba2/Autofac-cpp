@@ -15,12 +15,17 @@ namespace DI
 				_alias_registerers.push_back(alias_registerer);
 			}
 
-			ServiceResolvers getServiceResolvers(ServiceResolverPtr<> main_resolver) const
+			ServiceResolvers getServiceResolvers(ServiceResolverCreatorPtr main_resolver) const
 			{
 				if (_alias_registerers.empty())
-					return ServiceResolvers{ main_resolver };
+				{
+					auto result = ServiceResolvers();
+					result.add(main_resolver);
 
-				return getServiceAliasResolvers(main_resolver);
+					return result;
+				}
+
+				return getServiceAliasResolvers(main_resolver->getServiceResolver());
 			}
 
 		private:

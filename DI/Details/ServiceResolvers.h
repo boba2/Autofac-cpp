@@ -1,26 +1,25 @@
 #pragma once
 
 #include "../Support/DIdecl.h"
-#include "ServiceResolver.h"
+#include "ServiceResolverCreator.h"
 
 namespace DI
 {
 	namespace Details
 	{
-		
+
 		class DI_API ServiceResolvers
 		{
 		public:
 			ServiceResolvers();
 			ServiceResolvers(ServiceResolvers&& other);
-			ServiceResolvers(std::initializer_list<ServiceResolverPtr<>> resolvers);
 			~ServiceResolvers();
 
-			void add(ServiceResolverPtr<> resolver);
+			void add(ServiceResolverCreatorPtr resolver);
 			void merge(const ServiceResolvers& other);
 
 			auto empty() const -> bool;
-			auto get(TypeIndex type_index) const -> ServiceResolverPtr<>;
+			auto get(const TypeIndex& type_index) const -> CompositeServiceResolverPtr<>;
 
 		private:
 			class Impl;

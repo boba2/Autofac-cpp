@@ -1,15 +1,23 @@
 #pragma once
-
-#include <vector>
 #include "ServiceResolver.h"
 
 namespace DI
 {
 	namespace Details
 	{
+		
+		template<class T = void>
+		class ServiceResolverGroup;
+
+		template<>
+		class ServiceResolverGroup<void>
+		{
+		public:
+			virtual ~ServiceResolverGroup() {};
+		};
 
 		template<class T>
-		class AutoManagedServiceResolver : public ServiceResolver<T>
+		class ServiceResolverGroup : public ServiceResolver<T>, public ServiceResolverGroup<>
 		{
 			using ServiceType = typename ServiceResolver<T>::ServiceType;
 			using ServiceRefType = typename ServiceResolver<T>::ServiceRefType;
@@ -18,45 +26,32 @@ namespace DI
 			using ServiceUniquePtrType = typename ServiceResolver<T>::ServiceUniquePtrType;
 
 		public:
-			explicit AutoManagedServiceResolver(ServiceResolverPtr<T> inner_resolver)
-				: _inner_resolver(inner_resolver)
-			{}
-
-		private:
 			virtual ServiceType getService(Container* container) override
 			{
-				return _inner_resolver->getService(container);
+				return _resolver->getService(container);
 			}
 
 			virtual ServiceRefType getServiceAsRef(Container* container) override
 			{
-				return *getNewManagedInstance(container).get();
+				return _resolver->getServiceAsRef(container);
 			}
 
 			virtual ServicePtrType getServiceAsPtr(Container* container) override
 			{
-				return getNewManagedInstance(container).get();
+				return _resolver->getServiceAsPtr(container);
 			}
 
 			virtual ServiceSharedPtrType getServiceAsSharedPtr(Container* container) override
 			{
-				return _inner_resolver->getServiceAsSharedPtr(container);
+				return _resolver->getServiceAsSharedPtr(container);
 			}
 
 			virtual ServiceUniquePtrType getServiceAsUniquePtr(Container* container) override
 			{
-				return _inner_resolver->getServiceAsUniquePtr(container);
+				return _resolver->getServiceAsUniquePtr(container);
 			}
 
-			ServiceSharedPtrType getNewManagedInstance(Container* container)
-			{
-				_managed_instances.push_back(getServiceAsSharedPtr(container));
-
-				return _managed_instances.back();
-			}
-
-			ServiceResolverPtr<T> const _inner_resolver;
-			std::vector<std::shared_ptr<T>> _managed_instances;
+			ServiceResolverPtr<T> _resolver;
 		};
 
 	}
