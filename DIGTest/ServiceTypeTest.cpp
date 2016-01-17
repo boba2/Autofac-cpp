@@ -5,8 +5,8 @@
 
 namespace
 {
-	struct DummyService {};
-	struct AbstractDummyService { virtual ~AbstractDummyService() = 0; };
+	struct Service {};
+	struct AbstractService { virtual ~AbstractService() = 0; };
 }
 
 using ServiceTypeTest = ContainerBaseTest;
@@ -14,40 +14,40 @@ using ServiceTypeTest = ContainerBaseTest;
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsCopy_WhenNonAbstractServiceTypeRegistered)
 {
 	builder()
-		.registerType<DummyService>();
+		.registerType<Service>();
 
-	auto service = container().resolve<DummyService>();
+	auto service = container().resolve<Service>();
 
-	ASSERT_TRUE(dynamic_cast<DummyService*>(&service) != nullptr);
+	ASSERT_TRUE(isOfType<Service>(service));
 }
 
 TEST_F(ServiceTypeTest, ShouldThrowException_WhenResolvingServiceAsReference_AndServiceTypeRegisteredNotAsAutoManaged)
 {
 	builder()
-		.registerType<DummyService>();
+		.registerType<Service>();
 
-	ASSERT_THROW(container().resolve<DummyService&>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service&>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsReference_WhenServiceTypeRegisteredAsAutoManaged)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<Service>()
 		.autoManaged();
 
-	auto& service = container().resolve<DummyService&>();
+	auto& service = container().resolve<Service&>();
 
-	ASSERT_TRUE(dynamic_cast<DummyService*>(&service) != nullptr);
+	ASSERT_TRUE(isOfType<Service>(service));
 }
 
 TEST_F(ServiceTypeTest, ShouldResolveServicesAsDistinctReferences_WhenServiceTypeRegisteredAsAutoManaged)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<Service>()
 		.autoManaged();
 
-	auto& service1 = container().resolve<DummyService&>();
-	auto& service2 = container().resolve<DummyService&>();
+	auto& service1 = container().resolve<Service&>();
+	auto& service2 = container().resolve<Service&>();
 
 	ASSERT_NE(&service1, &service2);
 }
@@ -55,28 +55,28 @@ TEST_F(ServiceTypeTest, ShouldResolveServicesAsDistinctReferences_WhenServiceTyp
 TEST_F(ServiceTypeTest, ShouldThrowException_WhenResolvingServiceAsPointer_AndServiceTypeRegisteredNotAsAutoManaged)
 {
 	builder()
-		.registerType<DummyService>();
+		.registerType<Service>();
 
-	ASSERT_THROW(container().resolve<DummyService*>(), DI::Error::ServiceNotResolvableAs);
+	ASSERT_THROW(container().resolve<Service*>(), DI::Error::ServiceNotResolvableAs);
 }
 
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsPointer_WhenServiceTypeRegisteredAsAutoManageable)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<Service>()
 		.autoManaged();
 
-	ASSERT_TRUE(container().resolve<DummyService*>() != nullptr);
+	ASSERT_TRUE(container().resolve<Service*>() != nullptr);
 }
 
 TEST_F(ServiceTypeTest, ShouldResolveServicesAsDistinctPointers_WhenServiceTypeRegisteredAsAutoManageable)
 {
 	builder()
-		.registerType<DummyService>()
+		.registerType<Service>()
 		.autoManaged();
 
-	auto service1 = container().resolve<DummyService*>();
-	auto service2 = container().resolve<DummyService*>();
+	auto service1 = container().resolve<Service*>();
+	auto service2 = container().resolve<Service*>();
 
 	ASSERT_NE(service1, service2);
 }
@@ -84,15 +84,15 @@ TEST_F(ServiceTypeTest, ShouldResolveServicesAsDistinctPointers_WhenServiceTypeR
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsSharedPtr_WhenServiceTypeRegistered)
 {
 	builder()
-		.registerType<DummyService>();
+		.registerType<Service>();
 
-	ASSERT_TRUE(dynamic_cast<DummyService*>(container().resolve<std::shared_ptr<DummyService>>().get()) != nullptr);
+	ASSERT_TRUE(dynamic_cast<Service*>(container().resolve<std::shared_ptr<Service>>().get()) != nullptr);
 }
 
 TEST_F(ServiceTypeTest, ShouldResolveServiceAsUniquePtr_WhenServiceTypeRegistered)
 {
 	builder()
-		.registerType<DummyService>();
+		.registerType<Service>();
 
-	ASSERT_TRUE(dynamic_cast<DummyService*>(container().resolve<std::unique_ptr<DummyService>>().get()) != nullptr);
+	ASSERT_TRUE(dynamic_cast<Service*>(container().resolve<std::unique_ptr<Service>>().get()) != nullptr);
 }

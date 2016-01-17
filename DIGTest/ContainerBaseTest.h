@@ -22,6 +22,18 @@ struct ContainerBaseTest : ::testing::Test
 		return _container;
 	}
 
+	template<class A, class B>
+	bool isOfType(const B& service, std::enable_if_t<!std::is_pointer<B>::value>* = nullptr)
+	{
+		return dynamic_cast<const A*>(&service) != nullptr;
+	}
+
+	template<class A, class B>
+	bool isOfType(const B& service, std::enable_if_t<std::is_pointer<B>::value>* = nullptr)
+	{
+		return dynamic_cast<const A*>(service) != nullptr;
+	}
+
 	DI::ContainerBuilder _container_builder;
 	DI::Container _container;
 	bool _container_valid = false;

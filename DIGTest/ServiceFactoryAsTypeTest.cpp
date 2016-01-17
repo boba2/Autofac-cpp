@@ -21,7 +21,9 @@ TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceFact
 		.as<ServiceA>()
 		.autoManaged();
 
-	ASSERT_TRUE(dynamic_cast<SpecialService*>(container().resolve<ServiceA*>()) != nullptr);
+	auto service = container().resolve<ServiceA*>();
+
+	ASSERT_TRUE(isOfType<SpecialService>(service));
 }
 
 TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceFactoryRegisteredAliasedAsAbstractBaseType)
@@ -31,7 +33,9 @@ TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsBaseTypeAsPtr_WhenServiceFact
 		.as<AbstractService>()
 		.autoManaged();
 
-	ASSERT_TRUE(dynamic_cast<ConcreteService*>(container().resolve<AbstractService*>()) != nullptr);
+	auto service = container().resolve<AbstractService*>();
+
+	ASSERT_TRUE(isOfType<ConcreteService>(service));
 }
 
 TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServiceFactoryRegisteredAliasedAsAbstractBaseType)
@@ -43,7 +47,7 @@ TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsBaseTypeAsConstRef_WhenServic
 
 	auto& service = container().resolve<AbstractService>();
 
-	ASSERT_TRUE(dynamic_cast<const ConcreteService*>(&service) != nullptr);
+	ASSERT_TRUE(isOfType<const ConcreteService>(service));
 }
 
 TEST_F(ServiceFactoryAsType, ShouldThrowException_WhenResolvingServiceAsItsType_AndServiceFactoryRegisteredOnlyWithAlias)
@@ -64,5 +68,7 @@ TEST_F(ServiceFactoryAsType, ShouldResolveServiceAsItsType_WhenServiceFactoryReg
 		.asSelf()
 		.autoManaged();
 
-	ASSERT_TRUE(container().resolve<ConcreteService*>() != nullptr);
+	auto service = container().resolve<ConcreteService*>();
+
+	ASSERT_NE(nullptr, service);
 }

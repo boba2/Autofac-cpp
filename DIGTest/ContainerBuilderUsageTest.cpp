@@ -6,8 +6,8 @@ using ContainerBuilderUsageTest = ContainerBaseTest;
 
 namespace
 {
-	struct ServiceA {};
-	struct ServiceB {};
+	struct ServiceA { virtual ~ServiceA() = default; };
+	struct ServiceB { virtual ~ServiceB() = default; };
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceTypes_WhenRegisterMethodsChained)
@@ -19,8 +19,8 @@ TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceTypes_WhenRegist
 	auto serviceA = container().resolve<ServiceA>();
 	auto serviceB = container().resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceFactories_WhenRegisterMethodsChained)
@@ -32,8 +32,8 @@ TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceFactories_WhenRe
 	auto serviceA = container().resolve<ServiceA>();
 	auto serviceB = container().resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceInstances_WhenRegisterMethodsChained)
@@ -45,8 +45,8 @@ TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceInstances_WhenRe
 	auto serviceA = container().resolve<ServiceA>();
 	auto serviceB = container().resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterServicesWithDifferentDefinitions_WhenRegisterMethodsChained_1)
@@ -58,8 +58,8 @@ TEST_F(ContainerBuilderUsageTest, ShouldRegisterServicesWithDifferentDefinitions
 	auto serviceA = container().resolve<ServiceA>();
 	auto serviceB = container().resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterServicesWithDifferentDefinitions_WhenRegisterMethodsChained_2)
@@ -71,8 +71,8 @@ TEST_F(ContainerBuilderUsageTest, ShouldRegisterServicesWithDifferentDefinitions
 	auto serviceA = container().resolve<ServiceA>();
 	auto serviceB = container().resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterServicesWithDifferentDefinitions_WhenRegisterMethodsChained_3)
@@ -84,8 +84,8 @@ TEST_F(ContainerBuilderUsageTest, ShouldRegisterServicesWithDifferentDefinitions
 	auto serviceA = container().resolve<ServiceA>();
 	auto serviceB = container().resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }
 
 TEST_F(ContainerBuilderUsageTest, ShouldRegisterDifferentServiceTypes_WhenRegisterMethodsChained_AndDifferentOptionsSpecified)
@@ -115,6 +115,6 @@ TEST_F(ContainerBuilderUsageTest, ShouldBuildContainer_WhenBuildMethodChainedToT
 	auto serviceA = container.resolve<ServiceA>();
 	auto serviceB = container.resolve<ServiceB>();
 
-	ASSERT_TRUE(dynamic_cast<ServiceA*>(&serviceA) != nullptr);
-	ASSERT_TRUE(dynamic_cast<ServiceB*>(&serviceB) != nullptr);
+	ASSERT_TRUE(isOfType<ServiceA>(serviceA));
+	ASSERT_TRUE(isOfType<ServiceB>(serviceB));
 }

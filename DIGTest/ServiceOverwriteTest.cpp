@@ -6,18 +6,18 @@ using ServiceOverwriteTest = ContainerBaseTest;
 namespace
 {
 	struct Base { virtual ~Base() {} };
-	struct Derived1 : Base {};
-	struct Derived2 : Base {};
+	struct DerivedA : Base {};
+	struct DerivedB : Base {};
 }
 
 TEST_F(ServiceOverwriteTest, ShouldResolveLatestType_WhenAliasDefinitionOverwritten)
 {
-	builder().registerType<Derived1>().as<Base>();
-	builder().registerType<Derived2>().as<Base>();
+	builder().registerType<DerivedA>().as<Base>();
+	builder().registerType<DerivedB>().as<Base>();
 
-	auto service = container().resolve<std::shared_ptr<Base>>();
+	auto resolved = container().resolve<std::shared_ptr<Base>>();
 
-	ASSERT_TRUE(dynamic_cast<Derived2*>(service.get()) != nullptr);
+	ASSERT_TRUE(dynamic_cast<DerivedB*>(resolved.get()) != nullptr);
 }
 
 TEST_F(ServiceOverwriteTest, ShouldResolveWithLatestOptions_WhenDefinitionOverwritten)
@@ -25,8 +25,8 @@ TEST_F(ServiceOverwriteTest, ShouldResolveWithLatestOptions_WhenDefinitionOverwr
 	builder().registerType<Base>();
 	builder().registerType<Base>().singleInstance();
 
-	auto service1 = container().resolve<Base*>();
-	auto service2 = container().resolve<Base*>();
+	auto resolved1 = container().resolve<Base*>();
+	auto resolved2 = container().resolve<Base*>();
 
-	ASSERT_EQ(service1, service2);
+	ASSERT_EQ(resolved1, resolved2);
 }
